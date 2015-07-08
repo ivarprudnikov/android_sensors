@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="IntroText">
+        <item name="android:textSize">@dimen/content_text</item>
+        <item name="android:textColor">@color/content_textcolor</item>
+        <item name="android:paddingBottom">@dimen/section_bottom_margin</item>
+    </style>
+
+</resources>
