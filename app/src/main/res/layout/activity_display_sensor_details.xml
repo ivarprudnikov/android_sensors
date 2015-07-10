@@ -1,0 +1,187 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView"
+    android:layout_gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        tools:context=".DisplaySensorDetailsActivity">
+
+        <TextView
+            android:text="Sensor name"
+            android:id="@+id/sensorDetailsNameTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsNameValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Vendor"
+            android:id="@+id/sensorDetailsVendorTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsVendorValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Type"
+            android:id="@+id/sensorDetailsTypeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsTypeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Type as string"
+            android:id="@+id/sensorDetailsTypeStringTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsTypeStringValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Version"
+            android:id="@+id/sensorDetailsVersionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsVersionValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Reporting mode"
+            android:id="@+id/sensorDetailsReportingModeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsReportingModeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Maximum range"
+            android:id="@+id/sensorDetailsMaxRangeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsMaxRangeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Resolution"
+            android:id="@+id/sensorDetailsResolutionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsResolutionValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Power"
+            android:id="@+id/sensorDetailsPowerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsPowerValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Minimum delay"
+            android:id="@+id/sensorDetailsMinDelayTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsMinDelayValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Maximum delay"
+            android:id="@+id/sensorDetailsMaxDelayTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsMaxDelayValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="FIFO Max event count"
+            android:id="@+id/sensorDetailsFifoMaxEventTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsFifoMaxEventValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="FIFO reserved event count"
+            android:id="@+id/sensorDetailsFifoReservedEventTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsFifoReservedEventValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
+            android:text="Is wake up sensor?"
+            android:id="@+id/sensorDetailsIsWakeUpTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsIsWakeUpValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+    </LinearLayout>
+</ScrollView>
+
+

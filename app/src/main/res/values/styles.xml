@@ -8,7 +8,25 @@
     <style name="IntroText">
         <item name="android:textSize">@dimen/content_text</item>
         <item name="android:textColor">@color/content_textcolor</item>
-        <item name="android:paddingBottom">@dimen/section_bottom_margin</item>
+        <item name="android:paddingLeft">@dimen/section_padding</item>
+        <item name="android:paddingRight">@dimen/section_padding</item>
+        <item name="android:paddingBottom">@dimen/section_padding</item>
+    </style>
+
+    <style name="DescriptionTitleText">
+        <item name="android:textSize">@dimen/content_label</item>
+        <item name="android:textColor">@color/content_textcolor</item>
+        <item name="android:paddingLeft">@dimen/section_padding</item>
+        <item name="android:paddingRight">@dimen/section_padding</item>
+        <item name="android:paddingBottom">@dimen/section_padding_half</item>
+    </style>
+
+    <style name="DescriptionValueText">
+        <item name="android:textSize">@dimen/content_text</item>
+        <item name="android:textColor">@color/content_textcolor</item>
+        <item name="android:paddingLeft">@dimen/section_padding</item>
+        <item name="android:paddingRight">@dimen/section_padding</item>
+        <item name="android:paddingBottom">@dimen/section_padding</item>
     </style>
 
 </resources>
