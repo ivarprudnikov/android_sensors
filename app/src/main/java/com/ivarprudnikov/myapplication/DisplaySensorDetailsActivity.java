@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +59,8 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
             "REPORTING_MODE_ON_CHANGE",
             "REPORTING_MODE_ONE_SHOT",
             "REPORTING_MODE_SPECIAL_TRIGGER");
+
+    ImageButton mOpenChartButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +122,17 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
         // hidden methods
         //selectedSensor.getRequiredPermission();
         //selectedSensor.getHandle();
+
+
+
+        // Handle button clicks
+        mOpenChartButton = (ImageButton) findViewById(R.id.chartButton);
+        mOpenChartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DisplaySensorDetailsActivity.this, "Hello World", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
