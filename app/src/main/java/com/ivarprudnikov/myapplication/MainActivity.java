@@ -18,10 +18,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView homeSensorListView;
+    private ListView mHomeSensorListView;
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-    private List<String> sensorNames;
+    private List<String> mSensorNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,29 +36,29 @@ public class MainActivity extends AppCompatActivity {
 
         // List of Sensors Available
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        sensorNames = new ArrayList<String>();
+        mSensorNames = new ArrayList<String>();
         for(Sensor s : mSensorList){
-            sensorNames.add(s.getName());
+            mSensorNames.add(s.getName());
         }
 
         // construct list holder for view
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                sensorNames );
+                mSensorNames );
 
         // set sensor values in view
-        homeSensorListView = (ListView) findViewById(R.id.listView);
+        mHomeSensorListView = (ListView) findViewById(R.id.listView);
 
         // do not allow focus on children as they will swallow events
-        homeSensorListView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+        mHomeSensorListView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
 
         // attach data
-        homeSensorListView.setAdapter(arrayAdapter);
+        mHomeSensorListView.setAdapter(arrayAdapter);
 
         // attach click listener
         // open detailed view of sensor
-        homeSensorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mHomeSensorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(currentActivity, DisplaySensorDetailsActivity.class);

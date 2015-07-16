@@ -62,6 +62,18 @@
             style="@style/DescriptionValueText"/>
 
         <TextView
+            android:text="Type resolved"
+            android:id="@+id/sensorDetailsTypeResolvedTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDetailsTypeResolvedValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
+        <TextView
             android:text="Version"
             android:id="@+id/sensorDetailsVersionTitle"
             android:layout_width="match_parent"

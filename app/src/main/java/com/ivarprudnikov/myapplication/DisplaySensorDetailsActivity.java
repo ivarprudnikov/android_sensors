@@ -21,8 +21,9 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
     private List<Sensor> mSensorList;
 
     public static final String NO_SENSOR_FOUND = "Could not identify the sensor";
+    public static final String SENSOR_TYPE_UNRESOLVABLE = "Unresolvable";
 
-    List<String> sensorTypes = Arrays.asList(
+    public List<String> sensorTypes = Arrays.asList(
             "", // padding because sensor types start at 1
             "TYPE_ACCELEROMETER",
             "TYPE_MAGNETIC_FIELD",
@@ -50,7 +51,7 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
             "TYPE_GLANCE_GESTURE",
             "TYPE_PICK_UP_GESTURE");
 
-    List<String> reportingModes = Arrays.asList(
+    public List<String> reportingModes = Arrays.asList(
             "REPORTING_MODE_CONTINUOUS",
             "REPORTING_MODE_ON_CHANGE",
             "REPORTING_MODE_ONE_SHOT",
@@ -91,6 +92,12 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
 
         ((TextView)findViewById(R.id.sensorDetailsVendorValue)).setText(selectedSensor.getVendor());
         ((TextView)findViewById(R.id.sensorDetailsTypeValue)).setText(Integer.toString(selectedSensor.getType()));
+
+        if(selectedSensor.getType() < sensorTypes.size())
+            ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( sensorTypes.get(selectedSensor.getType()) );
+        else
+            ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( SENSOR_TYPE_UNRESOLVABLE );
+
         ((TextView)findViewById(R.id.sensorDetailsVersionValue)).setText(Integer.toString(selectedSensor.getVersion()) );
         ((TextView)findViewById(R.id.sensorDetailsMaxRangeValue)).setText( Float.toString(selectedSensor.getMaximumRange()) );
         ((TextView)findViewById(R.id.sensorDetailsResolutionValue)).setText( Float.toString(selectedSensor.getResolution()) );
