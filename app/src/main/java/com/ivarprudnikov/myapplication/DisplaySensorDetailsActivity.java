@@ -64,6 +64,7 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_sensor_details);
 
@@ -86,6 +87,8 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
                 selectedSensor = s;
             }
         }
+
+        final Sensor fSelectedSensor = selectedSensor;
 
         TextView texName = (TextView)findViewById(R.id.sensorDetailsNameValue);
 
@@ -130,7 +133,13 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
         mOpenChartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DisplaySensorDetailsActivity.this, "Hello World", Toast.LENGTH_SHORT).show();
+                if(fSelectedSensor != null){
+                    Intent intent = new Intent(DisplaySensorDetailsActivity.this, DisplaySensorDataActivity.class);
+                    intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, fSelectedSensor.getName());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(DisplaySensorDetailsActivity.this, "Sensor unavailable", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

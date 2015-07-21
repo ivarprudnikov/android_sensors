@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(currentActivity, DisplaySensorDetailsActivity.class);
                 Sensor selectedSensor = mSensorList.get(position);
-                selectedSensor.getName();
                 intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, selectedSensor.getName());
                 startActivity(intent);
             }

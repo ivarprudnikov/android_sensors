@@ -24,6 +24,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ivarprudnikov.myapplication.MainActivity" />
         </activity>
+        <activity
+            android:name=".DisplaySensorDataActivity"
+            android:label="@string/title_activity_display_sensor_data"
+            android:parentActivityName=".DisplaySensorDetailsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ivarprudnikov.myapplication.DisplaySensorDetailsActivity" />
+        </activity>
     </application>
 
 </manifest>
