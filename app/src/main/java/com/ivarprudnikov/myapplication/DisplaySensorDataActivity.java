@@ -76,15 +76,35 @@ public class DisplaySensorDataActivity extends ActionBarActivity implements Sens
 
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Do something here if sensor accuracy changes.
+
+        TextView texAccuracy = (TextView)findViewById(R.id.sensorDataAccuracyValue);
+
+        switch(accuracy){
+            case SensorManager.SENSOR_STATUS_NO_CONTACT:
+                texAccuracy.setText("SENSOR_STATUS_NO_CONTACT");
+                break;
+            case SensorManager.SENSOR_STATUS_UNRELIABLE:
+                texAccuracy.setText("SENSOR_STATUS_UNRELIABLE");
+                break;
+            case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
+                texAccuracy.setText("SENSOR_STATUS_ACCURACY_LOW");
+                break;
+            case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
+                texAccuracy.setText("SENSOR_STATUS_ACCURACY_MEDIUM");
+                break;
+            case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
+                texAccuracy.setText("SENSOR_STATUS_ACCURACY_HIGH");
+                break;
+            default:
+                texAccuracy.setText("OTHER");
+                break;
+
+        }
+
     }
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        // The light sensor returns a single value.
-        // Many sensors return 3 values, one for each axis.
-        // float lux = event.values[0];
-        // Do something with this sensor value.
 
         TextView texData = (TextView)findViewById(R.id.sensorDataDataValue);
         float[] vals = event.values;
