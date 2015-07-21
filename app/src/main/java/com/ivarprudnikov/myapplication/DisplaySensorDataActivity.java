@@ -45,11 +45,11 @@ public class DisplaySensorDataActivity extends ActionBarActivity implements Sens
         }
 
         TextView texName = (TextView)findViewById(R.id.sensorDataNameValue);
-
         if(mSelectedSensor != null)
             texName.setText(mSelectedSensor.getName());
         else
             texName.setText(Constants.TEXT_NO_SENSOR_FOUND);
+
     }
 
     @Override
@@ -85,6 +85,17 @@ public class DisplaySensorDataActivity extends ActionBarActivity implements Sens
         // Many sensors return 3 values, one for each axis.
         // float lux = event.values[0];
         // Do something with this sensor value.
+
+        TextView texData = (TextView)findViewById(R.id.sensorDataDataValue);
+        float[] vals = event.values;
+        StringBuilder sb = new StringBuilder();
+
+        for(float v : vals){
+            sb.append(v);
+            sb.append(" \n");
+        }
+
+        texData.setText( sb.toString() );
     }
 
     @Override

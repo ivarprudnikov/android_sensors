@@ -25,6 +25,18 @@
             android:layout_height="wrap_content"
             style="@style/DescriptionValueText"/>
 
+        <TextView
+            android:text="Sensor data"
+            android:id="@+id/sensorDataDataTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionTitleText"/>
+        <TextView
+            android:id="@+id/sensorDataDataValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DescriptionValueText"/>
+
     </LinearLayout>
 
 </ScrollView>
