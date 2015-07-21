@@ -1,17 +1,55 @@
 package com.ivarprudnikov.myapplication;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.List;
 
 
-public class DisplaySensorDataActivity extends ActionBarActivity {
+public class DisplaySensorDataActivity extends ActionBarActivity implements SensorEventListener {
+
+    private SensorManager mSensorManager;
+    private List<Sensor> mSensorList;
+    private Sensor mSelectedSensor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_sensor_data);
+
+        // Set the SensorManager
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        // List of Sensors Available
+        mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+
+        // get intent that was used to open this view
+        Intent intent = getIntent();
+
+        // extract passed data
+        String sensorName = intent.getStringExtra(Constants.INTENT_KEY_SENSOR_NAME);
+
+        // figure out which sensor was selected
+        for(Sensor s : mSensorList){
+            if(s.getName().equals(sensorName)){
+                mSelectedSensor = s;
+            }
+        }
+
+        TextView texName = (TextView)findViewById(R.id.sensorDataNameValue);
+
+        if(mSelectedSensor != null)
+            texName.setText(mSelectedSensor.getName());
+        else
+            texName.setText(Constants.TEXT_NO_SENSOR_FOUND);
     }
 
     @Override
@@ -34,5 +72,30 @@ public class DisplaySensorDataActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Do something here if sensor accuracy changes.
+    }
+
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+        // The light sensor returns a single value.
+        // Many sensors return 3 values, one for each axis.
+        // float lux = event.values[0];
+        // Do something with this sensor value.
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSelectedSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
     }
 }

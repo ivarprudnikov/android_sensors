@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +18,8 @@ import java.util.List;
 
 public class DisplaySensorDetailsActivity extends ActionBarActivity {
 
-    private ListView homeSensorListView;
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-
-    public static final String NO_SENSOR_FOUND = "Could not identify the sensor";
-    public static final String SENSOR_TYPE_UNRESOLVABLE = "Unresolvable";
 
     public List<String> sensorTypes = Arrays.asList(
             "", // padding because sensor types start at 1
@@ -95,7 +90,7 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
         if(selectedSensor != null)
             texName.setText(selectedSensor.getName());
         else
-            texName.setText(NO_SENSOR_FOUND);
+            texName.setText(Constants.TEXT_NO_SENSOR_FOUND);
 
 
         ((TextView)findViewById(R.id.sensorDetailsVendorValue)).setText(selectedSensor.getVendor());
@@ -104,7 +99,7 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
         if(selectedSensor.getType() < sensorTypes.size())
             ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( sensorTypes.get(selectedSensor.getType()) );
         else
-            ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( SENSOR_TYPE_UNRESOLVABLE );
+            ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( Constants.TEXT_SENSOR_TYPE_UNRESOLVABLE );
 
         ((TextView)findViewById(R.id.sensorDetailsVersionValue)).setText(Integer.toString(selectedSensor.getVersion()) );
         ((TextView)findViewById(R.id.sensorDetailsMaxRangeValue)).setText( Float.toString(selectedSensor.getMaximumRange()) );
