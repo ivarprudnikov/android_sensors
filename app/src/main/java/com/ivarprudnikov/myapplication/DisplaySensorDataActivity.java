@@ -72,17 +72,17 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(DisplaySensorDataActivity.this, DisplaySensorDetailsActivity.class);
+                intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, mSelectedSensor.getName());
+                startActivity(intent);
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -111,7 +111,6 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
                 break;
 
         }
-
     }
 
     @Override
