@@ -89,7 +89,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         // and/or if data was not passed to this activity
         // return to list of sensors with some toast message
         if(fSelectedSensor == null){
-            Toast.makeText(DisplaySensorDetailsActivity.this, "Couldn't identify sensor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DisplaySensorDetailsActivity.this, Constants.TEXT_NO_SENSOR_FOUND, Toast.LENGTH_SHORT).show();
             Intent intentToList = new Intent(DisplaySensorDetailsActivity.this, MainActivity.class);
             startActivity(intentToList);
             return;
@@ -124,19 +124,14 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         //selectedSensor.getRequiredPermission();
         //selectedSensor.getHandle();
 
-
         // Handle button tap
         mOpenChartButton = (ImageButton) findViewById(R.id.chartButton);
         mOpenChartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(fSelectedSensor != null){
-                    Intent intent = new Intent(DisplaySensorDetailsActivity.this, DisplaySensorDataActivity.class);
-                    intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, fSelectedSensor.getName());
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(DisplaySensorDetailsActivity.this, "Sensor unavailable", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(DisplaySensorDetailsActivity.this, DisplaySensorDataActivity.class);
+                intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, fSelectedSensor.getName());
+                startActivity(intent);
             }
         });
 

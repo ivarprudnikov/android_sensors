@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -49,12 +50,17 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
             }
         }
 
-        TextView texName = (TextView)findViewById(R.id.sensorDataNameValue);
-        if(mSelectedSensor != null)
-            texName.setText(mSelectedSensor.getName());
-        else
-            texName.setText(Constants.TEXT_NO_SENSOR_FOUND);
+        // if for some reason sensor was not identified
+        // and/or if data was not passed to this activity
+        // return to list of sensors with some toast message
+        if(mSelectedSensor == null){
+            Toast.makeText(DisplaySensorDataActivity.this, Constants.TEXT_NO_SENSOR_FOUND, Toast.LENGTH_SHORT).show();
+            Intent intentToList = new Intent(DisplaySensorDataActivity.this, MainActivity.class);
+            startActivity(intentToList);
+            return;
+        }
 
+        ((TextView)findViewById(R.id.sensorDataNameValue)).setText(mSelectedSensor.getName());
     }
 
     @Override
