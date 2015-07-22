@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class DisplaySensorDetailsActivity extends ActionBarActivity {
+public class DisplaySensorDetailsActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;

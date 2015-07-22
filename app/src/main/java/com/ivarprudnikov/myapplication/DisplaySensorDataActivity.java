@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class DisplaySensorDataActivity extends ActionBarActivity implements SensorEventListener {
+public class DisplaySensorDataActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
