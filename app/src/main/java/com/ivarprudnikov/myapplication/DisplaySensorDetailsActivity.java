@@ -85,14 +85,17 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
 
         final Sensor fSelectedSensor = selectedSensor;
 
-        TextView texName = (TextView)findViewById(R.id.sensorDetailsNameValue);
+        // if for some reason sensor was not identified
+        // and/or if data was not passed to this activity
+        // return to list of sensors with some toast message
+        if(fSelectedSensor == null){
+            Toast.makeText(DisplaySensorDetailsActivity.this, "Couldn't identify sensor", Toast.LENGTH_SHORT).show();
+            Intent intentToList = new Intent(DisplaySensorDetailsActivity.this, MainActivity.class);
+            startActivity(intentToList);
+            return;
+        }
 
-        if(selectedSensor != null)
-            texName.setText(selectedSensor.getName());
-        else
-            texName.setText(Constants.TEXT_NO_SENSOR_FOUND);
-
-
+        ((TextView)findViewById(R.id.sensorDetailsNameValue)).setText(selectedSensor.getName());
         ((TextView)findViewById(R.id.sensorDetailsVendorValue)).setText(selectedSensor.getVendor());
         ((TextView)findViewById(R.id.sensorDetailsTypeValue)).setText(Integer.toString(selectedSensor.getType()));
 
@@ -122,8 +125,7 @@ public class DisplaySensorDetailsActivity extends ActionBarActivity {
         //selectedSensor.getHandle();
 
 
-
-        // Handle button clicks
+        // Handle button tap
         mOpenChartButton = (ImageButton) findViewById(R.id.chartButton);
         mOpenChartButton.setOnClickListener(new View.OnClickListener() {
             @Override
