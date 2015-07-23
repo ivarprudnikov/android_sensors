@@ -1,6 +1,7 @@
 package com.ivarprudnikov.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,7 +14,14 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class DisplaySensorDataActivity extends AppCompatActivity implements SensorEventListener {
@@ -21,6 +29,7 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
     private Sensor mSelectedSensor = null;
+    private LineChart mChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,81 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
         }
 
         ((TextView)findViewById(R.id.sensorDataNameValue)).setText(mSelectedSensor.getName());
+
+
+        mChart = (LineChart) findViewById(R.id.chart);
+    }
+
+    private void setChartData(float[] sensorValues) {
+
+        for (int i = 0; i < sensorValues.length; i++) {
+            LineDataSet data = mChart.getLineData().getDataSetByIndex(i);
+            List<Entry> yVals = data.getYVals();
+            int yValsSize = yVals.size();
+
+            if(yValsSize < Constants.CHART_MAX_HORIZONTAL_POINTS) {
+                Entry entr = new Entry(sensorValues[i], yValsSize);
+                data.addEntry(entr);
+            } else {
+
+            }
+
+
+        }
+        mChart.notifyDataSetChanged();
+        mChart.invalidate();
+
+    }
+
+
+    private void initialiseChartDatasets(int lineCount){
+
+        int count = Constants.CHART_MAX_HORIZONTAL_POINTS;
+
+        ArrayList<String> xVals = new ArrayList<String>();
+        for (int i = 0; i < count; i++) {
+            xVals.add((i) + "");
+        }
+
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>(lineCount);
+        for (int i = 0; i < lineCount; i++) {
+            LineDataSet lineDataSet = createLineDataset((i + ""));
+            dataSets.add(lineDataSet);
+        }
+
+        // create a data object with the datasets
+        LineData data = new LineData(xVals, dataSets);
+
+        // set data
+        if(mChart.getLineData() == null){
+            mChart.setData(data);
+            mChart.invalidate();
+        }
+    }
+
+    public LineDataSet createLineDataset(String label){
+        ArrayList<Entry> yVals = new ArrayList<Entry>(Constants.CHART_MAX_HORIZONTAL_POINTS);
+        LineDataSet set1 = new LineDataSet(yVals, label);
+
+        Random rnd = new Random();
+        //int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        int color = Color.argb(255, rnd.nextInt(161), rnd.nextInt(161), rnd.nextInt(161));
+
+        set1.setColor(color);
+        set1.setLineWidth(1f);
+
+        set1.setFillAlpha(65);
+        set1.setFillColor(color);
+
+        set1.setCircleColor(color);
+        set1.setCircleSize(3f);
+        set1.setDrawCircleHole(false);
+        set1.setDrawCircles(false);
+
+        set1.setDrawValues(false);
+        set1.setValueTextSize(9f);
+
+        return set1;
     }
 
     @Override
@@ -115,6 +199,12 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
+
+        // check if data list is initialized
+        if(mChart.getLineData() == null)
+            initialiseChartDatasets(event.values.length);
+
+        setChartData(event.values);
 
         TextView texData = (TextView)findViewById(R.id.sensorDataDataValue);
         float[] vals = event.values;

@@ -5,4 +5,6 @@ public class Constants {
 
     public static final String TEXT_NO_SENSOR_FOUND = "Could not identify the sensor";
     public static final String TEXT_SENSOR_TYPE_UNRESOLVABLE = "Unresolvable";
+
+    public static final int CHART_MAX_HORIZONTAL_POINTS = 200;
 }
