@@ -73,6 +73,10 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
 
 
         mChart = (LineChart) findViewById(R.id.chart);
+        mChart.setAutoScaleMinMaxEnabled(true);
+        mChart.getAxisLeft().setStartAtZero(false);
+        mChart.getAxisRight().setStartAtZero(false);
+
     }
 
     private void setChartData(float[] sensorValues) {
@@ -81,14 +85,23 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
             LineDataSet data = mChart.getLineData().getDataSetByIndex(i);
             List<Entry> yVals = data.getYVals();
             int yValsSize = yVals.size();
+            Entry entr = new Entry(sensorValues[i], yValsSize);
 
             if(yValsSize < Constants.CHART_MAX_HORIZONTAL_POINTS) {
-                Entry entr = new Entry(sensorValues[i], yValsSize);
                 data.addEntry(entr);
             } else {
+                data.removeEntry(0);
 
+                // reduce index of each entry
+                // as it is what defines location of point
+                // on x axis. This will get effect of moving
+                // chart.
+                for (int j = 0; j < yVals.size(); j++) {
+                    yVals.get(j).setXIndex(j);
+                }
+
+                data.addEntry(entr);
             }
-
 
         }
         mChart.notifyDataSetChanged();
