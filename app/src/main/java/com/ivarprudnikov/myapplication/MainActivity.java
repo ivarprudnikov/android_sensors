@@ -67,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Construct Intent to start background service
+        Intent i = new Intent(this, SensorDataProcessorService.class);
+        // Start the service
+        startService(i);
     }
 
     @Override
@@ -84,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.log_view) {
+            Intent intent = new Intent(MainActivity.this, DisplayLogActivity.class);
+            startActivity(intent);
             return true;
         }
 

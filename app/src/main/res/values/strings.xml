@@ -2,8 +2,11 @@
     <string name="app_name">Phone sensors</string>
     <string name="intro_text">Available device sensors</string>
     <string name="action_settings">Settings</string>
+    <string name="log_view">Show Log</string>
+
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_display_log">Log</string>
 </resources>
