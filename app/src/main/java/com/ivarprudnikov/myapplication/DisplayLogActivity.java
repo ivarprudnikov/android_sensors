@@ -29,12 +29,18 @@ public class DisplayLogActivity extends AppCompatActivity {
     }
 
     public void refreshLog(){
+        
         ArrayList<String> lines = new ArrayList<String>();
         String line;
         BufferedReader in = null;
+        File file = new File(Environment.getExternalStorageDirectory(), "SensorLog.txt");
+
+        if(file.exists() == false){
+            return;
+        }
 
         try {
-            in = new BufferedReader(new FileReader(new File(Environment.getExternalStorageDirectory(), "SensorLog.txt")));
+            in = new BufferedReader(new FileReader(file));
             while ((line = in.readLine()) != null) {
                 lines.add(line);
             }
@@ -54,11 +60,13 @@ public class DisplayLogActivity extends AppCompatActivity {
     public void deleteLog(){
 
         File file = new File(Environment.getExternalStorageDirectory(), "SensorLog.txt");
-        boolean result = file.delete();
-        if(result == true){
-            ((TextView)findViewById(R.id.logView)).setText("");
-        } else {
-            Toast.makeText(DisplayLogActivity.this, "Could not delete log", Toast.LENGTH_SHORT).show();
+        if(file.exists()){
+            boolean result = file.delete();
+            if(result == true){
+                ((TextView)findViewById(R.id.logView)).setText("");
+            } else {
+                Toast.makeText(DisplayLogActivity.this, "Could not delete log", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
