@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +25,10 @@ public class DisplayLogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_log);
+        refreshLog();
+    }
 
+    public void refreshLog(){
         ArrayList<String> lines = new ArrayList<String>();
         String line;
         BufferedReader in = null;
@@ -47,6 +51,18 @@ public class DisplayLogActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.logView)).setText(logContent);
     }
 
+    public void deleteLog(){
+
+        File file = new File(Environment.getExternalStorageDirectory(), "SensorLog.txt");
+        boolean result = file.delete();
+        if(result == true){
+            ((TextView)findViewById(R.id.logView)).setText("");
+        } else {
+            Toast.makeText(DisplayLogActivity.this, "Could not delete log", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -62,8 +78,10 @@ public class DisplayLogActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.delete_log) {
+            deleteLog();
+        } else if (id == R.id.refresh_log) {
+            refreshLog();
         }
 
         return super.onOptionsItemSelected(item);

@@ -3,6 +3,8 @@
     <string name="intro_text">Available device sensors</string>
     <string name="action_settings">Settings</string>
     <string name="log_view">Show Log</string>
+    <string name="refresh_log">Refresh log</string>
+    <string name="delete_log">Clear log</string>
 
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
