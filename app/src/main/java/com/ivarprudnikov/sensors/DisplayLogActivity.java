@@ -1,4 +1,4 @@
-package com.ivarprudnikov.myapplication;
+package com.ivarprudnikov.sensors;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +29,7 @@ public class DisplayLogActivity extends AppCompatActivity {
     }
 
     public void refreshLog(){
-        
+
         ArrayList<String> lines = new ArrayList<String>();
         String line;
         BufferedReader in = null;

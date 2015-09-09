@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivarprudnikov.myapplication" >
+    package="com.ivarprudnikov.sensors" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -26,7 +26,7 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.myapplication.MainActivity" />
+                android:value="com.ivarprudnikov.sensors.MainActivity" />
         </activity>
         <activity
             android:name=".DisplaySensorDataActivity"
@@ -34,7 +34,7 @@
             android:parentActivityName=".DisplaySensorDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.myapplication.DisplaySensorDetailsActivity" />
+                android:value="com.ivarprudnikov.sensors.DisplaySensorDetailsActivity" />
         </activity>
 
         <service
@@ -62,7 +62,7 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.myapplication.MainActivity" />
+                android:value="com.ivarprudnikov.sensors.MainActivity" />
         </activity>
     </application>
 

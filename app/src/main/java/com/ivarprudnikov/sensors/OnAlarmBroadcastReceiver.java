@@ -1,4 +1,4 @@
-package com.ivarprudnikov.myapplication;
+package com.ivarprudnikov.sensors;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

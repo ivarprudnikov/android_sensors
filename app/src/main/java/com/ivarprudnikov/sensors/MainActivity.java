@@ -1,4 +1,4 @@
-package com.ivarprudnikov.myapplication;
+package com.ivarprudnikov.sensors;
 
 import android.app.Activity;
 import android.content.Intent;
