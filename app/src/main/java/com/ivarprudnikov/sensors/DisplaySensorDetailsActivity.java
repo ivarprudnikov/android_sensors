@@ -1,14 +1,16 @@
 package com.ivarprudnikov.sensors;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,9 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
+    private SharedPreferences mSharedPreferences;
+    private Switch isSensorEnabledSwitch;
+    ImageButton mOpenChartButton;
 
     public List<String> sensorTypes = Arrays.asList(
             "", // padding because sensor types start at 1
@@ -55,7 +60,13 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             "REPORTING_MODE_ONE_SHOT",
             "REPORTING_MODE_SPECIAL_TRIGGER");
 
-    ImageButton mOpenChartButton;
+    public SharedPreferences getPrefs(){
+        if(mSharedPreferences != null){
+            return mSharedPreferences;
+        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(DisplaySensorDetailsActivity.this);
+        return mSharedPreferences;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +84,12 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         // extract passed data
-        String sensorName = intent.getStringExtra(Constants.INTENT_KEY_SENSOR_NAME);
+        final String fSensorName = intent.getStringExtra(Constants.INTENT_KEY_SENSOR_NAME);
 
         // figure out which sensor was selected
         Sensor selectedSensor = null;
         for(Sensor s : mSensorList){
-            if(s.getName().equals(sensorName)){
+            if(s.getName().equals(fSensorName)){
                 selectedSensor = s;
             }
         }
@@ -135,27 +146,18 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             }
         });
 
+        final String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + fSensorName;
+        boolean switchValue = getPrefs().getBoolean(fSensorKey, false);
+        isSensorEnabledSwitch = (Switch)findViewById(R.id.isSensorListenerEnabled);
+        isSensorEnabledSwitch.setChecked(switchValue);
+        isSensorEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = getPrefs().edit();
+                editor.putBoolean(fSensorKey, isChecked);
+                editor.commit();
+            }
+        });
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_display_sensor_details, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

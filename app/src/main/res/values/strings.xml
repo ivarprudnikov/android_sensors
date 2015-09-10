@@ -12,4 +12,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_log">Log</string>
     <string name="is_sensor_logging_enabled">Is sensor logging enabled?</string>
+    <string name="is_sensor_listener_enabled">Collect sensor data?</string>
 </resources>
