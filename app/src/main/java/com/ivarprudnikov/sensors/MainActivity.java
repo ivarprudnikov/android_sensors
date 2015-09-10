@@ -1,11 +1,11 @@
 package com.ivarprudnikov.sensors;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView mHomeSensorListView;
+    private View mHomeSensorListHeaderView;
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
     private List<String> mSensorNames;
@@ -28,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final Activity currentActivity = this;
 
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -50,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
         // set sensor values in view
         mHomeSensorListView = (ListView) findViewById(R.id.listView);
 
+        // Add header view
+        LayoutInflater inflater = getLayoutInflater();
+        mHomeSensorListHeaderView = inflater.inflate(R.layout.activity_main_header, null);
+        mHomeSensorListView.addHeaderView(mHomeSensorListHeaderView, null, false);
+
         // do not allow focus on children as they will swallow events
         mHomeSensorListView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
 
@@ -61,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
         mHomeSensorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(currentActivity, DisplaySensorDetailsActivity.class);
-                Sensor selectedSensor = mSensorList.get(position);
+                Intent intent = new Intent(MainActivity.this, DisplaySensorDetailsActivity.class);
+                // compensate header position
+                Sensor selectedSensor = mSensorList.get((position - 1));
                 intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, selectedSensor.getName());
                 startActivity(intent);
             }

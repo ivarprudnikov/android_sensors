@@ -9,6 +9,8 @@
     <dimen name="content_text">18sp</dimen>
     <dimen name="content_title">30sp</dimen>
 
+    <dimen name="page_padding">80dp</dimen>
+
     <dimen name="section_padding">16dp</dimen>
     <dimen name="section_padding_half">8dp</dimen>
 </resources>

@@ -5,12 +5,14 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="IntroText">
-        <item name="android:textSize">@dimen/content_text</item>
-        <item name="android:textColor">@color/content_textcolor</item>
-        <item name="android:paddingLeft">@dimen/section_padding</item>
-        <item name="android:paddingRight">@dimen/section_padding</item>
+    <style name="Header">
+        <item name="android:paddingTop">@dimen/page_padding</item>
         <item name="android:paddingBottom">@dimen/section_padding</item>
+        <item name="android:paddingRight">@dimen/section_padding</item>
+        <item name="android:paddingLeft">@dimen/section_padding</item>
+        <item name="android:background">@color/accent_material_dark</item>
+        <item name="android:textSize">@dimen/content_text</item>
+        <item name="android:textColor">@color/primary_text_default_material_dark</item>
     </style>
 
     <style name="DescriptionTitleText">
