@@ -1,12 +1,16 @@
 package com.ivarprudnikov.sensors;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +25,38 @@ import java.util.Collections;
 
 public class DisplayLogActivity extends AppCompatActivity {
 
+    private SharedPreferences mSharedPreferences;
+    private Switch isSensorLogEnabledSwitch;
+    private TextView logView;
+
+    public SharedPreferences getPrefs(){
+        if(mSharedPreferences != null){
+            return mSharedPreferences;
+        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(DisplayLogActivity.this);
+        return mSharedPreferences;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_log);
+
+        logView = (TextView)findViewById(R.id.logView);
+
+        boolean switchValue = getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+        isSensorLogEnabledSwitch = (Switch)findViewById(R.id.isSensorLogEnabled);
+        isSensorLogEnabledSwitch.setChecked(switchValue);
+        isSensorLogEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = getPrefs().edit();
+                editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, isChecked);
+                editor.commit();
+            }
+        });
+
         refreshLog();
+
     }
 
     public void refreshLog(){
@@ -33,7 +64,7 @@ public class DisplayLogActivity extends AppCompatActivity {
         ArrayList<String> lines = new ArrayList<String>();
         String line;
         BufferedReader in = null;
-        File file = new File(Environment.getExternalStorageDirectory(), "SensorLog.txt");
+        File file = new File(Environment.getExternalStorageDirectory(), Constants.PREFS_SENSOR_LOG_FILE_NAME);
 
         if(file.exists() == false){
             return;
@@ -54,16 +85,18 @@ public class DisplayLogActivity extends AppCompatActivity {
 
         String logContent = TextUtils.join("\n", lines);
 
-        ((TextView)findViewById(R.id.logView)).setText(logContent);
+        logView.setText(logContent);
+        logView.requestLayout();
     }
 
     public void deleteLog(){
 
-        File file = new File(Environment.getExternalStorageDirectory(), "SensorLog.txt");
+        File file = new File(Environment.getExternalStorageDirectory(), Constants.PREFS_SENSOR_LOG_FILE_NAME);
         if(file.exists()){
             boolean result = file.delete();
             if(result == true){
-                ((TextView)findViewById(R.id.logView)).setText("");
+                logView.setText("");
+                logView.requestLayout();
             } else {
                 Toast.makeText(DisplayLogActivity.this, "Could not delete log", Toast.LENGTH_SHORT).show();
             }

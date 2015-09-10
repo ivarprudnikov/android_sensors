@@ -2,12 +2,14 @@ package com.ivarprudnikov.sensors;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -20,8 +22,17 @@ public class SensorDataProcessorService extends Service {
 
     private volatile HandlerThread mHandlerThread;
     private ServiceHandler mServiceHandler;
+    private SharedPreferences mSharedPreferences;
 
-    public SensorDataProcessorService() {}
+    public SensorDataProcessorService(){}
+
+    public SharedPreferences getPrefs(){
+        if(mSharedPreferences != null){
+            return mSharedPreferences;
+        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(SensorDataProcessorService.this);
+        return mSharedPreferences;
+    }
 
     // Define how the handler will process messages
     private final class ServiceHandler extends Handler {
@@ -78,7 +89,13 @@ public class SensorDataProcessorService extends Service {
     }
 
     public void writeToLog(String dataString){
-        File log = new File(Environment.getExternalStorageDirectory(), "SensorLog.txt");
+
+        boolean sensorLogEnabled = getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+        if(sensorLogEnabled == false){
+            return;
+        }
+
+        File log = new File(Environment.getExternalStorageDirectory(), Constants.PREFS_SENSOR_LOG_FILE_NAME);
         boolean shouldAppendToFile = log.exists();
         String message = dataString + " - " + new Date().toString();
         try {

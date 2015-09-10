@@ -33,6 +33,7 @@
         <item name="android:fontFamily">monospace</item>
         <item name="android:textSize">@dimen/content_log</item>
         <item name="android:textColor">@color/content_textcolor</item>
+        <item name="android:paddingTop">@dimen/section_padding</item>
         <item name="android:paddingLeft">@dimen/section_padding</item>
         <item name="android:paddingRight">@dimen/section_padding</item>
         <item name="android:paddingBottom">@dimen/section_padding</item>
