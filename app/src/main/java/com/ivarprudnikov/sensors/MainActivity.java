@@ -9,11 +9,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private View mHomeSensorListHeaderView;
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-    private List<String> mSensorNames;
+    private SensorAdapter mSensorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +32,12 @@ public class MainActivity extends AppCompatActivity {
 
         // List of Sensors Available
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        mSensorNames = new ArrayList<String>();
-        for(Sensor s : mSensorList){
-            mSensorNames.add(s.getName());
-        }
-
-        // construct list holder for view
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                mSensorNames );
 
         // set sensor values in view
         mHomeSensorListView = (ListView) findViewById(R.id.listView);
 
         // Add header view
-        LayoutInflater inflater = getLayoutInflater();
+        final LayoutInflater inflater = getLayoutInflater();
         mHomeSensorListHeaderView = inflater.inflate(R.layout.activity_main_header, null);
         mHomeSensorListView.addHeaderView(mHomeSensorListHeaderView, null, false);
 
@@ -58,20 +45,8 @@ public class MainActivity extends AppCompatActivity {
         mHomeSensorListView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
 
         // attach data
-        mHomeSensorListView.setAdapter(arrayAdapter);
-
-        // attach click listener
-        // open detailed view of sensor
-        mHomeSensorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DisplaySensorDetailsActivity.class);
-                // compensate header position
-                Sensor selectedSensor = mSensorList.get((position - 1));
-                intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, selectedSensor.getName());
-                startActivity(intent);
-            }
-        });
+        mSensorAdapter = new SensorAdapter(this, mSensorList);
+        mHomeSensorListView.setAdapter(mSensorAdapter);
 
         // Construct Intent to start background service
         Intent i = new Intent(this, SensorDataProcessorService.class);
@@ -101,5 +76,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorAdapter.notifyDataSetChanged();
     }
 }
