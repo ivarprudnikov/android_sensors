@@ -3,6 +3,10 @@ package com.ivarprudnikov.sensors;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -17,12 +21,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-public class SensorDataProcessorService extends Service {
+public class SensorDataProcessorService extends Service implements SensorEventListener {
 
     private volatile HandlerThread mHandlerThread;
     private ServiceHandler mServiceHandler;
     private SharedPreferences mSharedPreferences;
+    private SensorManager mSensorManager;
+    private List<Sensor> mSensorList;
+    private List<Sensor> mSensorRegisteredList;
 
     public SensorDataProcessorService(){}
 
@@ -58,6 +67,10 @@ public class SensorDataProcessorService extends Service {
         mHandlerThread.start();
         // An Android service handler is a handler running on a specific background thread.
         mServiceHandler = new ServiceHandler(mHandlerThread.getLooper());
+        // Set the SensorManager
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        // List of Sensors Available
+        mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
     }
 
     // Fires when a service is started up
@@ -67,6 +80,20 @@ public class SensorDataProcessorService extends Service {
 //        Bundle b = new Bundle();
 //        b.putSerializable("x","y");
 //        m.setData(b);
+
+        // reregister sensors
+        mSensorManager.unregisterListener(this);
+        // TODO: pick up required sensors from prefs
+
+        //mSensorRegisteredList = new ArrayList<Sensor>();
+        Map<String,?> allPrefs = getPrefs().getAll();
+        for(String key : allPrefs.keySet()){
+            if(key.matches(Constants.PREFS_SENSOR_ENABLED_PREFIX + ".*")){
+                Log.i("SensorDataProcessorSrvc", key);
+            }
+        }
+
+        mSensorManager.registerListener(this, mSensorList.get(0), SensorManager.SENSOR_DELAY_NORMAL);
 
         // Send empty message to background thread
         mServiceHandler.sendEmptyMessage(0);
@@ -87,6 +114,37 @@ public class SensorDataProcessorService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+
+    @Override
+    public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+        switch(accuracy){
+            case SensorManager.SENSOR_STATUS_NO_CONTACT:
+                break;
+            case SensorManager.SENSOR_STATUS_UNRELIABLE:
+                break;
+            case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
+                break;
+            case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
+                break;
+            case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+        float[] vals = event.values;
+        StringBuilder sb = new StringBuilder();
+        for(float v : vals){
+            sb.append(v);
+            sb.append(" \n");
+        }
+        writeToLog(sb.toString());
+    }
+
 
     public void writeToLog(String dataString){
 
