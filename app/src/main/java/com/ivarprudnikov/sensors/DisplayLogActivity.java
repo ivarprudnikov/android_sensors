@@ -3,7 +3,6 @@ package com.ivarprudnikov.sensors;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ivarprudnikov.sensors.config.Constants;
+import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,17 +27,8 @@ import java.util.Collections;
 
 public class DisplayLogActivity extends AppCompatActivity {
 
-    private SharedPreferences mSharedPreferences;
     private Switch isSensorLogEnabledSwitch;
     private TextView logView;
-
-    public SharedPreferences getPrefs(){
-        if(mSharedPreferences != null){
-            return mSharedPreferences;
-        }
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(DisplayLogActivity.this);
-        return mSharedPreferences;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +37,12 @@ public class DisplayLogActivity extends AppCompatActivity {
 
         logView = (TextView)findViewById(R.id.logView);
 
-        boolean switchValue = getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+        boolean switchValue = Preferences.getPrefs(DisplayLogActivity.this).getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
         isSensorLogEnabledSwitch = (Switch)findViewById(R.id.isSensorLogEnabled);
         isSensorLogEnabledSwitch.setChecked(switchValue);
         isSensorLogEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = getPrefs().edit();
+                SharedPreferences.Editor editor = Preferences.getPrefs(DisplayLogActivity.this).edit();
                 editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, isChecked);
                 editor.commit();
             }

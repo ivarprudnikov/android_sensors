@@ -1,4 +1,4 @@
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.config;
 
 public class Constants {
     public final static String INTENT_KEY_SENSOR_NAME = "com.ivarprudnikov.sensors.SENSOR_NAME";

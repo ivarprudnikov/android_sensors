@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -13,6 +12,9 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ivarprudnikov.sensors.config.Constants;
+import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +24,6 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-    private SharedPreferences mSharedPreferences;
     private Switch isSensorEnabledSwitch;
     ImageButton mOpenChartButton;
 
@@ -59,14 +60,6 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             "REPORTING_MODE_ON_CHANGE",
             "REPORTING_MODE_ONE_SHOT",
             "REPORTING_MODE_SPECIAL_TRIGGER");
-
-    public SharedPreferences getPrefs(){
-        if(mSharedPreferences != null){
-            return mSharedPreferences;
-        }
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(DisplaySensorDetailsActivity.this);
-        return mSharedPreferences;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,12 +140,12 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         });
 
         final String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + fSensorName;
-        boolean switchValue = getPrefs().getBoolean(fSensorKey, false);
+        boolean switchValue = Preferences.getPrefs(DisplaySensorDetailsActivity.this).getBoolean(fSensorKey, false);
         isSensorEnabledSwitch = (Switch)findViewById(R.id.isSensorListenerEnabled);
         isSensorEnabledSwitch.setChecked(switchValue);
         isSensorEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = getPrefs().edit();
+                SharedPreferences.Editor editor = Preferences.getPrefs(DisplaySensorDetailsActivity.this).edit();
                 editor.putBoolean(fSensorKey, isChecked);
                 editor.commit();
             }
