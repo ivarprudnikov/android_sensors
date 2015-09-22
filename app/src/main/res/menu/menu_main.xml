@@ -3,4 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/log_view" android:title="@string/log_view"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/database_view" android:title="@string/database_view"
+        android:orderInCategory="200" app:showAsAction="never" />
 </menu>

@@ -6,6 +6,9 @@
     <string name="refresh_log">Refresh log</string>
     <string name="delete_log">Clear log</string>
 
+    <string name="database_view">Show database</string>
+    <string name="title_activity_android_database_manager">Stored data</string>
+
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
 

@@ -2,10 +2,12 @@ package com.ivarprudnikov.sensors;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -19,13 +21,12 @@ import com.ivarprudnikov.sensors.storage.SensorDataLogService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SensorDataProcessorService extends Service implements SensorEventListener {
+public class SensorDataProcessorService extends Service implements SensorEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private volatile HandlerThread mHandlerThread;
     private ServiceHandler mServiceHandler;
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-    private List<Sensor> mSensorRegisteredList;
     private SensorDataDbService mSensorDataDbService;
     private SensorDataLogService mSensorDataLogService;
 
@@ -40,7 +41,16 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         // Define how to handle any incoming messages here
         @Override
         public void handleMessage(Message message) {
-            mSensorDataLogService.write(message.getData().toString());
+
+            Bundle b = message.getData();
+            switch(b.getString("EVENT")){
+                case "SENSOR":
+                    mSensorDataDbService.save(b.getString("NAME"), b.getFloatArray("VALUES"), b.getLong("TIMESTAMP"));
+                    break;
+                default:
+                    mSensorDataLogService.write( b.toString() );
+            }
+
             // ...
             // When needed, stop the service with
             // stopSelf();
@@ -67,27 +77,21 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     // Fires when a service is started up
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        Message m = Message.obtain();
-//        Bundle b = new Bundle();
-//        b.putSerializable("x","y");
-//        m.setData(b);
-
-        // reregister sensors
-        mSensorManager.unregisterListener(this);
-
-        mSensorRegisteredList = new ArrayList<Sensor>();
-        ArrayList<String> allEnabled = Preferences.getEnabledSensorNames(SensorDataProcessorService.this);
-        for(Sensor s : mSensorList){
-            if(allEnabled.contains(s.getName())){
-                mSensorRegisteredList.add(s);
-                mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
-            }
-        }
-
+        registerSensorListeners();
         // Send empty message to background thread
         mServiceHandler.sendEmptyMessage(0);
         // Keep service around "sticky"
         return START_STICKY;
+    }
+
+    public void registerSensorListeners(){
+        mSensorManager.unregisterListener(this);
+        ArrayList<String> allEnabled = Preferences.getEnabledSensorNames(SensorDataProcessorService.this);
+        for(Sensor s : mSensorList){
+            if(allEnabled.contains(s.getName())){
+                mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+        }
     }
 
     // Defines the shutdown sequence
@@ -104,6 +108,10 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         return null;
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        registerSensorListeners();
+    }
 
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -125,7 +133,13 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        mSensorDataDbService.save(event);
-        mSensorDataLogService.write(event);
+        Message m = Message.obtain();
+        Bundle b = new Bundle();
+        b.putString("EVENT","SENSOR");
+        b.putString("NAME", event.sensor.getName());
+        b.putFloatArray("VALUES", event.values);
+        b.putLong("TIMESTAMP", event.timestamp);
+        m.setData(b);
+        mServiceHandler.sendMessage(m);
     }
 }

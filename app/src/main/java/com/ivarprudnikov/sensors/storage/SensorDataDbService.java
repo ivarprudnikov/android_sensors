@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.SensorEvent;
 
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
@@ -17,10 +16,6 @@ public class SensorDataDbService extends ContextWrapper {
     public SensorDataDbService (Context ctx){
         super(ctx);
         mDbHelper = new SensorDataDbHelper(ctx);
-    }
-
-    public void save(SensorEvent event){
-        save(event.sensor.getName(), event.values, event.timestamp);
     }
 
     public void save(String sensorName, float[] sensorValues, long nanotimestamp){
