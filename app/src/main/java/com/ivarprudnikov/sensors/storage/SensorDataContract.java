@@ -14,7 +14,7 @@ public final class SensorDataContract {
     /* Inner class that defines the table contents */
     public static abstract class DataEntry implements BaseColumns {
         public static final String TABLE_NAME = "data";
-        public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
+        public static final String COLUMN_NAME_TIMESTAMP = "timestamp_nano";
         public static final String COLUMN_NAME_SENSOR_NAME = "sensor_name";
         public static final String COLUMN_NAME_SENSOR_DATA = "sensor_data";
     }

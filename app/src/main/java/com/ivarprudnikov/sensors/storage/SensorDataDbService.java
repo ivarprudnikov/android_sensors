@@ -28,11 +28,9 @@ public class SensorDataDbService extends ContextWrapper {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        long microtimestamp = nanotimestamp / 1000;
-
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(DataEntry.COLUMN_NAME_TIMESTAMP, Long.valueOf(microtimestamp).intValue());
+        values.put(DataEntry.COLUMN_NAME_TIMESTAMP, Long.valueOf(nanotimestamp).intValue());
         values.put(DataEntry.COLUMN_NAME_SENSOR_NAME, sensorName);
         values.put(DataEntry.COLUMN_NAME_SENSOR_DATA, SensorDataConverter.floatArray2ByteArray(sensorValues));
 
