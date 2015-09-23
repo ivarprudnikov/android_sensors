@@ -43,13 +43,19 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         public void handleMessage(Message message) {
 
             Bundle b = message.getData();
-            switch(b.getString("EVENT")){
-                case "SENSOR":
-                    mSensorDataDbService.save(b.getString("NAME"), b.getFloatArray("VALUES"), b.getLong("TIMESTAMP"));
-                    break;
-                default:
-                    mSensorDataLogService.write( b.toString() );
+            String EVENT_TYPE = b.getString("EVENT");
+            if(EVENT_TYPE != null){
+                switch(EVENT_TYPE){
+                    case "SENSOR":
+                        mSensorDataDbService.save(b.getString("NAME"), b.getFloatArray("VALUES"), b.getLong("TIMESTAMP"));
+                        break;
+                    default:
+                        mSensorDataLogService.write( b.toString() );
+                }
+            } else {
+                mSensorDataLogService.write( "EMPTY MESSAGE" );
             }
+
 
             // ...
             // When needed, stop the service with
