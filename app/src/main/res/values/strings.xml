@@ -12,8 +12,8 @@
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_log">Log</string>
-    <string name="is_sensor_logging_enabled">Is sensor logging enabled?</string>
+
+    <string name="is_data_storage_enabled">Is data storage enabled?</string>
     <string name="is_sensor_listener_enabled">Collect sensor data?</string>
 </resources>

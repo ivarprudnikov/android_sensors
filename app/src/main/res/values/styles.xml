@@ -11,15 +11,13 @@
     </style>
 
     <style name="Header">
-        <item name="android:paddingTop">@dimen/section_padding</item>
-        <item name="android:paddingBottom">@dimen/section_padding</item>
-        <item name="android:paddingRight">@dimen/section_padding</item>
-        <item name="android:paddingLeft">@dimen/section_padding</item>
         <item name="android:background">@color/material_deep_teal_500</item>
     </style>
 
     <style name="HeaderHero">
         <item name="android:paddingTop">@dimen/abc_action_bar_default_height_material</item>
+        <item name="android:paddingRight">@dimen/section_padding</item>
+        <item name="android:paddingLeft">@dimen/section_padding</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">@dimen/abc_text_size_display_2_material</item>
         <item name="android:textStyle">bold</item>
@@ -28,6 +26,9 @@
     </style>
 
     <style name="HeaderHeroSub">
+        <item name="android:paddingBottom">@dimen/section_padding</item>
+        <item name="android:paddingRight">@dimen/section_padding</item>
+        <item name="android:paddingLeft">@dimen/section_padding</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">@dimen/abc_text_size_body_1_material</item>
         <item name="android:textColor">@color/abc_primary_text_material_dark</item>

@@ -21,7 +21,7 @@
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/is_sensor_logging_enabled"
+                android:text="@string/is_data_storage_enabled"
                 android:id="@+id/isSensorLogEnabled"
                 android:layout_gravity="center_horizontal|top"
                 android:background="@color/material_blue_grey_800"

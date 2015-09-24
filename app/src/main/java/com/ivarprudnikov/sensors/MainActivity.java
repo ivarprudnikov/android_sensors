@@ -1,6 +1,7 @@
 package com.ivarprudnikov.sensors;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -8,8 +9,13 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.ivarprudnikov.sensors.config.Constants;
+import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.List;
 
@@ -22,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorAdapter mSensorAdapter;
     private TextView mDataCountText;
     private StoredSensorEventsCounter.OnQueryResponseListener countListener;
+    private Switch isDataStorageEnabledSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,17 @@ public class MainActivity extends AppCompatActivity {
                 h.postDelayed(this, 3000);
             }
         }, 2000);
+
+        boolean switchValue = Preferences.getPrefs(MainActivity.this).getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+        isDataStorageEnabledSwitch = (Switch)findViewById(R.id.isDataStorageEnabled);
+        isDataStorageEnabledSwitch.setChecked(switchValue);
+        isDataStorageEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = Preferences.getPrefs(MainActivity.this).edit();
+                editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, isChecked);
+                editor.commit();
+            }
+        });
 
         // Construct Intent to start background service
         Intent i = new Intent(this, SensorDataProcessorService.class);

@@ -17,11 +17,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/HeaderHeroSub"
+        android:id="@+id/dataCountTitle"
         android:layout_below="@+id/dataCount" />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/is_data_storage_enabled"
+        android:id="@+id/isDataStorageEnabled"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_below="@+id/dataCountTitle"
+        style="@style/SwitchDark"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/section_padding"
         android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:background="@color/accent_material_light"
         android:layout_alignParentTop="true"
