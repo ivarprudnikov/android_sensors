@@ -25,6 +25,7 @@
         android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:background="@color/accent_material_light"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:id="@+id/settingsButton"/>
 
 </RelativeLayout>

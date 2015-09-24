@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
     private SensorAdapter mSensorAdapter;
+    private TextView mDataCountText;
+    private StoredSensorEventsCounter.OnQueryResponseListener countListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,37 +50,30 @@ public class MainActivity extends AppCompatActivity {
         mSensorAdapter = new SensorAdapter(this, mSensorList);
         mHomeSensorListView.setAdapter(mSensorAdapter);
 
+        // Initiate data counter
+        mDataCountText = (TextView)mHomeSensorListHeaderView.findViewById(R.id.dataCount);
+        mDataCountText.setText("...");
+        countListener = new StoredSensorEventsCounter.OnQueryResponseListener() {
+            @Override
+            public void OnQueryResponseFinished(String resp) {
+                mDataCountText.setText(resp);
+            }
+        };
+
+        final Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final StoredSensorEventsCounter mTask = new StoredSensorEventsCounter(MainActivity.this, countListener);
+                mTask.execute();
+                h.postDelayed(this, 3000);
+            }
+        }, 2000);
+
         // Construct Intent to start background service
         Intent i = new Intent(this, SensorDataProcessorService.class);
         // Start the service
         startService(i);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.log_view) {
-            Intent intent = new Intent(MainActivity.this, DisplayLogActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.database_view) {
-            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

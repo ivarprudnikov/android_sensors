@@ -3,6 +3,7 @@ package com.ivarprudnikov.sensors.storage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
@@ -21,6 +22,31 @@ public class SensorDataDbService extends ContextWrapper {
         mSensorDataLogService = new SensorDataLogService(ctx);
     }
 
+    public int countSensorEvents(){
+
+        SQLiteDatabase db = null;
+        int count = -1;
+
+        try {
+            db = mDbHelper.getReadableDatabase();
+        } catch(SQLiteException e){
+            mSensorDataLogService.write(e.getMessage());
+        }
+
+        if(db != null){
+            Cursor c = db.query(
+                    DataEntry.TABLE_NAME,
+                    new String[]{DataEntry._ID},
+                    DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?",
+                    new String[]{"0"},
+                    null, null, null, null);
+            count = c.getCount();
+            db.close();
+        }
+
+        return count;
+    }
+
     public void save(String sensorName, float[] sensorValues, long nanotimestamp){
 
         boolean sensorLogEnabled = Preferences.getPrefs(SensorDataDbService.this).getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
@@ -28,28 +54,29 @@ public class SensorDataDbService extends ContextWrapper {
             return;
         }
 
-        // Gets the data repository in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = null;
 
         try {
+            db = mDbHelper.getWritableDatabase();
+        } catch(SQLiteException e){
+            mSensorDataLogService.write(e.getMessage());
+        }
+
+        if(db != null){
             for(int i = 0; i < sensorValues.length; i++){
                 // Create a new map of values, where column names are the keys
                 ContentValues values = new ContentValues();
                 float val = sensorValues[i];
 
-                values.put(DataEntry.COLUMN_NAME_TIMESTAMP, Long.valueOf(nanotimestamp).intValue());
+                values.put(DataEntry.COLUMN_NAME_TIMESTAMP, nanotimestamp);
                 values.put(DataEntry.COLUMN_NAME_SENSOR_NAME, sensorName);
-                values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE, Float.valueOf(val).toString());
+                values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE, val);
                 values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX, i);
 
                 db.insert(DataEntry.TABLE_NAME, null, values);
             }
-        } catch(SQLiteException e){
-            mSensorDataLogService.write(e.getMessage());
+            db.close();
         }
-
-
-        db.close();
 
     }
 
