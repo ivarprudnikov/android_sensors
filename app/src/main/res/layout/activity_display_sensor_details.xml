@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,9 +22,7 @@
                 android:text="@string/is_sensor_listener_enabled"
                 android:id="@+id/isSensorListenerEnabled"
                 android:layout_gravity="center_horizontal|top"
-                android:background="@color/material_blue_grey_800"
-                android:padding="@dimen/section_padding"
-                android:textColor="@color/bright_foreground_material_dark" />
+                style="@style/SwitchDark" />
 
             <TextView
                 android:text="Sensor name"
@@ -213,10 +211,13 @@
         android:layout_margin="15dp"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="end|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:src="@drawable/chart_icon"
         android:background="@drawable/circle"
         android:id="@+id/chartButton"
-        android:clickable="true" />
+        android:clickable="true"
+        android:layout_above="@+id/scrollView"/>
 
-</FrameLayout>
+</RelativeLayout>
