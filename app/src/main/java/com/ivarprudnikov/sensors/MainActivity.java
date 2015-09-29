@@ -7,7 +7,9 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -29,12 +31,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDataCountText;
     private StoredSensorEventsCounter.OnQueryResponseListener countListener;
     private Switch isDataStorageEnabledSwitch;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final LayoutInflater inflater = getLayoutInflater();
+
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -46,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         mHomeSensorListView = (ListView) findViewById(R.id.listView);
 
         // Add header view
-        final LayoutInflater inflater = getLayoutInflater();
         mHomeSensorListHeaderView = inflater.inflate(R.layout.activity_main_header, null);
         mHomeSensorListView.addHeaderView(mHomeSensorListHeaderView, null, false);
 
@@ -98,5 +105,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mSensorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 }

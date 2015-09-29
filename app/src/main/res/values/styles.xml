@@ -1,24 +1,29 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Main theme colors -->
+    <style name="AppTheme" parent="AppTheme.Base"></style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
+        <item name="windowNoTitle">true</item>
+        <!--We will be using the toolbar so no need to show ActionBar-->
+        <item name="windowActionBar">false</item>
+        <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette-->
         <!--   your app branding color for the app bar -->
-        <item name="android:colorPrimary">@color/theme_normal</item>
+        <item name="colorPrimary">@color/theme_normal</item>
         <!--   darker variant for the status bar and contextual app bars -->
-        <item name="android:colorPrimaryDark">@color/theme_darkest</item>
+        <item name="colorPrimaryDark">@color/theme_darkest</item>
         <!--   theme UI controls like checkboxes and text fields -->
-        <item name="android:colorAccent">@color/theme_dark</item>
+        <item name="colorAccent">@color/theme_dark</item>
     </style>
 
     <style name="Header">
-        <item name="android:background">@color/theme_dark</item>
+        <item name="android:background">@color/theme_normal</item>
+        <item name="android:paddingTop">@dimen/abc_action_bar_default_height_material</item>
     </style>
 
     <style name="HeaderHero">
-        <item name="android:paddingTop">@dimen/abc_action_bar_default_height_material</item>
         <item name="android:paddingRight">@dimen/section_padding</item>
         <item name="android:paddingLeft">@dimen/section_padding</item>
-        <item name="android:textAlignment">center</item>
         <item name="android:textSize">@dimen/abc_text_size_display_2_material</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/abc_primary_text_material_dark</item>
@@ -26,10 +31,9 @@
     </style>
 
     <style name="HeaderHeroSub">
-        <item name="android:paddingBottom">@dimen/section_padding</item>
+        <item name="android:paddingBottom">@dimen/abc_action_bar_default_height_material</item>
         <item name="android:paddingRight">@dimen/section_padding</item>
         <item name="android:paddingLeft">@dimen/section_padding</item>
-        <item name="android:textAlignment">center</item>
         <item name="android:textSize">@dimen/abc_text_size_body_1_material</item>
         <item name="android:textColor">@color/abc_primary_text_material_dark</item>
         <item name="android:gravity">center_horizontal</item>
