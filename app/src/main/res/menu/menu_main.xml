@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/settings_view" android:title="@string/settings_view"
+    <item android:id="@+id/export_action" android:title="@string/export_action"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/settings_view" android:title="@string/settings_view"
+        android:orderInCategory="200" app:showAsAction="never" />
 </menu>

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Device sensors</string>
     <string name="settings_view">Settings</string>
+    <string name="send_action">Send</string>
+    <string name="export_action">Export</string>
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
     <string name="is_data_storage_enabled">Is data storage enabled?</string>
