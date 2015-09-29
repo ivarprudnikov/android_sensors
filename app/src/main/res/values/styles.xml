@@ -3,15 +3,15 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Main theme colors -->
         <!--   your app branding color for the app bar -->
-        <item name="android:colorPrimary">@color/material_deep_teal_200</item>
+        <item name="android:colorPrimary">@color/theme_normal</item>
         <!--   darker variant for the status bar and contextual app bars -->
-        <item name="android:colorPrimaryDark">@color/material_deep_teal_500</item>
+        <item name="android:colorPrimaryDark">@color/theme_darkest</item>
         <!--   theme UI controls like checkboxes and text fields -->
-        <item name="android:colorAccent">@color/accent_material_light</item>
+        <item name="android:colorAccent">@color/theme_dark</item>
     </style>
 
     <style name="Header">
-        <item name="android:background">@color/material_deep_teal_500</item>
+        <item name="android:background">@color/theme_dark</item>
     </style>
 
     <style name="HeaderHero">
@@ -53,7 +53,7 @@
 
     <style name="SwitchDark" parent="Base.TextAppearance.AppCompat.Widget.Switch">
         <item name="android:padding">@dimen/section_padding</item>
-        <item name="android:background">@color/material_deep_teal_200</item>
+        <item name="android:background">@color/theme_light</item>
         <item name="android:textColor">@color/bright_foreground_material_dark</item>
     </style>
 

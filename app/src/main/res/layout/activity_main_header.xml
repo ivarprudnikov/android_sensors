@@ -13,7 +13,7 @@
         android:id="@+id/dataCount" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:text="Sensor events stored"
+        android:text="@string/total_events_stored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/HeaderHeroSub"

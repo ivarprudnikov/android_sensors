@@ -2,11 +2,17 @@
 <resources>
 
     <color name="action_inverted">@android:color/white</color>
-
     <color name="content_textcolor">#444</color>
 
     <color name="action_bg">#DDD</color>
     <color name="action_item_bg">#F4F4F4</color>
+
+    <!-- Theme -->
+    <!-- Positive Actions -->
+    <color name="theme_darkest">#FF008679</color>
+    <color name="theme_dark">#ff009688</color>
+    <color name="theme_normal">#FF00A293</color>
+    <color name="theme_light">#FF00C7B5</color>
 
     <!-- Neutral Actions -->
     <color name="action_focused">#FFE3F4FC</color>

@@ -4,4 +4,5 @@
     <string name="title_activity_display_sensor_data">Sensor Data</string>
     <string name="is_data_storage_enabled">Is data storage enabled?</string>
     <string name="is_sensor_listener_enabled">Collect sensor data?</string>
+    <string name="total_events_stored">Total events stored</string>
 </resources>
