@@ -1,9 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ivarprudnikov.sensors.DisplayLogActivity">
-    <item android:id="@+id/refresh_log" android:title="@string/refresh_log"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/delete_log" android:title="@string/delete_log"
-        android:orderInCategory="100" app:showAsAction="never" />
-</menu>

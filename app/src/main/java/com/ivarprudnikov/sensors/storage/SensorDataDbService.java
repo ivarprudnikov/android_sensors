@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
@@ -14,12 +15,10 @@ import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 public class SensorDataDbService extends ContextWrapper {
 
     private SensorDataDbHelper mDbHelper;
-    private SensorDataLogService mSensorDataLogService;
 
     public SensorDataDbService (Context ctx){
         super(ctx);
         mDbHelper = new SensorDataDbHelper(ctx);
-        mSensorDataLogService = new SensorDataLogService(ctx);
     }
 
     public int countSensorEvents(){
@@ -30,7 +29,7 @@ public class SensorDataDbService extends ContextWrapper {
         try {
             db = mDbHelper.getReadableDatabase();
         } catch(SQLiteException e){
-            mSensorDataLogService.write(e.getMessage());
+            Log.e("SensorDataDbService","mDbHelper.getReadableDatabase() exception", e);
         }
 
         if(db != null){
@@ -59,7 +58,7 @@ public class SensorDataDbService extends ContextWrapper {
         try {
             db = mDbHelper.getWritableDatabase();
         } catch(SQLiteException e){
-            mSensorDataLogService.write(e.getMessage());
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
         }
 
         if(db != null){

@@ -51,16 +51,6 @@
         <item name="android:paddingBottom">@dimen/section_padding</item>
     </style>
 
-    <style name="LogText">
-        <item name="android:fontFamily">monospace</item>
-        <item name="android:textSize">@dimen/content_log</item>
-        <item name="android:textColor">@color/content_textcolor</item>
-        <item name="android:paddingTop">@dimen/section_padding</item>
-        <item name="android:paddingLeft">@dimen/section_padding</item>
-        <item name="android:paddingRight">@dimen/section_padding</item>
-        <item name="android:paddingBottom">@dimen/section_padding</item>
-    </style>
-
     <style name="SwitchDark" parent="Base.TextAppearance.AppCompat.Widget.Switch">
         <item name="android:padding">@dimen/section_padding</item>
         <item name="android:background">@color/material_deep_teal_200</item>

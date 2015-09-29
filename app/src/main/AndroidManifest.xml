@@ -56,24 +56,6 @@
             android:exported="false" >
         </receiver>
 
-        <activity
-            android:name=".DisplayLogActivity"
-            android:label="@string/title_activity_display_log"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.sensors.MainActivity" />
-        </activity>
-
-        <activity
-            android:name=".AndroidDatabaseManager"
-            android:label="@string/title_activity_android_database_manager"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.sensors.MainActivity" />
-        </activity>
-
     </application>
 
 </manifest>

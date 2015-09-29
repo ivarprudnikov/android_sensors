@@ -13,10 +13,10 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.SensorDataDbService;
-import com.ivarprudnikov.sensors.storage.SensorDataLogService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
     private SensorDataDbService mSensorDataDbService;
-    private SensorDataLogService mSensorDataLogService;
 
     public SensorDataProcessorService(){}
 
@@ -50,16 +49,10 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
                         mSensorDataDbService.save(b.getString("NAME"), b.getFloatArray("VALUES"), b.getLong("TIMESTAMP"));
                         break;
                     default:
-                        mSensorDataLogService.write( b.toString() );
+                        Log.i("handleMessage", b.toString());
                 }
             } else {
-                mSensorDataLogService.write( "EMPTY MESSAGE" );
             }
-
-
-            // ...
-            // When needed, stop the service with
-            // stopSelf();
         }
     }
 
@@ -77,7 +70,6 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
         mSensorDataDbService = new SensorDataDbService(this);
-        mSensorDataLogService = new SensorDataLogService(this);
     }
 
     // Fires when a service is started up
@@ -104,6 +96,7 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     @Override
     public void onDestroy() {
         // Cleanup service before destruction
+        mSensorManager.unregisterListener(this);
         mHandlerThread.quit();
     }
 
@@ -116,6 +109,7 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // TODO: depending on storage preference turn on/off listeners, turn on/off service
         registerSensorListeners();
     }
 
