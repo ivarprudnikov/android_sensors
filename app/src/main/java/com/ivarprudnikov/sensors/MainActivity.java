@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_menu_moreoverflow_mtrl_alpha);
+        mToolbar.setNavigationIcon(R.drawable.menu_bars_icon);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
