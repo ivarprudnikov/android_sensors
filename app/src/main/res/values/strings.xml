@@ -3,8 +3,11 @@
     <string name="settings_view">Settings</string>
     <string name="send_action">Send</string>
     <string name="export_action">Export</string>
+
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
+    <string name="title_activity_settings">Settings</string>
+
     <string name="is_data_storage_enabled">Is data storage enabled?</string>
     <string name="is_sensor_listener_enabled">Collect sensor data?</string>
     <string name="total_events_stored">Total events stored</string>

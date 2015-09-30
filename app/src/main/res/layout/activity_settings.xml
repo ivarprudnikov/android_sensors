@@ -1,0 +1,41 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="Drop all stored sensor events?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/DescriptionTitleText"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/section_padding"
+                android:layout_marginBottom="@dimen/section_padding"
+                android:text="Delete data"
+                android:id="@+id/deleteDataButton"
+                style="@style/DangerButton" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
