@@ -79,4 +79,25 @@ public class SensorDataDbService extends ContextWrapper {
 
     }
 
+    public int deleteAllRows(){
+
+        SQLiteDatabase db = null;
+        String whereClause = null;
+        String[] whereArgs = null;
+
+        try {
+            db = mDbHelper.getWritableDatabase();
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        int deleted = 0;
+
+        if(db != null){
+            deleted = db.delete(DataEntry.TABLE_NAME, whereClause, whereArgs);
+        }
+
+        return deleted;
+    }
+
 }

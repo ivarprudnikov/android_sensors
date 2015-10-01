@@ -9,11 +9,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.ivarprudnikov.sensors.storage.SensorDataDbService;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Button mDeleteButton;
+    private SensorDataDbService mSensorDataDbService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class SettingsActivity extends AppCompatActivity {
                 showDialog("Delete all data?", "This cannot be undone. You could try deleting individual sensor data first.");
             }
         });
+
+        mSensorDataDbService = new SensorDataDbService(this);
     }
 
     @Override
@@ -59,7 +65,8 @@ public class SettingsActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Do Something Here
+                        int rowCount = mSensorDataDbService.deleteAllRows();
+                        Toast.makeText(SettingsActivity.this, String.valueOf(rowCount) + " items removed", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
