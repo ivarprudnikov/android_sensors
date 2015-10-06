@@ -7,4 +7,6 @@ public class Constants {
     public static final int CHART_MAX_HORIZONTAL_POINTS = 200;
     public static final String PREFS_IS_SENSOR_LOG_ENABLED = "IS_SENSOR_LOG_ENABLED";
     public static final String PREFS_SENSOR_ENABLED_PREFIX = "IS_SENSOR_ENABLED_";
+    public static final String PREFS_STORAGE_DURATION = "STORAGE_DURATION";
+    public static final String PREFS_STORAGE_LIMIT_ACTION = "STORAGE_LIMIT_ACTION";
 }

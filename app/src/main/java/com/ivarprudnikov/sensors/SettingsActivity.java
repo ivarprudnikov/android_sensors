@@ -8,14 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.SensorDataDbService;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Toolbar mToolbar;
     private Button mDeleteButton;
@@ -45,7 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog("Delete all data?", "This cannot be undone. You could try deleting individual sensor data first.");
+                showDeleteConfirmationDialog("Delete all data?", "This cannot be undone. You could try deleting individual sensor data first.");
             }
         });
 
@@ -54,12 +56,18 @@ public class SettingsActivity extends AppCompatActivity {
                 R.array.available_durations_in_hours, android.R.layout.simple_spinner_item);
         adapterHours.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHours.setAdapter(adapterHours);
+        String selectedDuration = Preferences.getStorageDuration(this);
+        spinnerHours.setSelection(adapterHours.getPosition(selectedDuration));
+        spinnerHours.setOnItemSelectedListener(this);
 
         Spinner spinnerLimitAction = (Spinner) findViewById(R.id.limitAction);
         ArrayAdapter<CharSequence> adapterLimitAction = ArrayAdapter.createFromResource(this,
                 R.array.data_limit_action, android.R.layout.simple_spinner_item);
         adapterLimitAction.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLimitAction.setAdapter(adapterLimitAction);
+        String selectedLimitAction = Preferences.getStorageLimitAction(this);
+        spinnerLimitAction.setSelection(adapterLimitAction.getPosition(selectedLimitAction));
+        spinnerLimitAction.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -72,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
         return true;
     }
 
-    private void showDialog(String title, String message) {
+    private void showDeleteConfirmationDialog(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
@@ -89,5 +97,23 @@ public class SettingsActivity extends AppCompatActivity {
                         //Do Something Here
                     }
                 }).show();
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+        String selectedValue = (String)parent.getItemAtPosition(pos);
+
+        switch (parent.getId()){
+            case R.id.hours:
+                Preferences.setStorageDuration(this, selectedValue);
+                break;
+            case R.id.limitAction:
+                Preferences.setStorageLimitAction(this, selectedValue);
+                break;
+        }
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
     }
 }

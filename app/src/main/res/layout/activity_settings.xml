@@ -21,7 +21,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:text="Limit of data hours that is stored"
+                android:text="@string/data_limit_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/DescriptionTitleText"/>
@@ -39,7 +39,7 @@
                 android:layout_marginBottom="@dimen/section_padding" />
 
             <TextView
-                android:text="What to do with data when limit is reached?"
+                android:text="@string/data_limit_reached_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/DescriptionTitleText"/>
@@ -57,7 +57,7 @@
                 android:layout_marginBottom="@dimen/section_padding" />
 
             <TextView
-                android:text="Drop all stored sensor events?"
+                android:text="@string/delete_data_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/DescriptionTitleText"/>

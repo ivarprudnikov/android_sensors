@@ -36,4 +36,26 @@ public class Preferences {
         }
         return names;
     }
+
+    public static String getStorageDuration(Context ctx){
+        SharedPreferences prefs = getPrefs(ctx);
+        return prefs.getString(Constants.PREFS_STORAGE_DURATION, "5 min");
+    }
+
+    public static void setStorageDuration(Context ctx, String val){
+        SharedPreferences.Editor editor = getPrefs(ctx).edit();
+        editor.putString(Constants.PREFS_STORAGE_DURATION, val);
+        editor.commit();
+    }
+
+    public static String getStorageLimitAction(Context ctx){
+        SharedPreferences prefs = getPrefs(ctx);
+        return prefs.getString(Constants.PREFS_STORAGE_LIMIT_ACTION, "Overwrite older data");
+    }
+
+    public static void setStorageLimitAction(Context ctx, String val){
+        SharedPreferences.Editor editor = getPrefs(ctx).edit();
+        editor.putString(Constants.PREFS_STORAGE_LIMIT_ACTION, val);
+        editor.commit();
+    }
 }

@@ -12,13 +12,19 @@
     <string name="is_sensor_listener_enabled">Collect sensor data?</string>
     <string name="total_events_stored">Total events stored</string>
 
+    <string name="data_limit_label">Stored data limit</string>
+    <string name="data_limit_reached_label">What to do with data when limit is reached?</string>
+    <string name="delete_data_label">Drop all stored sensor events?</string>
+
     <string-array name="available_durations_in_hours">
+        <item>1 min</item>
+        <item>5 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
         <item>1 hour</item>
         <item>3 hours</item>
         <item>6 hours</item>
         <item>12 hours</item>
-        <item>24 hours</item>
-        <item>48 hours</item>
     </string-array>
 
     <string-array name="data_limit_action">
