@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 mTask.execute();
                 h.postDelayed(this, 3000);
             }
-        }, 2000);
+        }, 500);
 
         boolean switchValue = Preferences.isDataStorageEnabled(MainActivity.this);
         isDataStorageEnabledSwitch = (Switch)findViewById(R.id.isDataStorageEnabled);

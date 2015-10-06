@@ -65,6 +65,14 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         mHandlerThread.start();
         // An Android service handler is a handler running on a specific background thread.
         mServiceHandler = new ServiceHandler(mHandlerThread.getLooper());
+        mServiceHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // TODO: check if data within settings limits and act if not
+                mServiceHandler.postDelayed(this, 4000);
+            }
+        }, 4000);
+
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         // List of Sensors Available
