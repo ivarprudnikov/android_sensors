@@ -21,6 +21,42 @@
             android:orientation="vertical">
 
             <TextView
+                android:text="Limit of data hours that is stored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/DescriptionTitleText"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/hours"
+                android:layout_gravity="left"
+                android:focusable="true"
+                android:spinnerMode="dropdown"
+                android:textAlignment="textStart"
+                android:layout_marginLeft="@dimen/section_padding"
+                android:layout_marginRight="@dimen/section_padding"
+                android:layout_marginBottom="@dimen/section_padding" />
+
+            <TextView
+                android:text="What to do with data when limit is reached?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/DescriptionTitleText"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/limitAction"
+                android:layout_gravity="left"
+                android:focusable="true"
+                android:spinnerMode="dropdown"
+                android:textAlignment="textStart"
+                android:layout_marginLeft="@dimen/section_padding"
+                android:layout_marginRight="@dimen/section_padding"
+                android:layout_marginBottom="@dimen/section_padding" />
+
+            <TextView
                 android:text="Drop all stored sensor events?"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,6 +70,7 @@
                 android:text="Delete data"
                 android:id="@+id/deleteDataButton"
                 style="@style/DangerButton" />
+
         </LinearLayout>
 
     </ScrollView>

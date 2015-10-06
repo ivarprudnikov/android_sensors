@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000);
 
-        boolean switchValue = Preferences.getPrefs(MainActivity.this).getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+        boolean switchValue = Preferences.isDataStorageEnabled(MainActivity.this);
         isDataStorageEnabledSwitch = (Switch)findViewById(R.id.isDataStorageEnabled);
         isDataStorageEnabledSwitch.setChecked(switchValue);
         isDataStorageEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

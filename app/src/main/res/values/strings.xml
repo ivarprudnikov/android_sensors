@@ -11,4 +11,18 @@
     <string name="is_data_storage_enabled">Is data storage enabled?</string>
     <string name="is_sensor_listener_enabled">Collect sensor data?</string>
     <string name="total_events_stored">Total events stored</string>
+
+    <string-array name="available_durations_in_hours">
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>48 hours</item>
+    </string-array>
+
+    <string-array name="data_limit_action">
+        <item>Turn off data storage</item>
+        <item>Overwrite older data</item>
+    </string-array>
 </resources>

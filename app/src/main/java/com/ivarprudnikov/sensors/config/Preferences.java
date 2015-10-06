@@ -19,6 +19,11 @@ public class Preferences {
         return sSharedPreferences;
     }
 
+    public static boolean isDataStorageEnabled(Context ctx){
+        SharedPreferences prefs = getPrefs(ctx);
+        return prefs.getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+    }
+
     public static ArrayList<String> getEnabledSensorNames(Context ctx){
         SharedPreferences prefs = getPrefs(ctx);
         Map<String,?> allPrefs = prefs.getAll();

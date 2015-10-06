@@ -28,6 +28,7 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
     private SensorDataDbService mSensorDataDbService;
+    private SharedPreferences mSharedPreferences;
 
     public SensorDataProcessorService(){}
 
@@ -70,12 +71,15 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
         mSensorDataDbService = new SensorDataDbService(this);
+
+        mSharedPreferences = Preferences.getPrefs(this);
     }
 
     // Fires when a service is started up
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         registerSensorListeners();
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         // Send empty message to background thread
         mServiceHandler.sendEmptyMessage(0);
         // Keep service around "sticky"
@@ -84,10 +88,12 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     public void registerSensorListeners(){
         mSensorManager.unregisterListener(this);
-        ArrayList<String> allEnabled = Preferences.getEnabledSensorNames(SensorDataProcessorService.this);
-        for(Sensor s : mSensorList){
-            if(allEnabled.contains(s.getName())){
-                mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+        if(Preferences.isDataStorageEnabled(SensorDataProcessorService.this)){
+            ArrayList<String> allEnabled = Preferences.getEnabledSensorNames(SensorDataProcessorService.this);
+            for(Sensor s : mSensorList){
+                if(allEnabled.contains(s.getName())){
+                    mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+                }
             }
         }
     }
@@ -97,6 +103,7 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     public void onDestroy() {
         // Cleanup service before destruction
         mSensorManager.unregisterListener(this);
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         mHandlerThread.quit();
     }
 
@@ -109,7 +116,6 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // TODO: depending on storage preference turn on/off listeners, turn on/off service
         registerSensorListeners();
     }
 

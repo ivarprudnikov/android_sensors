@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.storage.SensorDataDbService;
@@ -24,6 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        mSensorDataDbService = new SensorDataDbService(this);
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -45,7 +49,17 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        mSensorDataDbService = new SensorDataDbService(this);
+        Spinner spinnerHours = (Spinner) findViewById(R.id.hours);
+        ArrayAdapter<CharSequence> adapterHours = ArrayAdapter.createFromResource(this,
+                R.array.available_durations_in_hours, android.R.layout.simple_spinner_item);
+        adapterHours.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHours.setAdapter(adapterHours);
+
+        Spinner spinnerLimitAction = (Spinner) findViewById(R.id.limitAction);
+        ArrayAdapter<CharSequence> adapterLimitAction = ArrayAdapter.createFromResource(this,
+                R.array.data_limit_action, android.R.layout.simple_spinner_item);
+        adapterLimitAction.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLimitAction.setAdapter(adapterLimitAction);
     }
 
     @Override
