@@ -11,7 +11,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.config.Constants;
-import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class SensorAdapter extends ArrayAdapter<Sensor> {
 
         // Populate the data into the template view using the data object
         String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + sensor.getName();
-        boolean switchValue = Preferences.getPrefs(convertView.getContext()).getBoolean(fSensorKey, false);
+        boolean switchValue = App.getPrefs().getBoolean(fSensorKey, false);
         viewHolder.btn.setChecked(switchValue);
         viewHolder.btn.setVisibility(RadioButton.INVISIBLE);
         viewHolder.btn.setVisibility(RadioButton.VISIBLE);

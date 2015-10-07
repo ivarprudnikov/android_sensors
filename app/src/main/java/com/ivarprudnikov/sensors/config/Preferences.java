@@ -1,35 +1,29 @@
 package com.ivarprudnikov.sensors.config;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import com.ivarprudnikov.sensors.App;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class Preferences {
 
-    private static SharedPreferences sSharedPreferences;
-
-    public static SharedPreferences getPrefs(Context ctx){
-        if(sSharedPreferences != null){
-            return sSharedPreferences;
-        }
-        sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sSharedPreferences;
+    public static boolean isRelatedToSensorRegistration(String key){
+        return key.matches(Constants.PREFS_SENSOR_ENABLED_PREFIX + ".*") ||
+                key.matches(Constants.PREFS_IS_SENSOR_LOG_ENABLED);
     }
 
-    public static boolean isDataStorageEnabled(Context ctx){
-        SharedPreferences prefs = getPrefs(ctx);
-        return prefs.getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+    public static boolean isDataStorageEnabled(){
+        return App.getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
     }
 
-    public static ArrayList<String> getEnabledSensorNames(Context ctx){
-        SharedPreferences prefs = getPrefs(ctx);
+    public static ArrayList<String> getEnabledSensorNames(){
+        SharedPreferences prefs = App.getPrefs();
         Map<String,?> allPrefs = prefs.getAll();
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         for(String key : allPrefs.keySet()){
-            if(key.matches(Constants.PREFS_SENSOR_ENABLED_PREFIX + ".*") && prefs.getBoolean(key, false) == true){
+            if(key.matches(Constants.PREFS_SENSOR_ENABLED_PREFIX + ".*") && prefs.getBoolean(key, false)){
                 String name = key.replaceFirst(Constants.PREFS_SENSOR_ENABLED_PREFIX, "");
                 names.add(name);
             }
@@ -37,25 +31,30 @@ public class Preferences {
         return names;
     }
 
-    public static String getStorageDuration(Context ctx){
-        SharedPreferences prefs = getPrefs(ctx);
-        return prefs.getString(Constants.PREFS_STORAGE_DURATION, "5 min");
+    public static String getStorageDuration(){
+        return App.getPrefs().getString(Constants.PREFS_STORAGE_DURATION, "5 min");
     }
 
-    public static void setStorageDuration(Context ctx, String val){
-        SharedPreferences.Editor editor = getPrefs(ctx).edit();
+    public static void setStorageDuration(String val){
+        SharedPreferences.Editor editor = App.getPrefs().edit();
         editor.putString(Constants.PREFS_STORAGE_DURATION, val);
-        editor.commit();
+        editor.apply();
     }
 
-    public static String getStorageLimitAction(Context ctx){
-        SharedPreferences prefs = getPrefs(ctx);
-        return prefs.getString(Constants.PREFS_STORAGE_LIMIT_ACTION, "Overwrite older data");
+    public static String getStorageLimitAction(){
+        return App.getPrefs().getString(Constants.PREFS_STORAGE_LIMIT_ACTION, "Overwrite older data");
     }
 
-    public static void setStorageLimitAction(Context ctx, String val){
-        SharedPreferences.Editor editor = getPrefs(ctx).edit();
+    public static void setStorageLimitAction(String val){
+        SharedPreferences.Editor editor = App.getPrefs().edit();
         editor.putString(Constants.PREFS_STORAGE_LIMIT_ACTION, val);
-        editor.commit();
+        editor.apply();
+    }
+
+    public static boolean isStorageLimitStop(){
+        return getStorageLimitAction().equals("Turn off data storage");
+    }
+    public static boolean isStorageLimitOverwrite(){
+        return getStorageLimitAction().equals("Overwrite older data");
     }
 }

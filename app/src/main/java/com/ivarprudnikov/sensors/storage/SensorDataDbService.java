@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.ivarprudnikov.sensors.App;
 import com.ivarprudnikov.sensors.config.Constants;
-import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 
 public class SensorDataDbService extends ContextWrapper {
@@ -48,7 +48,7 @@ public class SensorDataDbService extends ContextWrapper {
 
     public void save(String sensorName, float[] sensorValues, long nanotimestamp){
 
-        boolean sensorLogEnabled = Preferences.getPrefs(SensorDataDbService.this).getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
+        boolean sensorLogEnabled = App.getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
         if(sensorLogEnabled == false){
             return;
         }

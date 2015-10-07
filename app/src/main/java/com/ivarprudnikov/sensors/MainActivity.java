@@ -85,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 500);
 
-        boolean switchValue = Preferences.isDataStorageEnabled(MainActivity.this);
+        boolean switchValue = Preferences.isDataStorageEnabled();
         isDataStorageEnabledSwitch = (Switch)findViewById(R.id.isDataStorageEnabled);
         isDataStorageEnabledSwitch.setChecked(switchValue);
         isDataStorageEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = Preferences.getPrefs(MainActivity.this).edit();
+                SharedPreferences.Editor editor = App.getPrefs().edit();
                 editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, isChecked);
                 editor.commit();
             }

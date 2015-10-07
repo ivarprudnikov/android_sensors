@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.config.Constants;
-import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.Arrays;
 import java.util.List;
@@ -140,12 +139,12 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         });
 
         final String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + fSensorName;
-        boolean switchValue = Preferences.getPrefs(DisplaySensorDetailsActivity.this).getBoolean(fSensorKey, false);
+        boolean switchValue = App.getPrefs().getBoolean(fSensorKey, false);
         isSensorEnabledSwitch = (Switch)findViewById(R.id.isSensorListenerEnabled);
         isSensorEnabledSwitch.setChecked(switchValue);
         isSensorEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = Preferences.getPrefs(DisplaySensorDetailsActivity.this).edit();
+                SharedPreferences.Editor editor = App.getPrefs().edit();
                 editor.putBoolean(fSensorKey, isChecked);
                 editor.commit();
             }

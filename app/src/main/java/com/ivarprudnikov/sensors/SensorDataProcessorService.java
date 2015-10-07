@@ -16,7 +16,6 @@ import android.os.Message;
 import android.util.Log;
 
 import com.ivarprudnikov.sensors.config.Preferences;
-import com.ivarprudnikov.sensors.storage.SensorDataDbService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +26,13 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     private ServiceHandler mServiceHandler;
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-    private SensorDataDbService mSensorDataDbService;
     private SharedPreferences mSharedPreferences;
 
     public SensorDataProcessorService(){}
 
     // Define how the handler will process messages
     private final class ServiceHandler extends Handler {
+
         public ServiceHandler(Looper looper) {
             super(looper);
         }
@@ -47,12 +46,11 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
             if(EVENT_TYPE != null){
                 switch(EVENT_TYPE){
                     case "SENSOR":
-                        mSensorDataDbService.save(b.getString("NAME"), b.getFloatArray("VALUES"), b.getLong("TIMESTAMP"));
+                        App.getDbService().save(b.getString("NAME"), b.getFloatArray("VALUES"), b.getLong("TIMESTAMP"));
                         break;
                     default:
                         Log.i("handleMessage", b.toString());
                 }
-            } else {
             }
         }
     }
@@ -69,18 +67,19 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
             @Override
             public void run() {
                 // TODO: check if data within settings limits and act if not
-                mServiceHandler.postDelayed(this, 4000);
+
+
+
+                mServiceHandler.postDelayed(this, 5000);
             }
-        }, 4000);
+        }, 10000);
 
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         // List of Sensors Available
         mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
-        mSensorDataDbService = new SensorDataDbService(this);
-
-        mSharedPreferences = Preferences.getPrefs(this);
+        mSharedPreferences = App.getPrefs();
     }
 
     // Fires when a service is started up
@@ -96,8 +95,8 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     public void registerSensorListeners(){
         mSensorManager.unregisterListener(this);
-        if(Preferences.isDataStorageEnabled(SensorDataProcessorService.this)){
-            ArrayList<String> allEnabled = Preferences.getEnabledSensorNames(SensorDataProcessorService.this);
+        if(Preferences.isDataStorageEnabled()){
+            ArrayList<String> allEnabled = Preferences.getEnabledSensorNames();
             for(Sensor s : mSensorList){
                 if(allEnabled.contains(s.getName())){
                     mSensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
@@ -124,7 +123,9 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        registerSensorListeners();
+        if(Preferences.isRelatedToSensorRegistration(key)){
+            registerSensorListeners();
+        }
     }
 
     @Override

@@ -15,13 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.config.Preferences;
-import com.ivarprudnikov.sensors.storage.SensorDataDbService;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-    private Toolbar mToolbar;
-    private Button mDeleteButton;
-    private SensorDataDbService mSensorDataDbService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +24,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        mSensorDataDbService = new SensorDataDbService(this);
-
-        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -42,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        mDeleteButton = (Button)findViewById(R.id.deleteDataButton);
+        Button mDeleteButton = (Button)findViewById(R.id.deleteDataButton);
         mDeleteButton.setClickable(true);
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 R.array.available_durations_in_hours, android.R.layout.simple_spinner_item);
         adapterHours.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHours.setAdapter(adapterHours);
-        String selectedDuration = Preferences.getStorageDuration(this);
+        String selectedDuration = Preferences.getStorageDuration();
         spinnerHours.setSelection(adapterHours.getPosition(selectedDuration));
         spinnerHours.setOnItemSelectedListener(this);
 
@@ -65,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 R.array.data_limit_action, android.R.layout.simple_spinner_item);
         adapterLimitAction.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLimitAction.setAdapter(adapterLimitAction);
-        String selectedLimitAction = Preferences.getStorageLimitAction(this);
+        String selectedLimitAction = Preferences.getStorageLimitAction();
         spinnerLimitAction.setSelection(adapterLimitAction.getPosition(selectedLimitAction));
         spinnerLimitAction.setOnItemSelectedListener(this);
     }
@@ -87,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int rowCount = mSensorDataDbService.deleteAllRows();
+                        int rowCount = App.getDbService().deleteAllRows();
                         Toast.makeText(SettingsActivity.this, String.valueOf(rowCount) + " items removed", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -105,10 +98,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         switch (parent.getId()){
             case R.id.hours:
-                Preferences.setStorageDuration(this, selectedValue);
+                Preferences.setStorageDuration(selectedValue);
                 break;
             case R.id.limitAction:
-                Preferences.setStorageLimitAction(this, selectedValue);
+                Preferences.setStorageLimitAction(selectedValue);
                 break;
         }
     }
