@@ -12,7 +12,7 @@ import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 public class SensorDataDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "SensorData.db";
 
     private static final String TEXT_TYPE = " TEXT";

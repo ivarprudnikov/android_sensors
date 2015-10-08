@@ -13,6 +13,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.ivarprudnikov.sensors.config.Preferences;
@@ -27,8 +28,13 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
     private SharedPreferences mSharedPreferences;
+    private long timestampOnBoot;
 
-    public SensorDataProcessorService(){}
+    public SensorDataProcessorService(){
+        long sys = System.currentTimeMillis();
+        long elapsed = SystemClock.elapsedRealtime();
+        timestampOnBoot = sys - elapsed;
+    }
 
     // Define how the handler will process messages
     private final class ServiceHandler extends Handler {
@@ -66,11 +72,10 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         mServiceHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // TODO: check if data within settings limits and act if not
-
-
-
-                mServiceHandler.postDelayed(this, 5000);
+                // Check if data within settings limits
+                int removed = App.getDbService().trimData();
+                Log.d("serviceHandler.trimData",String.valueOf(removed));
+                mServiceHandler.postDelayed(this, 20000);
             }
         }, 10000);
 
@@ -148,12 +153,17 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
+
+        long timestampnano = event.timestamp;
+        long timestampmilli = (long)(timestampnano / 1000000L);
+        long eventTimeMilli = timestampOnBoot + timestampmilli;
+
         Message m = Message.obtain();
         Bundle b = new Bundle();
         b.putString("EVENT","SENSOR");
         b.putString("NAME", event.sensor.getName());
         b.putFloatArray("VALUES", event.values);
-        b.putLong("TIMESTAMP", event.timestamp);
+        b.putLong("TIMESTAMP", eventTimeMilli);
         m.setData(b);
         mServiceHandler.sendMessage(m);
     }

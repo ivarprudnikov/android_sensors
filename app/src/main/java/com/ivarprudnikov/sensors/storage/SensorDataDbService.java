@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.ivarprudnikov.sensors.App;
 import com.ivarprudnikov.sensors.config.Constants;
+import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 
 public class SensorDataDbService extends ContextWrapper {
@@ -46,35 +47,32 @@ public class SensorDataDbService extends ContextWrapper {
         return count;
     }
 
-    public void save(String sensorName, float[] sensorValues, long nanotimestamp){
+    public void save(String sensorName, float[] sensorValues, long timestamp){
 
         boolean sensorLogEnabled = App.getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
         if(sensorLogEnabled == false){
             return;
         }
 
-        SQLiteDatabase db = null;
+        for(int i = 0; i < sensorValues.length; i++){
+            // Create a new map of values, where column names are the keys
+            ContentValues values = new ContentValues();
+            float val = sensorValues[i];
 
-        try {
-            db = mDbHelper.getWritableDatabase();
-        } catch(SQLiteException e){
-            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
-        }
+            values.put(DataEntry.COLUMN_NAME_TIMESTAMP, timestamp);
+            values.put(DataEntry.COLUMN_NAME_SENSOR_NAME, sensorName);
+            values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE, val);
+            values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX, i);
 
-        if(db != null){
-            for(int i = 0; i < sensorValues.length; i++){
-                // Create a new map of values, where column names are the keys
-                ContentValues values = new ContentValues();
-                float val = sensorValues[i];
-
-                values.put(DataEntry.COLUMN_NAME_TIMESTAMP, nanotimestamp);
-                values.put(DataEntry.COLUMN_NAME_SENSOR_NAME, sensorName);
-                values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE, val);
-                values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX, i);
-
-                db.insert(DataEntry.TABLE_NAME, null, values);
+            try {
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                if(db != null){
+                    db.insert(DataEntry.TABLE_NAME, null, values);
+                }
+            } catch(SQLiteException e){
+                Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
             }
-            db.close();
+
         }
 
     }
@@ -84,6 +82,38 @@ public class SensorDataDbService extends ContextWrapper {
         SQLiteDatabase db = null;
         String whereClause = null;
         String[] whereArgs = null;
+
+        try {
+            db = mDbHelper.getWritableDatabase();
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        int deleted = 0;
+
+        if(db != null){
+            deleted = db.delete(DataEntry.TABLE_NAME, whereClause, whereArgs);
+        }
+
+        return deleted;
+    }
+
+    public int trimData(){
+
+        long time = System.currentTimeMillis();
+        String duration = Preferences.getStorageDuration();
+        String[] parts = duration.split(" ");
+        int num = Integer.valueOf(parts[0]);
+        long deleteOffset;
+        if(parts[0].equals("min")){
+            deleteOffset = (long)(time - (60 * 1000 * num));
+        } else {
+            deleteOffset = (long)(time - (3600 * 1000 * num));
+        }
+
+        SQLiteDatabase db = null;
+        String whereClause = DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
+        String[] whereArgs = new String[]{ String.valueOf(deleteOffset) };
 
         try {
             db = mDbHelper.getWritableDatabase();
