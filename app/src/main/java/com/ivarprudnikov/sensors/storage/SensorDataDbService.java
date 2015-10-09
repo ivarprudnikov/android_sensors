@@ -24,24 +24,22 @@ public class SensorDataDbService extends ContextWrapper {
 
     public int countSensorEvents(){
 
-        SQLiteDatabase db = null;
         int count = -1;
 
         try {
-            db = mDbHelper.getReadableDatabase();
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                        DataEntry.TABLE_NAME,
+                        new String[]{DataEntry._ID},
+                        DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?",
+                        new String[]{"0"},
+                        null, null, null, null);
+                count = c.getCount();
+                c.close();
+            }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService","mDbHelper.getReadableDatabase() exception", e);
-        }
-
-        if(db != null){
-            Cursor c = db.query(
-                    DataEntry.TABLE_NAME,
-                    new String[]{DataEntry._ID},
-                    DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?",
-                    new String[]{"0"},
-                    null, null, null, null);
-            count = c.getCount();
-            db.close();
         }
 
         return count;
@@ -50,7 +48,7 @@ public class SensorDataDbService extends ContextWrapper {
     public void save(String sensorName, float[] sensorValues, long timestamp){
 
         boolean sensorLogEnabled = App.getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
-        if(sensorLogEnabled == false){
+        if(!sensorLogEnabled){
             return;
         }
 
@@ -79,20 +77,15 @@ public class SensorDataDbService extends ContextWrapper {
 
     public int deleteAllRows(){
 
-        SQLiteDatabase db = null;
-        String whereClause = null;
-        String[] whereArgs = null;
-
-        try {
-            db = mDbHelper.getWritableDatabase();
-        } catch(SQLiteException e){
-            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
-        }
-
         int deleted = 0;
 
-        if(db != null){
-            deleted = db.delete(DataEntry.TABLE_NAME, whereClause, whereArgs);
+        try {
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            if(db != null){
+                deleted = db.delete(DataEntry.TABLE_NAME, null, null);
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
         }
 
         return deleted;
@@ -105,29 +98,62 @@ public class SensorDataDbService extends ContextWrapper {
         String[] parts = duration.split(" ");
         int num = Integer.valueOf(parts[0]);
         long deleteOffset;
-        if(parts[0].equals("min")){
-            deleteOffset = (long)(time - (60 * 1000 * num));
+        if(parts[1].equals("min")){
+            deleteOffset = time - (60 * 1000 * num);
         } else {
-            deleteOffset = (long)(time - (3600 * 1000 * num));
+            deleteOffset = time - (3600 * 1000 * num);
         }
 
-        SQLiteDatabase db = null;
         String whereClause = DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
         String[] whereArgs = new String[]{ String.valueOf(deleteOffset) };
 
+        int deleted = 0;
         try {
-            db = mDbHelper.getWritableDatabase();
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            if(db != null){
+                deleted = db.delete(DataEntry.TABLE_NAME, whereClause, whereArgs);
+            }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
         }
 
-        int deleted = 0;
+        return deleted;
+    }
 
-        if(db != null){
-            deleted = db.delete(DataEntry.TABLE_NAME, whereClause, whereArgs);
+    public int rowsOverLimit(){
+
+        long time = System.currentTimeMillis();
+        String duration = Preferences.getStorageDuration();
+        String[] parts = duration.split(" ");
+        int num = Integer.valueOf(parts[0]);
+        long offset;
+        if(parts[1].equals("min")){
+            offset = time - (60 * 1000 * num);
+        } else {
+            offset = time - (3600 * 1000 * num);
         }
 
-        return deleted;
+        String whereClause = DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
+        String[] whereArgs = new String[]{ String.valueOf(offset) };
+
+        int count = 0;
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                        DataEntry.TABLE_NAME,
+                        new String[]{DataEntry._ID},
+                        whereClause,
+                        whereArgs,
+                        null, null, null, null);
+                count = c.getCount();
+                c.close();
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return count;
     }
 
 }

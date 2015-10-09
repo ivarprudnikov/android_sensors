@@ -64,6 +64,14 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     // Fires when a service is first initialized
     public void onCreate() {
         super.onCreate();
+
+        // Set the SensorManager
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        // List of Sensors Available
+        mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+
+        mSharedPreferences = App.getPrefs();
+
         // An Android handler thread internally operates on a looper.
         mHandlerThread = new HandlerThread("SensorDataProcessorService.HandlerThread");
         mHandlerThread.start();
@@ -72,25 +80,31 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
         mServiceHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Check if data within settings limits
-                int removed = App.getDbService().trimData();
-                Log.d("serviceHandler.trimData",String.valueOf(removed));
-                mServiceHandler.postDelayed(this, 20000);
+                if(Preferences.isDataStorageEnabled()){
+                    if(Preferences.isStorageLimitOverwrite()){
+                        // Check if data within settings limits
+                        App.getDbService().trimData();
+                    }
+                    if(Preferences.isStorageLimitStop() && App.getDbService().rowsOverLimit() > 0){
+                        Preferences.setDataStorageEnabled(false);
+                    }
+                    mServiceHandler.postDelayed(this, 20000);
+                } else {
+                    mServiceHandler.postDelayed(this, 60000);
+                }
             }
         }, 10000);
-
-        // Set the SensorManager
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        // List of Sensors Available
-        mSensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-
-        mSharedPreferences = App.getPrefs();
     }
 
-    // Fires when a service is started up
+    /**
+     * Fires when a service is started up
+     * And every time it is being triggered by
+     * activities or alarm
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         registerSensorListeners();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         // Send empty message to background thread
         mServiceHandler.sendEmptyMessage(0);
@@ -155,7 +169,7 @@ public class SensorDataProcessorService extends Service implements SensorEventLi
     public final void onSensorChanged(SensorEvent event) {
 
         long timestampnano = event.timestamp;
-        long timestampmilli = (long)(timestampnano / 1000000L);
+        long timestampmilli = (timestampnano / 1000000L);
         long eventTimeMilli = timestampOnBoot + timestampmilli;
 
         Message m = Message.obtain();

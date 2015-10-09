@@ -18,6 +18,12 @@ public class Preferences {
         return App.getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
     }
 
+    public static void setDataStorageEnabled(boolean val){
+        SharedPreferences.Editor editor = App.getPrefs().edit();
+        editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, val);
+        editor.apply();
+    }
+
     public static ArrayList<String> getEnabledSensorNames(){
         SharedPreferences prefs = App.getPrefs();
         Map<String,?> allPrefs = prefs.getAll();

@@ -3,6 +3,8 @@ package com.ivarprudnikov.sensors;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.text.DecimalFormatSymbols;
+
 public class StoredSensorEventsCounter extends AsyncTask<Void, Void, String> {
 
     OnQueryResponseListener listener;
@@ -20,6 +22,9 @@ public class StoredSensorEventsCounter extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         int data = App.getDbService().countSensorEvents();
+        if(data < 0){
+            return DecimalFormatSymbols.getInstance().getInfinity();
+        }
         return Integer.valueOf(data).toString();
     }
 

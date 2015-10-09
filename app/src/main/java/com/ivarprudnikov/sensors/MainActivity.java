@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         boolean switchValue = Preferences.isDataStorageEnabled();
         isDataStorageEnabledSwitch = (Switch)findViewById(R.id.isDataStorageEnabled);
         isDataStorageEnabledSwitch.setChecked(switchValue);
+        // TODO: listen to prefs to update switch value in case they change in bg
         isDataStorageEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = App.getPrefs().edit();
@@ -96,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Construct Intent to start background service
-        Intent i = new Intent(this, SensorDataProcessorService.class);
-        // Start the service
-        startService(i);
+        // Construct Intent to start alarm which makes sure
+        // that background service is running
+        Intent i = new Intent(this, OnAlarmBroadcastReceiver.class);
+        sendBroadcast(i);
     }
 
     @Override
