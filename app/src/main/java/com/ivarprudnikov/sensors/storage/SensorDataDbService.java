@@ -188,8 +188,8 @@ public class SensorDataDbService extends ContextWrapper {
                 if(c.moveToFirst()){
                     while (c.isAfterLast() == false) {
                         String name = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_NAME));
-                        long timestamp = c.getLong(c.getColumnIndex(DataEntry.COLUMN_NAME_TIMESTAMP));
-                        int idx = c.getInt(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
+                        String timestamp = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_TIMESTAMP));
+                        String idx = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
                         float val = c.getFloat(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE));
 
                         if(data.get(name) == null){
@@ -197,7 +197,7 @@ public class SensorDataDbService extends ContextWrapper {
                         }
                         Map sensorData = (Map)data.get(name);
                         if(sensorData.get(timestamp) == null){
-                            sensorData.put(timestamp, new HashMap<Integer, Float>());
+                            sensorData.put(timestamp, new HashMap<String, Float>());
                         }
                         Map timestampData = (Map)sensorData.get(timestamp);
                         timestampData.put(idx, val);

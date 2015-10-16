@@ -1,65 +1,57 @@
 package com.ivarprudnikov.sensors.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.json.JsonHttpContent;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.JsonObjectParser;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 public class HttpUtil {
 
-    public static Map post(String urlString, Map data, Map headers){
+    static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    static final JsonFactory JSON_FACTORY = AndroidJsonFactory.getDefaultInstance();
 
-        URL url;
-        HttpURLConnection urlConnection = null;
+    public static HttpResponse post(String urlString, Map data, final Map<String, String> headers) throws IOException {
 
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e){
-            return null;
-        }
+        HttpRequestFactory requestFactory =
+                HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) {
+                        request.setParser(new JsonObjectParser(JSON_FACTORY));
+                        combineHeaders(request.getHeaders(), headers);
+                    }
+                });
+        GenericUrl url = new GenericUrl(urlString);
+        JsonHttpContent content = new JsonHttpContent(JSON_FACTORY, data);
+        HttpRequest request = requestFactory.buildPostRequest(url, content);
 
-        try {
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setChunkedStreamingMode(0); // when size not known
-
-            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-            OutputStreamWriter writer = new OutputStreamWriter(out);
-            writer.write("{}");
-            writer.close();
-
-            BufferedInputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-
-
-
-            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            } else {
-            }
-
-        } catch (MalformedURLException e) {
-            // ...
-        } catch (IOException e) {
-            // ...
-        } finally {
-            if(urlConnection != null){
-                urlConnection.disconnect();
-            }
-        }
+        return request.execute();
     }
+
+    private static HttpHeaders combineHeaders(HttpHeaders existing, Map<String, String> headers) {
+        HttpHeaders h;
+        if(existing != null){
+            h = existing;
+        } else {
+            h = new HttpHeaders();
+        }
+        if(headers != null){
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                h.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return h;
+    }
+
 }

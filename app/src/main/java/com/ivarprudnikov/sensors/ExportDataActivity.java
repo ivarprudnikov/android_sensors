@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ivarprudnikov.sensors.model.ExportCommand;
-
 import java.util.Map;
 
 
@@ -68,16 +66,18 @@ public class ExportDataActivity extends AppCompatActivity {
     public void send(){
         Toast.makeText(ExportDataActivity.this, "Sending ...", Toast.LENGTH_SHORT).show();
         Map data = App.getDbService().getData();
-        ExportCommand cmd = new ExportCommand();
-        cmd.setUrl(mUrl.getText().toString());
-        cmd.setData(data);
 
-        // TODO: get data
-        // TODO: send data
-    }
+        AsyncNetworkTask.OnResponseListener l = new AsyncNetworkTask.OnResponseListener() {
+            @Override
+            public void onResponseFinished(int statusCode) {
+                Toast.makeText(ExportDataActivity.this,
+                        "Got response status: " + String.valueOf(statusCode),
+                        Toast.LENGTH_SHORT).show();
+            }
+        };
+        final AsyncNetworkTask mTask = new AsyncNetworkTask(ExportDataActivity.this, l, mUrl.getText().toString(), data);
+        mTask.execute();
 
-    public boolean isValid(){
-        return false;
     }
 
 }
