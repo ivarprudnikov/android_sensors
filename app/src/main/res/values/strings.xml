@@ -31,4 +31,8 @@
         <item>Turn off data storage</item>
         <item>Overwrite older data</item>
     </string-array>
+    <string name="title_activity_export_data">Export</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

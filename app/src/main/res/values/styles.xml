@@ -55,6 +55,22 @@
         <item name="android:paddingBottom">@dimen/section_padding</item>
     </style>
 
+    <style name="InputLabel">
+        <item name="android:textSize">@dimen/content_label</item>
+        <item name="android:textColor">@color/content_textcolor</item>
+        <item name="android:paddingBottom">@dimen/section_padding_half</item>
+    </style>
+
+    <style name="InputField">
+        <item name="android:paddingBottom">@dimen/section_padding_half</item>
+    </style>
+
+    <style name="InputHelp">
+        <item name="android:textSize">@dimen/content_label</item>
+        <item name="android:textColor">@color/content_textcolor</item>
+        <item name="android:paddingBottom">@dimen/section_padding</item>
+    </style>
+
     <style name="SwitchDark" parent="Base.TextAppearance.AppCompat.Widget.Switch">
         <item name="android:padding">@dimen/section_padding</item>
         <item name="android:background">@color/theme_light</item>

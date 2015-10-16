@@ -13,6 +13,9 @@ import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SensorDataDbService extends ContextWrapper {
 
     private SensorDataDbHelper mDbHelper;
@@ -156,4 +159,60 @@ public class SensorDataDbService extends ContextWrapper {
         return count;
     }
 
+    /**
+     * { "sensorName": {
+     *   "timestamp": {
+     *       "0": "x",
+     *       "1": "y",
+     *       ...
+     *   },
+     *   ...
+     * }, ... }
+     * @return
+     */
+    public Map getData(){
+
+        Map data = new HashMap<String, Map>();
+
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                    DataEntry.TABLE_NAME,
+                    new String[]{
+                        DataEntry.COLUMN_NAME_TIMESTAMP,
+                        DataEntry.COLUMN_NAME_SENSOR_NAME,
+                        DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
+                        DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX,
+                    }, null, null, null, null, null, null);
+                if(c.moveToFirst()){
+                    while (c.isAfterLast() == false) {
+                        String name = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_NAME));
+                        long timestamp = c.getLong(c.getColumnIndex(DataEntry.COLUMN_NAME_TIMESTAMP));
+                        int idx = c.getInt(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
+                        float val = c.getFloat(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE));
+
+                        if(data.get(name) == null){
+                            data.put(name, new HashMap<Long, Map>());
+                        }
+                        Map sensorData = (Map)data.get(name);
+                        if(sensorData.get(timestamp) == null){
+                            sensorData.put(timestamp, new HashMap<Integer, Float>());
+                        }
+                        Map timestampData = (Map)sensorData.get(timestamp);
+                        timestampData.put(idx, val);
+                        sensorData.put(timestamp, timestampData);
+                        data.put(name, sensorData);
+                        c.moveToNext();
+                    }
+                }
+                c.close();
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return data;
+
+    }
 }

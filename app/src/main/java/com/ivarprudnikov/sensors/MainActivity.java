@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_view:
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+            case R.id.export_view:
+                startActivity(new Intent(MainActivity.this, ExportDataActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
