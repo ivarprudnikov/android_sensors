@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.hardware.Sensor;
 import android.util.Log;
 
 import com.ivarprudnikov.sensors.App;
@@ -25,18 +26,26 @@ public class SensorDataDbService extends ContextWrapper {
         mDbHelper = new SensorDataDbHelper(ctx);
     }
 
-    public int countSensorEvents(){
+    public int countSensorEvents(Sensor sensor){
 
         int count = -1;
 
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            String whereQuery = DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?";
+            String[] args = new String[]{"0"};
+
+            if(sensor != null){
+                whereQuery = DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=? AND " + DataEntry.COLUMN_NAME_SENSOR_NAME + "=?";
+                args = new String[]{"0", sensor.getName()};
+            }
+
             if(db != null){
                 Cursor c = db.query(
                         DataEntry.TABLE_NAME,
                         new String[]{DataEntry._ID},
-                        DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?",
-                        new String[]{"0"},
+                        whereQuery,
+                        args,
                         null, null, null, null);
                 count = c.getCount();
                 c.close();
@@ -86,6 +95,27 @@ public class SensorDataDbService extends ContextWrapper {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             if(db != null){
                 deleted = db.delete(DataEntry.TABLE_NAME, null, null);
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return deleted;
+    }
+
+    public int deleteSensorRows(Sensor sensor){
+
+        int deleted = 0;
+
+        try {
+            if(sensor != null){
+
+                String whereQuery = DataEntry.COLUMN_NAME_SENSOR_NAME + "=?";
+                String[] args = new String[]{sensor.getName()};
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                if(db != null){
+                    deleted = db.delete(DataEntry.TABLE_NAME, whereQuery, args);
+                }
             }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);

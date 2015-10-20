@@ -1,15 +1,20 @@
 package com.ivarprudnikov.sensors;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +30,10 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
     private List<Sensor> mSensorList;
     private CompoundButton isSensorEnabledSwitch;
     ImageButton mOpenChartButton;
+    private Toolbar mToolbar;
+    private Sensor mSelectedSensor = null;
+    private TextView mDataCountText;
+    private StoredSensorEventsCounter.OnQueryResponseListener countListener;
 
     public List<String> sensorTypes = Arrays.asList(
             "", // padding because sensor types start at 1
@@ -66,6 +75,18 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_sensor_details);
 
+        // prepare toolbar
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DisplaySensorDetailsActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -79,14 +100,13 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
         final String fSensorName = intent.getStringExtra(Constants.INTENT_KEY_SENSOR_NAME);
 
         // figure out which sensor was selected
-        Sensor selectedSensor = null;
         for(Sensor s : mSensorList){
             if(s.getName().equals(fSensorName)){
-                selectedSensor = s;
+                mSelectedSensor = s;
             }
         }
 
-        final Sensor fSelectedSensor = selectedSensor;
+        final Sensor fSelectedSensor = mSelectedSensor;
 
         // if for some reason sensor was not identified
         // and/or if data was not passed to this activity
@@ -98,34 +118,34 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        ((TextView)findViewById(R.id.sensorDetailsNameValue)).setText(selectedSensor.getName());
-        ((TextView)findViewById(R.id.sensorDetailsVendorValue)).setText(selectedSensor.getVendor());
-        ((TextView)findViewById(R.id.sensorDetailsTypeValue)).setText(Integer.toString(selectedSensor.getType()));
+        ((TextView)findViewById(R.id.sensorDetailsNameValue)).setText(mSelectedSensor.getName());
+        ((TextView)findViewById(R.id.sensorDetailsVendorValue)).setText(mSelectedSensor.getVendor());
+        ((TextView)findViewById(R.id.sensorDetailsTypeValue)).setText(Integer.toString(mSelectedSensor.getType()));
 
-        if(selectedSensor.getType() < sensorTypes.size())
-            ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( sensorTypes.get(selectedSensor.getType()) );
+        if(mSelectedSensor.getType() < sensorTypes.size())
+            ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( sensorTypes.get(mSelectedSensor.getType()) );
         else
             ((TextView)findViewById(R.id.sensorDetailsTypeResolvedValue)).setText( Constants.TEXT_SENSOR_TYPE_UNRESOLVABLE );
 
-        ((TextView)findViewById(R.id.sensorDetailsVersionValue)).setText(Integer.toString(selectedSensor.getVersion()) );
-        ((TextView)findViewById(R.id.sensorDetailsMaxRangeValue)).setText( Float.toString(selectedSensor.getMaximumRange()) );
-        ((TextView)findViewById(R.id.sensorDetailsResolutionValue)).setText( Float.toString(selectedSensor.getResolution()) );
-        ((TextView)findViewById(R.id.sensorDetailsPowerValue)).setText(Float.toString(selectedSensor.getPower()));
-        ((TextView)findViewById(R.id.sensorDetailsMinDelayValue)).setText(Integer.toString(selectedSensor.getMinDelay()));
+        ((TextView)findViewById(R.id.sensorDetailsVersionValue)).setText(Integer.toString(mSelectedSensor.getVersion()) );
+        ((TextView)findViewById(R.id.sensorDetailsMaxRangeValue)).setText( Float.toString(mSelectedSensor.getMaximumRange()) );
+        ((TextView)findViewById(R.id.sensorDetailsResolutionValue)).setText( Float.toString(mSelectedSensor.getResolution()) );
+        ((TextView)findViewById(R.id.sensorDetailsPowerValue)).setText(Float.toString(mSelectedSensor.getPower()));
+        ((TextView)findViewById(R.id.sensorDetailsMinDelayValue)).setText(Integer.toString(mSelectedSensor.getMinDelay()));
 
         // compatibility issues with lower than API ver 20
         try {
-            ((TextView)findViewById(R.id.sensorDetailsReportingModeValue)).setText( reportingModes.get(selectedSensor.getReportingMode()));
-            ((TextView)findViewById(R.id.sensorDetailsTypeStringValue)).setText(selectedSensor.getStringType());
-            ((TextView)findViewById(R.id.sensorDetailsMaxDelayValue)).setText(Integer.toString(selectedSensor.getMaxDelay()));
-            ((TextView)findViewById(R.id.sensorDetailsFifoMaxEventValue)).setText(Integer.toString(selectedSensor.getFifoMaxEventCount()));
-            ((TextView)findViewById(R.id.sensorDetailsFifoReservedEventValue)).setText(Integer.toString(selectedSensor.getFifoReservedEventCount()));
-            ((TextView)findViewById(R.id.sensorDetailsIsWakeUpValue)).setText(Boolean.toString(selectedSensor.isWakeUpSensor()));
+            ((TextView)findViewById(R.id.sensorDetailsReportingModeValue)).setText( reportingModes.get(mSelectedSensor.getReportingMode()));
+            ((TextView)findViewById(R.id.sensorDetailsTypeStringValue)).setText(mSelectedSensor.getStringType());
+            ((TextView)findViewById(R.id.sensorDetailsMaxDelayValue)).setText(Integer.toString(mSelectedSensor.getMaxDelay()));
+            ((TextView)findViewById(R.id.sensorDetailsFifoMaxEventValue)).setText(Integer.toString(mSelectedSensor.getFifoMaxEventCount()));
+            ((TextView)findViewById(R.id.sensorDetailsFifoReservedEventValue)).setText(Integer.toString(mSelectedSensor.getFifoReservedEventCount()));
+            ((TextView)findViewById(R.id.sensorDetailsIsWakeUpValue)).setText(Boolean.toString(mSelectedSensor.isWakeUpSensor()));
         } catch(Exception e){}
 
         // hidden methods
-        //selectedSensor.getRequiredPermission();
-        //selectedSensor.getHandle();
+        //mSelectedSensor.getRequiredPermission();
+        //mSelectedSensor.getHandle();
 
         // Handle button tap
         mOpenChartButton = (ImageButton) findViewById(R.id.chartButton);
@@ -138,6 +158,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             }
         });
 
+        // prepare sensor toggle
         final String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + fSensorName;
         boolean switchValue = App.getPrefs().getBoolean(fSensorKey, false);
         isSensorEnabledSwitch = (CompoundButton)findViewById(R.id.isSensorListenerEnabled);
@@ -150,6 +171,64 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             }
         });
 
+        // Initiate data counter
+        mDataCountText = (TextView)findViewById(R.id.dataCount);
+        mDataCountText.setText("...");
+        countListener = new StoredSensorEventsCounter.OnQueryResponseListener() {
+            @Override
+            public void OnQueryResponseFinished(String resp) {
+                mDataCountText.setText(resp);
+            }
+        };
+
+        // create data counter handler which will loop and set fresh value in view
+        final Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final StoredSensorEventsCounter mTask = new StoredSensorEventsCounter(DisplaySensorDetailsActivity.this, countListener, mSelectedSensor);
+                mTask.execute();
+                h.postDelayed(this, 3000);
+            }
+        }, 500);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_sensor_details, menu);
+        return true;
+    }
+
+    private void showDeleteConfirmationDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int rowCount = App.getDbService().deleteSensorRows(mSelectedSensor);
+                        Toast.makeText(DisplaySensorDetailsActivity.this, String.valueOf(rowCount) + " items removed", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do Something Here
+                    }
+                }).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_action:
+                showDeleteConfirmationDialog("Delete selected sensor data?", "This cannot be undone.");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

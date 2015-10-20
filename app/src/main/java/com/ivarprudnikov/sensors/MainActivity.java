@@ -74,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // create data counter handler which will loop and set fresh value in view
         final Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                final StoredSensorEventsCounter mTask = new StoredSensorEventsCounter(MainActivity.this, countListener);
+                final StoredSensorEventsCounter mTask = new StoredSensorEventsCounter(MainActivity.this, countListener, null);
                 mTask.execute();
                 h.postDelayed(this, 3000);
             }
@@ -96,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 mSensorAdapter.notifyDataSetChanged();
             }
         });
-
-
 
         // Construct Intent to start alarm which makes sure
         // that background service is running

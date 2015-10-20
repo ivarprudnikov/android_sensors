@@ -3,10 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <ScrollView android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,13 +20,14 @@
             android:orientation="vertical"
             tools:context=".DisplaySensorDetailsActivity">
 
-            <include layout="@layout/activity_display_sensor_details_switch" />
+            <include layout="@layout/activity_display_sensor_details_header" />
 
             <TextView
                 android:text="Sensor name"
                 android:id="@+id/sensorDetailsNameTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/section_padding"
                 style="@style/DescriptionTitleText"/>
             <TextView
                 android:id="@+id/sensorDetailsNameValue"

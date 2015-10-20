@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Header"
+    android:gravity="center_vertical" >
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/HeaderHero"
+        android:id="@+id/dataCount" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:text="@string/selected_sensor_events_stored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/HeaderHeroSub"
+        android:id="@+id/dataCountTitle"
+        android:layout_below="@+id/dataCount" />
+
+    <include layout="@layout/activity_display_sensor_details_switch" />
+
+</RelativeLayout>
