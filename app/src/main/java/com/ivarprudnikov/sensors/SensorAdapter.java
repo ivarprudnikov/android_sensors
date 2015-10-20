@@ -51,11 +51,19 @@ public class SensorAdapter extends ArrayAdapter<Sensor> {
 
         // Populate the data into the template view using the data object
         String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + sensor.getName();
+        boolean isDataStorageEnabled = App.getPrefs().getBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, false);
         boolean switchValue = App.getPrefs().getBoolean(fSensorKey, false);
+
         viewHolder.btn.setChecked(switchValue);
         viewHolder.btn.setVisibility(RadioButton.INVISIBLE);
         viewHolder.btn.setVisibility(RadioButton.VISIBLE);
-        viewHolder.btn.setEnabled(false);
+
+        // visually distinguish in case data is being stored
+        if(isDataStorageEnabled == true){
+            viewHolder.btn.setEnabled(true);
+        } else {
+            viewHolder.btn.setEnabled(false);
+        }
         viewHolder.btn.setClickable(false);
         viewHolder.btn.setFocusable(false);
         viewHolder.line1.setText(sensor.getName());

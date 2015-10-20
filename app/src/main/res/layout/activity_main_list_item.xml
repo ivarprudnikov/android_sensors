@@ -10,8 +10,7 @@
         android:id="@+id/sensorStatus"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="10dip"
-        android:layout_marginLeft="10dip"
-        android:enabled="false" />
+        android:layout_marginLeft="10dip" />
 
     <TextView
         android:id="@+id/line1"

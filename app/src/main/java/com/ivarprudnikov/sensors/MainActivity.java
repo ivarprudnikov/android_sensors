@@ -93,8 +93,11 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = App.getPrefs().edit();
                 editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, isChecked);
                 editor.commit();
+                mSensorAdapter.notifyDataSetChanged();
             }
         });
+
+
 
         // Construct Intent to start alarm which makes sure
         // that background service is running
