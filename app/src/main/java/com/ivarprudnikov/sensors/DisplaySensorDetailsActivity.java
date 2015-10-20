@@ -23,7 +23,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
-    private Switch isSensorEnabledSwitch;
+    private CompoundButton isSensorEnabledSwitch;
     ImageButton mOpenChartButton;
 
     public List<String> sensorTypes = Arrays.asList(
@@ -140,7 +140,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
 
         final String fSensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + fSensorName;
         boolean switchValue = App.getPrefs().getBoolean(fSensorKey, false);
-        isSensorEnabledSwitch = (Switch)findViewById(R.id.isSensorListenerEnabled);
+        isSensorEnabledSwitch = (CompoundButton)findViewById(R.id.isSensorListenerEnabled);
         isSensorEnabledSwitch.setChecked(switchValue);
         isSensorEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

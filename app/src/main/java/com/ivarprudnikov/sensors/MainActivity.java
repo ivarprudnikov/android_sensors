@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.config.Constants;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorAdapter mSensorAdapter;
     private TextView mDataCountText;
     private StoredSensorEventsCounter.OnQueryResponseListener countListener;
-    private Switch isDataStorageEnabledSwitch;
+    private CompoundButton isDataStorageEnabledSwitch;
     private Toolbar mToolbar;
 
     @Override
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }, 500);
 
         boolean switchValue = Preferences.isDataStorageEnabled();
-        isDataStorageEnabledSwitch = (Switch)findViewById(R.id.isDataStorageEnabled);
+        isDataStorageEnabledSwitch = (CompoundButton)findViewById(R.id.isDataStorageEnabled);
         isDataStorageEnabledSwitch.setChecked(switchValue);
         // TODO: listen to prefs to update switch value in case they change in bg
         isDataStorageEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -20,13 +20,6 @@
         android:id="@+id/dataCountTitle"
         android:layout_below="@+id/dataCount" />
 
-    <Switch
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/is_data_storage_enabled"
-        android:id="@+id/isDataStorageEnabled"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_below="@+id/dataCountTitle"
-        style="@style/SwitchDark"/>
+    <include layout="@layout/activity_main_switch" />
 
 </RelativeLayout>
