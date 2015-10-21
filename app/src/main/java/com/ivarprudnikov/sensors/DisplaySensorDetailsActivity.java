@@ -19,12 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.config.Constants;
+import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.Arrays;
 import java.util.List;
 
 
-public class DisplaySensorDetailsActivity extends AppCompatActivity {
+public class DisplaySensorDetailsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SensorManager mSensorManager;
     private List<Sensor> mSensorList;
@@ -33,7 +34,9 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Sensor mSelectedSensor = null;
     private TextView mDataCountText;
+    private TextView mStatusText;
     private StoredSensorEventsCounter.OnQueryResponseListener countListener;
+    private SharedPreferences mSharedPreferences;
 
     public List<String> sensorTypes = Arrays.asList(
             "", // padding because sensor types start at 1
@@ -86,6 +89,9 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // set shared prefs to register listeners later
+        mSharedPreferences = App.getPrefs();
 
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -181,6 +187,9 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             }
         };
 
+        // get reference to status
+        mStatusText = (TextView)findViewById(R.id.status);
+
         // create data counter handler which will loop and set fresh value in view
         final Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -192,6 +201,44 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity {
             }
         }, 500);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        syncStatus();
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(Preferences.isRelatedToSensorRegistration(key)){
+            syncStatus();
+        }
+    }
+
+    public void syncStatus(){
+
+        boolean switchValue = false;
+        if(mSelectedSensor != null){
+            String sensorKey = Constants.PREFS_SENSOR_ENABLED_PREFIX + mSelectedSensor.getName();
+            switchValue = App.getPrefs().getBoolean(sensorKey, false);
+        }
+
+        // give a hint to user if he anticipates data storage
+        if(!Preferences.isDataStorageEnabled() && switchValue == true){
+            mStatusText.setText("Data storage is disabled");
+            mStatusText.setVisibility(View.VISIBLE);
+        } else {
+            mStatusText.setVisibility(View.GONE);
+            mStatusText.setText("");
+        }
     }
 
     @Override

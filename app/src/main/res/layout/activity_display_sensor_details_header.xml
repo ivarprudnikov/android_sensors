@@ -19,6 +19,15 @@
         android:id="@+id/dataCountTitle"
         android:layout_below="@+id/dataCount" />
 
-    <include layout="@layout/activity_display_sensor_details_switch" />
+    <include android:id="@+id/mainSwitch"
+        layout="@layout/activity_display_sensor_details_switch" />
+
+    <TextView
+        style="@style/InfoMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/status"
+        android:layout_below="@+id/mainSwitch"
+        android:visibility="gone" />
 
 </RelativeLayout>
