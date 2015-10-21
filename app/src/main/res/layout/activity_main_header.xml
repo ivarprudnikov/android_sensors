@@ -3,16 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/Header"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical"
+    android:animateLayoutChanges="true" >
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:text="1376354"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/HeaderHero"
         android:id="@+id/dataCount" />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:text="@string/total_events_stored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,21 @@
         android:id="@+id/dataCountTitle"
         android:layout_below="@+id/dataCount" />
 
-    <include layout="@layout/activity_main_switch" />
+    <include android:id="@+id/mainSwitch"
+        layout="@layout/activity_main_switch" />
+
+    <TextView
+        android:padding="15dp"
+        android:background="@color/info_bg"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/status"
+        android:layout_below="@+id/mainSwitch"
+        android:elegantTextHeight="false"
+        android:gravity="center_horizontal"
+        android:visibility="gone" />
 
 </RelativeLayout>

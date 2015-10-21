@@ -7,6 +7,8 @@
     <color name="action_bg">#DDD</color>
     <color name="action_item_bg">#F4F4F4</color>
 
+    <color name="info_bg">#fff5f353</color>
+
     <!-- Theme -->
     <!-- Positive Actions -->
     <color name="theme_darkest">#FF008679</color>

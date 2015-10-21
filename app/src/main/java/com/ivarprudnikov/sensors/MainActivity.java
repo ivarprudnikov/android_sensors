@@ -21,7 +21,7 @@ import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ListView mHomeSensorListView;
     private View mHomeSensorListHeaderView;
@@ -29,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private List<Sensor> mSensorList;
     private SensorAdapter mSensorAdapter;
     private TextView mDataCountText;
+    private TextView mStatusText;
     private StoredSensorEventsCounter.OnQueryResponseListener countListener;
     private CompoundButton isDataStorageEnabledSwitch;
     private Toolbar mToolbar;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        // set shared prefs to register listeners later
+        mSharedPreferences = App.getPrefs();
 
         // Set the SensorManager
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -64,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         mSensorAdapter = new SensorAdapter(this, mSensorList);
         mHomeSensorListView.setAdapter(mSensorAdapter);
 
+        // get reference to status
+        mStatusText = (TextView)mHomeSensorListHeaderView.findViewById(R.id.status);
+
         // Initiate data counter
         mDataCountText = (TextView)mHomeSensorListHeaderView.findViewById(R.id.dataCount);
         mDataCountText.setText("...");
@@ -71,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void OnQueryResponseFinished(String resp) {
                 mDataCountText.setText(resp);
+                syncStatus();
             }
         };
 
@@ -88,13 +97,11 @@ public class MainActivity extends AppCompatActivity {
         boolean switchValue = Preferences.isDataStorageEnabled();
         isDataStorageEnabledSwitch = (CompoundButton)findViewById(R.id.isDataStorageEnabled);
         isDataStorageEnabledSwitch.setChecked(switchValue);
-        // TODO: listen to prefs to update switch value in case they change in bg
         isDataStorageEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = App.getPrefs().edit();
                 editor.putBoolean(Constants.PREFS_IS_SENSOR_LOG_ENABLED, isChecked);
                 editor.commit();
-                mSensorAdapter.notifyDataSetChanged();
             }
         });
 
@@ -108,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mSensorAdapter.notifyDataSetChanged();
+        syncStatus();
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -128,6 +143,28 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void syncStatus(){
+        String eventsCount = mDataCountText.getText().toString();
+        if(!Preferences.isDataStorageEnabled() && eventsCount.equals("0")){
+            mStatusText.setText("Enable storage first");
+            mStatusText.setVisibility(View.VISIBLE);
+        } else if(Preferences.isDataStorageEnabled() && !Preferences.areAnySensorListenersEnabled()){
+            mStatusText.setText("Now enable sensors");
+            mStatusText.setVisibility(View.VISIBLE);
+        } else {
+            mStatusText.setVisibility(View.GONE);
+            mStatusText.setText("");
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(Preferences.isRelatedToSensorRegistration(key)){
+            syncStatus();
+            mSensorAdapter.notifyDataSetChanged();
         }
     }
 }

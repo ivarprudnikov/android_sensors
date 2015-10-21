@@ -21,6 +21,11 @@
         <item name="android:paddingTop">@dimen/abc_action_bar_default_height_material</item>
     </style>
 
+    <style name="HeaderLight">
+        <item name="android:background">@color/theme_light</item>
+        <item name="android:paddingTop">@dimen/abc_action_bar_default_height_material</item>
+    </style>
+
     <style name="HeaderHero">
         <item name="android:paddingRight">@dimen/section_padding</item>
         <item name="android:paddingLeft">@dimen/section_padding</item>

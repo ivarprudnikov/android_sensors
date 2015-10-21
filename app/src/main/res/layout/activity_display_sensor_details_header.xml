@@ -2,16 +2,16 @@
     android:id="@+id/viewHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/Header"
+    style="@style/HeaderLight"
     android:gravity="center_vertical" >
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/HeaderHero"
         android:id="@+id/dataCount" />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView 
         android:text="@string/selected_sensor_events_stored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
