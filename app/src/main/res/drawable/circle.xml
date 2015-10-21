@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
         
     <item>
         <shape android:shape="oval">
@@ -7,9 +8,11 @@
         </shape>
     </item>
 
-    <item>
+    <!--
+    <item tools:targetApi="21">
         <ripple android:color="@color/accent_material_dark">
         </ripple>
     </item>
+    -->
 
 </layer-list>

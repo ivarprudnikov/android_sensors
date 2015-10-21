@@ -207,16 +207,21 @@
     </ScrollView>
 
     <ImageButton
+        android:translationZ="@dimen/abc_floating_window_z"
+        android:layout_above="@+id/toolbar"
         android:layout_margin="15dp"
+        android:padding="5dp"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="end|bottom"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/chart_icon"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_chart"
         android:background="@drawable/circle"
         android:id="@+id/chartButton"
         android:clickable="true"
-        android:layout_above="@+id/scrollView"/>
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
 
 </RelativeLayout>
