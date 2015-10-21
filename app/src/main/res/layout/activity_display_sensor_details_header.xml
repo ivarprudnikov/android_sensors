@@ -11,7 +11,7 @@
         style="@style/HeaderHero"
         android:id="@+id/dataCount" />
 
-    <TextView 
+    <TextView
         android:text="@string/selected_sensor_events_stored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

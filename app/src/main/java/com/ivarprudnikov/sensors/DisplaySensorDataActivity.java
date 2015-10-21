@@ -8,7 +8,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +31,26 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
     private List<Sensor> mSensorList;
     private Sensor mSelectedSensor = null;
     private LineChart mChart;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_sensor_data);
+
+        // prepare toolbar
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DisplaySensorDataActivity.this, DisplaySensorDetailsActivity.class);
+                intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, mSelectedSensor.getName());
+                startActivity(intent);
+            }
+        });
 
         // keep this activity alive as data is always refreshed on screen
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -158,19 +173,6 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
         set1.setValueTextSize(9f);
 
         return set1;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(DisplaySensorDataActivity.this, DisplaySensorDetailsActivity.class);
-                intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, mSelectedSensor.getName());
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
