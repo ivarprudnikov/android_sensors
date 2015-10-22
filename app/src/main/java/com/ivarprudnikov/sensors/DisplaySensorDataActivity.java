@@ -63,9 +63,7 @@ public class DisplaySensorDataActivity extends AppCompatActivity implements Sens
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DisplaySensorDataActivity.this, DisplaySensorDetailsActivity.class);
-                intent.putExtra(Constants.INTENT_KEY_SENSOR_NAME, mSelectedSensor.getName());
-                startActivity(intent);
+                finish();
             }
         });
 

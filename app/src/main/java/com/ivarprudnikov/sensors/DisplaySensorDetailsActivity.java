@@ -102,8 +102,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity implements S
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DisplaySensorDetailsActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 

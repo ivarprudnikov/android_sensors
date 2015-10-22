@@ -17,7 +17,6 @@
 
 package com.ivarprudnikov.sensors;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,8 +46,7 @@ public class ExportDataActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ExportDataActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
