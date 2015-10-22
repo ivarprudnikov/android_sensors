@@ -14,3 +14,7 @@ Subscribe to device sensors and store data locally. Later use URL to send it som
 - Near real time data stats in UI
 - Simple navigation
 - Android API since version 10
+
+## Licence
+
+GNU GENERAL PUBLIC LICENSE Version 3, see LICENCE file or [check online](http://www.gnu.org/licenses/gpl.html)
