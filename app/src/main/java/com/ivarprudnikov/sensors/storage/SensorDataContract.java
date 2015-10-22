@@ -36,4 +36,12 @@ public final class SensorDataContract {
         public static final String COLUMN_NAME_SENSOR_DATA_VALUE = "sensor_data_value";
         public static final String COLUMN_NAME_SENSOR_DATA_VALUE_INDEX = "sensor_data_value_index";
     }
+
+    /* Inner class that defines the table contents */
+    public static abstract class ActionUrl implements BaseColumns {
+        public static final String TABLE_NAME = "action_url";
+        public static final String COLUMN_NAME_URL = "url";
+        public static final String COLUMN_NAME_FREQUENCY = "frequency";
+        public static final String COLUMN_NAME_ENABLED = "enabled";
+    }
 }

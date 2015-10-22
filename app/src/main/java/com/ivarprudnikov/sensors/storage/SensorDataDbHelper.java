@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
+import com.ivarprudnikov.sensors.storage.SensorDataContract.ActionUrl;
 
 /**
  * http://developer.android.com/training/basics/data-storage/databases.html
@@ -29,7 +30,7 @@ import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 public class SensorDataDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "SensorData.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -44,6 +45,12 @@ public class SensorDataDbHelper extends SQLiteOpenHelper {
                     DataEntry.COLUMN_NAME_SENSOR_NAME + TEXT_TYPE + COMMA_SEP +
                     DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE + REAL_TYPE + COMMA_SEP +
                     DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + INTEGER_TYPE +
+                    " )" +
+            "CREATE TABLE " + ActionUrl.TABLE_NAME + " (" +
+                    ActionUrl._ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    ActionUrl.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
+                    ActionUrl.COLUMN_NAME_FREQUENCY + INTEGER_TYPE + COMMA_SEP +
+                    ActionUrl.COLUMN_NAME_ENABLED + INTEGER_TYPE +
                     " )";
 
     private static final String SQL_DELETE_ENTRIES =
