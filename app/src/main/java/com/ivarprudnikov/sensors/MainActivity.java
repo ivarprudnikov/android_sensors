@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         mSensorAdapter.notifyDataSetChanged();
         syncStatus();
+        syncToggleState();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -163,6 +164,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    public void syncToggleState(){
+        boolean switchValue = Preferences.isDataStorageEnabled();
+        isDataStorageEnabledSwitch.setChecked(switchValue);
+    }
+
     public void syncStatus(){
         String eventsCount = mDataCountText.getText().toString();
         if(!Preferences.isDataStorageEnabled() && eventsCount.equals("0")){
@@ -181,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(Preferences.isRelatedToSensorRegistration(key)){
             syncStatus();
+            syncToggleState();
             mSensorAdapter.notifyDataSetChanged();
         }
     }
