@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.ivarprudnikov.sensors.activity.DisplaySensorDetailsActivity;
 import com.ivarprudnikov.sensors.config.Constants;
 
 import java.util.List;

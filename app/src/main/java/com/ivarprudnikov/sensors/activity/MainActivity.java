@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +33,11 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.OnAlarmBroadcastReceiver;
+import com.ivarprudnikov.sensors.R;
+import com.ivarprudnikov.sensors.SensorAdapter;
+import com.ivarprudnikov.sensors.StoredSensorEventsCounter;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 

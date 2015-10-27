@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +26,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.AsyncNetworkTask;
+import com.ivarprudnikov.sensors.R;
 
 import java.util.Map;
 

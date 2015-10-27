@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,6 +35,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.config.Constants;
 
 import java.util.ArrayList;

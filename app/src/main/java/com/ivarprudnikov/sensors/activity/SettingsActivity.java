@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,6 +30,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.config.Preferences;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {

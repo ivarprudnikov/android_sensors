@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,6 +35,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.R;
+import com.ivarprudnikov.sensors.StoredSensorEventsCounter;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 
@@ -155,7 +158,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity implements S
         ((TextView)findViewById(R.id.sensorDetailsPowerValue)).setText(Float.toString(mSelectedSensor.getPower()));
         ((TextView)findViewById(R.id.sensorDetailsMinDelayValue)).setText(Integer.toString(mSelectedSensor.getMinDelay()));
 
-        // compatibility issues with lower than API ver 20
+        // TODO: compatibility issues with lower than API ver 20
         try {
             ((TextView)findViewById(R.id.sensorDetailsReportingModeValue)).setText( reportingModes.get(mSelectedSensor.getReportingMode()));
             ((TextView)findViewById(R.id.sensorDetailsTypeStringValue)).setText(mSelectedSensor.getStringType());

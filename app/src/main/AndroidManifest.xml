@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,28 +23,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplaySensorDetailsActivity"
+            android:name=".activity.DisplaySensorDetailsActivity"
             android:label="@string/title_activity_display_sensor_details"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.sensors.MainActivity" />
+                android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".DisplaySensorDataActivity"
+            android:name=".activity.DisplaySensorDataActivity"
             android:label="@string/title_activity_display_sensor_data"
-            android:parentActivityName=".DisplaySensorDetailsActivity" >
+            android:parentActivityName=".activity.DisplaySensorDetailsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.sensors.DisplaySensorDetailsActivity" />
+                android:value=".activity.DisplaySensorDetailsActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.sensors.MainActivity" />
+                android:value=".activity.MainActivity" />
         </activity>
 
         <service
@@ -67,12 +67,12 @@
         </receiver>
 
         <activity
-            android:name=".ExportDataActivity"
+            android:name=".activity.ExportDataActivity"
             android:label="@string/title_activity_export_data"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ivarprudnikov.sensors.MainActivity" />
+                android:value=".activity.MainActivity" />
         </activity>
     </application>
 
