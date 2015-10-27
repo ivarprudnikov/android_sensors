@@ -37,7 +37,7 @@ import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.App;
 import com.ivarprudnikov.sensors.R;
-import com.ivarprudnikov.sensors.StoredSensorEventsCounter;
+import com.ivarprudnikov.sensors.AsyncSensorEventsCounter;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 
@@ -55,7 +55,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity implements S
     private Sensor mSelectedSensor = null;
     private TextView mDataCountText;
     private TextView mStatusText;
-    private StoredSensorEventsCounter.OnQueryResponseListener countListener;
+    private AsyncSensorEventsCounter.OnQueryResponseListener countListener;
     private SharedPreferences mSharedPreferences;
 
     public List<String> sensorTypes = Arrays.asList(
@@ -199,7 +199,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity implements S
         // Initiate data counter
         mDataCountText = (TextView)findViewById(R.id.dataCount);
         mDataCountText.setText("...");
-        countListener = new StoredSensorEventsCounter.OnQueryResponseListener() {
+        countListener = new AsyncSensorEventsCounter.OnQueryResponseListener() {
             @Override
             public void OnQueryResponseFinished(String resp) {
                 mDataCountText.setText(resp);
@@ -214,7 +214,7 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity implements S
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                final StoredSensorEventsCounter mTask = new StoredSensorEventsCounter(DisplaySensorDetailsActivity.this, countListener, mSelectedSensor);
+                final AsyncSensorEventsCounter mTask = new AsyncSensorEventsCounter(DisplaySensorDetailsActivity.this, countListener, mSelectedSensor);
                 mTask.execute();
                 h.postDelayed(this, 3000);
             }

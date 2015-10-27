@@ -1,0 +1,55 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExportDataActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:id="@+id/exportSettings">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingStart="@dimen/section_padding"
+            android:paddingEnd="@dimen/section_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="URL"
+                android:id="@+id/exportUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/InputLabel"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editUrl"
+                android:inputType="textUri"
+                style="@style/InputField" />
+
+            <TextView
+                android:text="Set the URL the data will be sent to. Method will be POST and content type JSON"
+                android:id="@+id/exportUrlHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/InputHelp"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

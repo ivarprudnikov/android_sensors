@@ -2,7 +2,10 @@
     <string name="app_name">Device sensors</string>
     <string name="settings_view">Settings</string>
     <string name="send_action">Send</string>
+    <string name="save_action">Save</string>
     <string name="export_action">Export</string>
+    <string name="add_new_export_action">Add new export setup</string>
+
 
     <string name="title_activity_display_sensor_details">Selected sensor</string>
     <string name="title_activity_display_sensor_data">Sensor Data</string>
@@ -34,7 +37,7 @@
         <item>Overwrite older data</item>
     </string-array>
     <string name="title_activity_export_data">Export</string>
+    <string name="title_activity_export_data_create">Add export action</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 </resources>

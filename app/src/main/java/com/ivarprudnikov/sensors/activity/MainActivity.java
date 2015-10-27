@@ -34,10 +34,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.AsyncSensorEventsCounter;
 import com.ivarprudnikov.sensors.OnAlarmBroadcastReceiver;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.SensorAdapter;
-import com.ivarprudnikov.sensors.StoredSensorEventsCounter;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private SensorAdapter mSensorAdapter;
     private TextView mDataCountText;
     private TextView mStatusText;
-    private StoredSensorEventsCounter.OnQueryResponseListener countListener;
+    private AsyncSensorEventsCounter.OnQueryResponseListener countListener;
     private CompoundButton isDataStorageEnabledSwitch;
     private Toolbar mToolbar;
     private SharedPreferences mSharedPreferences;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Initiate data counter
         mDataCountText = (TextView)mHomeSensorListHeaderView.findViewById(R.id.dataCount);
         mDataCountText.setText("...");
-        countListener = new StoredSensorEventsCounter.OnQueryResponseListener() {
+        countListener = new AsyncSensorEventsCounter.OnQueryResponseListener() {
             @Override
             public void OnQueryResponseFinished(String resp) {
                 mDataCountText.setText(resp);
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                final StoredSensorEventsCounter mTask = new StoredSensorEventsCounter(MainActivity.this, countListener, null);
+                final AsyncSensorEventsCounter mTask = new AsyncSensorEventsCounter(MainActivity.this, countListener, null);
                 mTask.execute();
                 h.postDelayed(this, 3000);
             }

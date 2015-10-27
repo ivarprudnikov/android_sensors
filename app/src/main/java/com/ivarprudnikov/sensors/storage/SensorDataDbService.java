@@ -29,9 +29,10 @@ import android.util.Log;
 import com.ivarprudnikov.sensors.App;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
-import com.ivarprudnikov.sensors.storage.SensorDataContract.DataEntry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SensorDataDbService extends ContextWrapper {
@@ -49,18 +50,18 @@ public class SensorDataDbService extends ContextWrapper {
 
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
-            String whereQuery = DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?";
+            String whereQuery = SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=?";
             String[] args = new String[]{"0"};
 
             if(sensor != null){
-                whereQuery = DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=? AND " + DataEntry.COLUMN_NAME_SENSOR_NAME + "=?";
+                whereQuery = SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + "=? AND " + SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME + "=?";
                 args = new String[]{"0", sensor.getName()};
             }
 
             if(db != null){
                 Cursor c = db.query(
-                        DataEntry.TABLE_NAME,
-                        new String[]{DataEntry._ID},
+                        SensorDataContract.DataEntry.TABLE_NAME,
+                        new String[]{SensorDataContract.DataEntry._ID},
                         whereQuery,
                         args,
                         null, null, null, null);
@@ -86,15 +87,15 @@ public class SensorDataDbService extends ContextWrapper {
             ContentValues values = new ContentValues();
             float val = sensorValues[i];
 
-            values.put(DataEntry.COLUMN_NAME_TIMESTAMP, timestamp);
-            values.put(DataEntry.COLUMN_NAME_SENSOR_NAME, sensorName);
-            values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE, val);
-            values.put(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX, i);
+            values.put(SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP, timestamp);
+            values.put(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME, sensorName);
+            values.put(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE, val);
+            values.put(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX, i);
 
             try {
                 SQLiteDatabase db = mDbHelper.getWritableDatabase();
                 if(db != null){
-                    db.insert(DataEntry.TABLE_NAME, null, values);
+                    db.insert(SensorDataContract.DataEntry.TABLE_NAME, null, values);
                 }
             } catch(SQLiteException e){
                 Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
@@ -111,7 +112,7 @@ public class SensorDataDbService extends ContextWrapper {
         try {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             if(db != null){
-                deleted = db.delete(DataEntry.TABLE_NAME, null, null);
+                deleted = db.delete(SensorDataContract.DataEntry.TABLE_NAME, null, null);
             }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
@@ -127,11 +128,11 @@ public class SensorDataDbService extends ContextWrapper {
         try {
             if(sensor != null){
 
-                String whereQuery = DataEntry.COLUMN_NAME_SENSOR_NAME + "=?";
+                String whereQuery = SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME + "=?";
                 String[] args = new String[]{sensor.getName()};
                 SQLiteDatabase db = mDbHelper.getWritableDatabase();
                 if(db != null){
-                    deleted = db.delete(DataEntry.TABLE_NAME, whereQuery, args);
+                    deleted = db.delete(SensorDataContract.DataEntry.TABLE_NAME, whereQuery, args);
                 }
             }
         } catch(SQLiteException e){
@@ -154,14 +155,14 @@ public class SensorDataDbService extends ContextWrapper {
             deleteOffset = time - (3600 * 1000 * num);
         }
 
-        String whereClause = DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
+        String whereClause = SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
         String[] whereArgs = new String[]{ String.valueOf(deleteOffset) };
 
         int deleted = 0;
         try {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             if(db != null){
-                deleted = db.delete(DataEntry.TABLE_NAME, whereClause, whereArgs);
+                deleted = db.delete(SensorDataContract.DataEntry.TABLE_NAME, whereClause, whereArgs);
             }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
@@ -183,7 +184,7 @@ public class SensorDataDbService extends ContextWrapper {
             offset = time - (3600 * 1000 * num);
         }
 
-        String whereClause = DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
+        String whereClause = SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP + " < ?";
         String[] whereArgs = new String[]{ String.valueOf(offset) };
 
         int count = 0;
@@ -191,8 +192,8 @@ public class SensorDataDbService extends ContextWrapper {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
             if(db != null){
                 Cursor c = db.query(
-                        DataEntry.TABLE_NAME,
-                        new String[]{DataEntry._ID},
+                        SensorDataContract.DataEntry.TABLE_NAME,
+                        new String[]{SensorDataContract.DataEntry._ID},
                         whereClause,
                         whereArgs,
                         null, null, null, null);
@@ -225,19 +226,19 @@ public class SensorDataDbService extends ContextWrapper {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
             if(db != null){
                 Cursor c = db.query(
-                    DataEntry.TABLE_NAME,
+                        SensorDataContract.DataEntry.TABLE_NAME,
                     new String[]{
-                        DataEntry.COLUMN_NAME_TIMESTAMP,
-                        DataEntry.COLUMN_NAME_SENSOR_NAME,
-                        DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
-                        DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX,
+                            SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP,
+                            SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME,
+                            SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
+                            SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX,
                     }, null, null, null, null, null, null);
                 if(c.moveToFirst()){
                     while (c.isAfterLast() == false) {
-                        String name = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_NAME));
-                        String timestamp = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_TIMESTAMP));
-                        String idx = c.getString(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
-                        float val = c.getFloat(c.getColumnIndex(DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE));
+                        String name = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME));
+                        String timestamp = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP));
+                        String idx = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
+                        float val = c.getFloat(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE));
 
                         if(data.get(name) == null){
                             data.put(name, new HashMap<Long, Map>());
@@ -250,6 +251,61 @@ public class SensorDataDbService extends ContextWrapper {
                         timestampData.put(idx, val);
                         sensorData.put(timestamp, timestampData);
                         data.put(name, sensorData);
+                        c.moveToNext();
+                    }
+                }
+                c.close();
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return data;
+
+    }
+
+    public void saveExportAction(ActionUrl action){
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
+        values.put(SensorDataContract.ActionUrl.COLUMN_NAME_URL, action.getUrl());
+        values.put(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY, action.getFrequency());
+
+        try {
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            if(db != null){
+                db.insert(SensorDataContract.ActionUrl.TABLE_NAME, null, values);
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+    }
+
+    public List<ActionUrl> getActionUrlList(){
+
+        List<ActionUrl> data = new ArrayList<ActionUrl>();
+
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                        SensorDataContract.ActionUrl.TABLE_NAME,
+                        new String[]{
+                                SensorDataContract.ActionUrl._ID,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_URL,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY
+                        }, null, null, null, null, null, null);
+                if(c.moveToFirst()){
+                    while (c.isAfterLast() == false) {
+
+                        Integer id = c.getInt(c.getColumnIndex(SensorDataContract.ActionUrl._ID));
+                        String url = c.getString(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_URL));
+                        long freq = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY));
+
+
+                        data.add(new ActionUrl(id, url, freq));
                         c.moveToNext();
                     }
                 }

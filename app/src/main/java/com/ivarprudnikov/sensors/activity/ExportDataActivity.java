@@ -17,27 +17,29 @@
 
 package com.ivarprudnikov.sensors.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Patterns;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
+import com.ivarprudnikov.sensors.ActionUrlAdapter;
 import com.ivarprudnikov.sensors.App;
-import com.ivarprudnikov.sensors.AsyncNetworkTask;
 import com.ivarprudnikov.sensors.R;
+import com.ivarprudnikov.sensors.storage.ActionUrl;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ExportDataActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private EditText mUrl;
+    ImageButton mAddButton;
+    ActionUrlAdapter mListAdapter;
+    ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,49 +56,39 @@ public class ExportDataActivity extends AppCompatActivity {
             }
         });
 
-        mUrl = (EditText)findViewById(R.id.editUrl);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_export, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.send:
-
-                if(Patterns.WEB_URL.matcher(mUrl.getText().toString()).matches()){
-                    send();
-                } else {
-                    mUrl.setError("URL is invalid");
-                }
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void send(){
-        Toast.makeText(ExportDataActivity.this, "Sending ...", Toast.LENGTH_SHORT).show();
-        Map data = App.getDbService().getData();
-
-        AsyncNetworkTask.OnResponseListener l = new AsyncNetworkTask.OnResponseListener() {
+        // Handle button tap
+        mAddButton = (ImageButton) findViewById(R.id.addButton);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponseFinished(int statusCode) {
-                Toast.makeText(ExportDataActivity.this,
-                        "Got response status: " + String.valueOf(statusCode),
-                        Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Intent intent = new Intent(ExportDataActivity.this, ExportDataCreateActivity.class);
+                startActivity(intent);
             }
-        };
-        final AsyncNetworkTask mTask = new AsyncNetworkTask(ExportDataActivity.this, l, mUrl.getText().toString(), data);
-        mTask.execute();
+        });
 
+        mListView = (ListView) findViewById(R.id.listView);
+
+        // do not allow focus on children as they will swallow events
+        mListView.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+
+        mListAdapter = new ActionUrlAdapter(this, new ArrayList<ActionUrl>());
+        mListView.setAdapter(mListAdapter);
+        syncActionUrls();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        syncActionUrls();
+    }
+
+    public void syncActionUrls(){
+        List<ActionUrl> mActionsUrlList = App.getDbService().getActionUrlList();
+        mListAdapter.clear();
+        for(ActionUrl au : mActionsUrlList){
+            mListAdapter.add(au);
+        }
+        mListAdapter.notifyDataSetChanged();
     }
 
 }

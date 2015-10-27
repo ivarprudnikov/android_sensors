@@ -42,6 +42,5 @@ public final class SensorDataContract {
         public static final String TABLE_NAME = "action_url";
         public static final String COLUMN_NAME_URL = "url";
         public static final String COLUMN_NAME_FREQUENCY = "frequency";
-        public static final String COLUMN_NAME_ENABLED = "enabled";
     }
 }

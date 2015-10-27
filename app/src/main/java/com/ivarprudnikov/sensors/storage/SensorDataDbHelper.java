@@ -30,7 +30,7 @@ import com.ivarprudnikov.sensors.storage.SensorDataContract.ActionUrl;
 public class SensorDataDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "SensorData.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -45,16 +45,16 @@ public class SensorDataDbHelper extends SQLiteOpenHelper {
                     DataEntry.COLUMN_NAME_SENSOR_NAME + TEXT_TYPE + COMMA_SEP +
                     DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE + REAL_TYPE + COMMA_SEP +
                     DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX + INTEGER_TYPE +
-                    " )" +
+                    " )";
+    private static final String SQL_CREATE_ACTIONS =
             "CREATE TABLE " + ActionUrl.TABLE_NAME + " (" +
                     ActionUrl._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     ActionUrl.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
-                    ActionUrl.COLUMN_NAME_FREQUENCY + INTEGER_TYPE + COMMA_SEP +
-                    ActionUrl.COLUMN_NAME_ENABLED + INTEGER_TYPE +
+                    ActionUrl.COLUMN_NAME_FREQUENCY + INTEGER_TYPE +
                     " )";
 
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + DataEntry.TABLE_NAME;
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + DataEntry.TABLE_NAME;
+    private static final String SQL_DELETE_ACTIONS = "DROP TABLE IF EXISTS " + ActionUrl.TABLE_NAME;
 
     public SensorDataDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -62,12 +62,14 @@ public class SensorDataDbHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_ACTIONS);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL(SQL_DELETE_ACTIONS);
         onCreate(db);
     }
 
