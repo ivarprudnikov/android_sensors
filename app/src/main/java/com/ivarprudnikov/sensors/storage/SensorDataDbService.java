@@ -271,6 +271,7 @@ public class SensorDataDbService extends ContextWrapper {
 
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_URL, action.getUrl());
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY, action.getFrequency());
+        values.put(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP, action.getTimestamp());
 
         try {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -295,7 +296,8 @@ public class SensorDataDbService extends ContextWrapper {
                         new String[]{
                                 SensorDataContract.ActionUrl._ID,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_URL,
-                                SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY
+                                SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP
                         }, null, null, null, null, null, null);
                 if(c.moveToFirst()){
                     while (c.isAfterLast() == false) {
@@ -303,9 +305,9 @@ public class SensorDataDbService extends ContextWrapper {
                         Integer id = c.getInt(c.getColumnIndex(SensorDataContract.ActionUrl._ID));
                         String url = c.getString(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_URL));
                         long freq = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY));
+                        long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
 
-
-                        data.add(new ActionUrl(id, url, freq));
+                        data.add(new ActionUrl(id, url, freq, timestamp));
                         c.moveToNext();
                     }
                 }

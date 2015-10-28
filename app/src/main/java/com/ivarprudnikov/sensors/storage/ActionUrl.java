@@ -17,23 +17,29 @@
 
 package com.ivarprudnikov.sensors.storage;
 
+import java.util.Date;
+
 public class ActionUrl {
 
     int id;
     String url;
     long frequency;
+    long timestamp;
 
     public ActionUrl() {}
 
     public ActionUrl(String url, long frequency) {
         this.url = url;
         this.frequency = frequency;
+        Date now = new Date();
+        this.timestamp = now.getTime();
     }
 
-    public ActionUrl(int id, String url, long frequency) {
+    public ActionUrl(int id, String url, long frequency, long timestamp) {
         this.id = id;
         this.url = url;
         this.frequency = frequency;
+        this.timestamp = timestamp;
     }
 
     public int getId() {
@@ -59,6 +65,14 @@ public class ActionUrl {
 
     public void setFrequency(long frequency) {
         this.frequency = frequency;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public boolean isEnabled() {

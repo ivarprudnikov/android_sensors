@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 
+import java.util.Date;
 import java.util.List;
 
 public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
@@ -34,6 +35,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
     private static class ViewHolder {
         TextView line1;
         TextView line2;
+        TextView line3;
     }
 
     public ActionUrlAdapter(Context context, List<ActionUrl> actions) {
@@ -54,6 +56,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
             convertView = inflater.inflate(R.layout.activity_export_data_list_item, parent, false);
             viewHolder.line1 = (TextView) convertView.findViewById(R.id.line1);
             viewHolder.line2 = (TextView) convertView.findViewById(R.id.line2);
+            viewHolder.line3 = (TextView) convertView.findViewById(R.id.line3);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -63,7 +66,15 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
         convertView.setFocusable(false);
 
         viewHolder.line1.setText(action.getUrl());
-        viewHolder.line2.setText(String.valueOf(action.getFrequency()));
+
+        if(action.getFrequency() > 0)
+            viewHolder.line2.setText(String.valueOf(action.getFrequency()));
+        else
+            viewHolder.line2.setText("Disabled");
+
+        Date t = new Date();
+        t.setTime(action.getTimestamp());
+        viewHolder.line3.setText(t.toString());
 
         // Return the completed view to render on screen
         return convertView;

@@ -5,25 +5,75 @@
     android:gravity="center_vertical" >
 
     <TextView
+        android:id="@+id/line1label"
+        android:text="URL:"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginBottom="3dip"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/line1"
+        android:text="https://test.com?querystring=param"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
-        android:layout_marginBottom="5dip"
+        android:layout_marginBottom="3dip"
+        android:layout_toRightOf="@+id/line1label"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line2label"
+        android:text="Interval:"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginBottom="3dip"
+        android:layout_below="@id/line1"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/line2"
+        android:text="15 min"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginBottom="3dip"
+        android:layout_below="@id/line1"
+        android:layout_toRightOf="@+id/line2label"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line3label"
+        android:text="Created:"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginBottom="10dip"
+        android:layout_below="@id/line2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/line3"
+        android:text="2015-12-23 23:21:53 UTC"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:layout_marginBottom="10dip"
-        android:layout_below="@id/line1"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:layout_below="@id/line2"
+        android:layout_toRightOf="@+id/line3label"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 </RelativeLayout>
