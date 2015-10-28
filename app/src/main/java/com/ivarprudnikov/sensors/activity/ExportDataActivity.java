@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.ActionUrlAdapter;
 import com.ivarprudnikov.sensors.App;
@@ -40,6 +41,7 @@ public class ExportDataActivity extends AppCompatActivity {
     ImageButton mAddButton;
     ActionUrlAdapter mListAdapter;
     ListView mListView;
+    TextView mEmptyListHelperView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class ExportDataActivity extends AppCompatActivity {
             }
         });
 
+        mEmptyListHelperView = (TextView) findViewById(R.id.emptyListHelperView);
+
         mListView = (ListView) findViewById(R.id.listView);
 
         // do not allow focus on children as they will swallow events
@@ -84,6 +88,11 @@ public class ExportDataActivity extends AppCompatActivity {
 
     public void syncActionUrls(){
         List<ActionUrl> mActionsUrlList = App.getDbService().getActionUrlList();
+        if(mActionsUrlList.size() > 0){
+            mEmptyListHelperView.setVisibility(View.GONE);
+        } else {
+            mEmptyListHelperView.setVisibility(View.VISIBLE);
+        }
         mListAdapter.clear();
         for(ActionUrl au : mActionsUrlList){
             mListAdapter.add(au);

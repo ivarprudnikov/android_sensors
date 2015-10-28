@@ -16,6 +16,17 @@
         android:id="@+id/listView"
         android:clickable="false" />
 
+    <TextView
+        android:id="@+id/emptyListHelperView"
+        android:text="Add new export action first"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_margin="20dip" />
+
     <ImageButton
         android:translationZ="@dimen/abc_floating_window_z"
         android:layout_above="@+id/toolbar"
