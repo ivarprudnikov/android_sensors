@@ -17,11 +17,14 @@
 
 package com.ivarprudnikov.sensors.storage;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
-public class ActionUrl {
+public class ActionUrl implements Parcelable {
 
-    int id;
+    Integer id;
     String url;
     long frequency;
     long timestamp;
@@ -42,12 +45,11 @@ public class ActionUrl {
         this.timestamp = timestamp;
     }
 
-    public int getId() {
-
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -78,5 +80,42 @@ public class ActionUrl {
     public boolean isEnabled() {
         return this.frequency > 0;
     }
+
+    // Parcelable
+    //////////////////
+
+    public ActionUrl(Parcel in) {
+        super();
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public ActionUrl createFromParcel(Parcel in ) {
+            return new ActionUrl( in );
+        }
+        public ActionUrl[] newArray(int size) {
+            return new ActionUrl[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(url);
+        dest.writeLong(frequency);
+        dest.writeLong(timestamp);
+    }
+
+    public void readFromParcel(Parcel in) {
+        this.id = in.readInt();
+        this.url = in.readString();
+        this.timestamp = in.readLong();
+        this.frequency = in.readLong();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    };
 
 }

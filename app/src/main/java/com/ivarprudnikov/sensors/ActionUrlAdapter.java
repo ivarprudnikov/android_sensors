@@ -17,17 +17,25 @@
 
 package com.ivarprudnikov.sensors;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ivarprudnikov.sensors.activity.ExportDataFormActivity;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
 
@@ -36,6 +44,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
         TextView line1;
         TextView line2;
         TextView line3;
+        ImageButton menuTrigger;
     }
 
     public ActionUrlAdapter(Context context, List<ActionUrl> actions) {
@@ -57,10 +66,19 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
             viewHolder.line1 = (TextView) convertView.findViewById(R.id.line1);
             viewHolder.line2 = (TextView) convertView.findViewById(R.id.line2);
             viewHolder.line3 = (TextView) convertView.findViewById(R.id.line3);
+            viewHolder.menuTrigger = (ImageButton) convertView.findViewById(R.id.menuTrigger);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        viewHolder.menuTrigger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOptionsDialog(action);
+            }
+        });
 
         convertView.setClickable(true);
         convertView.setFocusable(false);
@@ -78,5 +96,62 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    private void showOptionsDialog(final ActionUrl action) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final String[] actionsArray = new String[]{ "Send data now", "Edit", "Delete" };
+        builder.setTitle("Options")
+                .setItems(actionsArray, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                Map data = App.getDbService().getData();
+                                AsyncNetworkTask.OnResponseListener lstnr = new AsyncNetworkTask.OnResponseListener() {
+                                    @Override
+                                    public void onResponseFinished(int statusCode) {
+                                        Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
+                                    }
+                                };
+                                final AsyncNetworkTask mTask = new AsyncNetworkTask(getContext(), lstnr, action.getUrl(), data);
+                                mTask.execute();
+                                dialog.dismiss();
+                                break;
+                            case 1:
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("item", action);
+                                Intent intent = new Intent(getContext(), ExportDataFormActivity.class);
+                                intent.putExtras(bundle);
+                                getContext().startActivity(intent);
+                                dialog.dismiss();
+                                break;
+                            case 2:
+                                showDeleteConfirmationDialog(action);
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+        builder.show();
+    }
+
+    private void showDeleteConfirmationDialog(final ActionUrl action) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Are you sure?")
+                .setMessage("Do you want to permanently remove action with url: " + action.getUrl())
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        App.getDbService().deleteActionUrlRows(action);
+                        remove(action);
+                        notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do Something Here
+                    }
+                }).show();
     }
 }

@@ -2,6 +2,7 @@
     <string name="app_name">Device sensors</string>
     <string name="settings_view">Settings</string>
     <string name="send_action">Send</string>
+    <string name="delete_action">Delete</string>
     <string name="save_action">Save</string>
     <string name="export_action">Export</string>
     <string name="add_new_export_action">Add new export setup</string>

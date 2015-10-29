@@ -63,7 +63,7 @@ public class ExportDataActivity extends AppCompatActivity {
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ExportDataActivity.this, ExportDataCreateActivity.class);
+                Intent intent = new Intent(ExportDataActivity.this, ExportDataFormActivity.class);
                 startActivity(intent);
             }
         });

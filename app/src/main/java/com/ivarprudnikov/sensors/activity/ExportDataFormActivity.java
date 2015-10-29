@@ -31,10 +31,11 @@ import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 
 
-public class ExportDataCreateActivity extends AppCompatActivity {
+public class ExportDataFormActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private EditText mUrl;
+    private ActionUrl action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,13 @@ public class ExportDataCreateActivity extends AppCompatActivity {
 
         mUrl = (EditText)findViewById(R.id.editUrl);
 
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null && bundle.size() > 0){
+            action = bundle.getParcelable("item");
+        }
+        if(action != null){
+            mUrl.setText(action.getUrl());
+        }
     }
 
     @Override
@@ -66,13 +74,11 @@ public class ExportDataCreateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save:
-
                 if(Patterns.WEB_URL.matcher(mUrl.getText().toString()).matches()){
                     save();
                 } else {
                     mUrl.setError("URL is invalid");
                 }
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -80,28 +86,18 @@ public class ExportDataCreateActivity extends AppCompatActivity {
     }
 
     public void save(){
-//        Map data = App.getDbService().getData();
-//        AsyncNetworkTask.OnResponseListener l = new AsyncNetworkTask.OnResponseListener() {
-//            @Override
-//            public void onResponseFinished(int statusCode) {
-//                Toast.makeText(ExportDataCreateActivity.this,
-//                        "Got response status: " + String.valueOf(statusCode),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//        final AsyncNetworkTask mTask = new AsyncNetworkTask(ExportDataCreateActivity.this, l, mUrl.getText().toString(), data);
-//        mTask.execute();
-
-//        App.getDbService().saveExportAction(mUrl.getText().toString(), 0, false);
-
         final AsyncActionUrlStorage mTask = new AsyncActionUrlStorage(new AsyncActionUrlStorage.OnQueryResponseListener() {
             @Override
             public void onQueryResponseFinished(String result) {
                 finish();
             }
         });
-        mTask.execute(new ActionUrl(mUrl.getText().toString(), 0));
-
+        if(action != null){
+            action.setUrl(mUrl.getText().toString());
+        } else {
+            action = new ActionUrl(mUrl.getText().toString(), 0);
+        }
+        mTask.execute(action);
     }
 
 }

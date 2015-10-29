@@ -276,7 +276,11 @@ public class SensorDataDbService extends ContextWrapper {
         try {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             if(db != null){
-                db.insert(SensorDataContract.ActionUrl.TABLE_NAME, null, values);
+                if(action.getId() != null){
+                    db.update(SensorDataContract.ActionUrl.TABLE_NAME, values, SensorDataContract.ActionUrl._ID+"=?", new String[]{ String.valueOf(action.getId()) });
+                } else {
+                    db.insert(SensorDataContract.ActionUrl.TABLE_NAME, null, values);
+                }
             }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
@@ -319,5 +323,26 @@ public class SensorDataDbService extends ContextWrapper {
 
         return data;
 
+    }
+
+    public int deleteActionUrlRows(ActionUrl url){
+
+        int deleted = 0;
+
+        try {
+            if(url != null){
+
+                String whereQuery = SensorDataContract.ActionUrl._ID + "=?";
+                String[] args = new String[]{String.valueOf(url.getId())};
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                if(db != null){
+                    deleted = db.delete(SensorDataContract.ActionUrl.TABLE_NAME, whereQuery, args);
+                }
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return deleted;
     }
 }

@@ -75,7 +75,7 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.ExportDataCreateActivity"
+            android:name=".activity.ExportDataFormActivity"
             android:label="@string/title_activity_export_data_create"
             android:parentActivityName=".activity.ExportDataActivity" >
             <meta-data
