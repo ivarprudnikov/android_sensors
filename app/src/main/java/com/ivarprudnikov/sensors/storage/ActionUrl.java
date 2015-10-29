@@ -109,8 +109,8 @@ public class ActionUrl implements Parcelable {
     public void readFromParcel(Parcel in) {
         this.id = in.readInt();
         this.url = in.readString();
-        this.timestamp = in.readLong();
         this.frequency = in.readLong();
+        this.timestamp = in.readLong();
     }
 
     @Override
