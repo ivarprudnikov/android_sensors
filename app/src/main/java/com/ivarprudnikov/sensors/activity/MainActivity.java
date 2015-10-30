@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private CompoundButton isDataStorageEnabledSwitch;
     private Toolbar mToolbar;
     private SharedPreferences mSharedPreferences;
+    private String mLoadingCount = "...";
+
+    private Handler fHandler = new Handler();
+
+    DecelerateInterpolator mDecelerateInterpolator = new DecelerateInterpolator(0.3f);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,23 +102,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Initiate data counter
         mDataCountText = (TextView)mHomeSensorListHeaderView.findViewById(R.id.dataCount);
-        mDataCountText.setText("...");
+        mDataCountText.setText(mLoadingCount);
         countListener = new AsyncSensorEventsCounter.OnQueryResponseListener() {
             @Override
             public void OnQueryResponseFinished(String resp) {
-                mDataCountText.setText(resp);
+                animateEventsCount(resp);
                 syncStatus();
             }
         };
 
         // create data counter handler which will loop and set fresh value in view
-        final Handler h = new Handler();
-        h.postDelayed(new Runnable() {
+        fHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 final AsyncSensorEventsCounter mTask = new AsyncSensorEventsCounter(MainActivity.this, countListener, null);
                 mTask.execute();
-                h.postDelayed(this, 3000);
+                fHandler.postDelayed(this, 3000);
             }
         }, 500);
 
@@ -194,6 +199,45 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             syncStatus();
             syncToggleState();
             mSensorAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void animateEventsCount(String val) {
+
+        final TextView textview = mDataCountText;
+        String initialString = textview.getText().toString();
+        Integer initialValue = null;
+        if(initialString == mLoadingCount){
+            initialValue = 0;
+        }
+        Integer finalValue = null;
+        try {
+            if(initialValue == null)
+                initialValue = Integer.parseInt(initialString, 10);
+            finalValue = Integer.parseInt(val, 10);
+        } catch (NumberFormatException e){}
+
+        if(finalValue != null && initialValue != null){
+
+            int difference = Math.abs(finalValue - initialValue);
+
+            if(difference < 500 && difference > 0){
+                for (int count = initialValue; count <= finalValue; count++) {
+                    int time = Math.round(mDecelerateInterpolator.getInterpolation(((float)(count - initialValue) / difference)) * 100) * 10;
+                    final int finalCount = ((initialValue > finalValue) ? initialValue - count : count);
+                    fHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            textview.setText(finalCount + "");
+                        }
+                    }, time);
+                }
+            } else {
+                textview.setText(val);
+            }
+
+        } else {
+            textview.setText(val);
         }
     }
 }
