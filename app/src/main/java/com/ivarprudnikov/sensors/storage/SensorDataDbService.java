@@ -31,6 +31,7 @@ import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -281,7 +282,13 @@ public class SensorDataDbService extends ContextWrapper {
      * @return {Map} sensor data
      */
     public Map getSensorDataFromCursor(final Cursor c){
-        Map data = new HashMap<String, Map>();
+
+        // TODO: convert to List<DataEntry> and then possibly to ExportObject eliminating Map
+
+        Map resp = new HashMap<>();
+        Map<String, Map> data = new HashMap<>();
+        List<String> sensors = new ArrayList<>();
+        List<Long> times = new ArrayList<>();
 
         if(c.moveToFirst()){
             while (c.isAfterLast() == false) {
@@ -292,10 +299,14 @@ public class SensorDataDbService extends ContextWrapper {
 
                 if(data.get(name) == null){
                     data.put(name, new HashMap<Long, Map>());
+                    sensors.add(name);
                 }
                 Map sensorData = (Map)data.get(name);
                 if(sensorData.get(timestamp) == null){
                     sensorData.put(timestamp, new HashMap<String, Float>());
+                    try {
+                        times.add(Long.valueOf(timestamp, 10));
+                    } catch(NumberFormatException e){}
                 }
                 Map timestampData = (Map)sensorData.get(timestamp);
                 timestampData.put(idx, val);
@@ -305,7 +316,16 @@ public class SensorDataDbService extends ContextWrapper {
             }
         }
 
-        return data;
+        resp.put("data", data);
+        resp.put("sensors_names", sensors);
+        if(times.size() > 0){
+            Collections.sort(times);
+            resp.put("from_time", times.get(0));
+            resp.put("to_time", times.get((times.size() - 1)));
+        }
+
+
+        return resp;
     }
 
     public void saveExportAction(ActionUrl action){
