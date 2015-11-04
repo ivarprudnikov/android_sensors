@@ -106,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         countListener = new AsyncSensorEventsCounter.OnQueryResponseListener() {
             @Override
             public void OnQueryResponseFinished(String resp) {
-                animateEventsCount(resp);
                 syncStatus();
+                mDataCountText.setText(resp);
             }
         };
 
@@ -202,42 +202,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    public void animateEventsCount(String val) {
-
-        final TextView textview = mDataCountText;
-        String initialString = textview.getText().toString();
-        Integer initialValue = null;
-        if(initialString == mLoadingCount){
-            initialValue = 0;
-        }
-        Integer finalValue = null;
-        try {
-            if(initialValue == null)
-                initialValue = Integer.parseInt(initialString, 10);
-            finalValue = Integer.parseInt(val, 10);
-        } catch (NumberFormatException e){}
-
-        if(finalValue != null && initialValue != null){
-
-            int difference = Math.abs(finalValue - initialValue);
-
-            if(difference < 500 && difference > 0){
-                for (int count = initialValue; count <= finalValue; count++) {
-                    int time = Math.round(mDecelerateInterpolator.getInterpolation(((float)(count - initialValue) / difference)) * 100) * 10;
-                    final int finalCount = ((initialValue > finalValue) ? initialValue - count : count);
-                    fHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            textview.setText(finalCount + "");
-                        }
-                    }, time);
-                }
-            } else {
-                textview.setText(val);
-            }
-
-        } else {
-            textview.setText(val);
-        }
-    }
 }
