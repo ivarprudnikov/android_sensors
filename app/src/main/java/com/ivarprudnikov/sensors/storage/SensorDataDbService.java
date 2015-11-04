@@ -207,17 +207,6 @@ public class SensorDataDbService extends ContextWrapper {
         return count;
     }
 
-    /**
-     * { "sensorName": {
-     *   "timestamp": {
-     *       "0": "x",
-     *       "1": "y",
-     *       ...
-     *   },
-     *   ...
-     * }, ... }
-     * @return
-     */
     public Map getData(){
 
         Map data = new HashMap<String, Map>();
@@ -233,27 +222,7 @@ public class SensorDataDbService extends ContextWrapper {
                             SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
                             SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX,
                     }, null, null, null, null, null, null);
-                if(c.moveToFirst()){
-                    while (c.isAfterLast() == false) {
-                        String name = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME));
-                        String timestamp = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP));
-                        String idx = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
-                        float val = c.getFloat(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE));
-
-                        if(data.get(name) == null){
-                            data.put(name, new HashMap<Long, Map>());
-                        }
-                        Map sensorData = (Map)data.get(name);
-                        if(sensorData.get(timestamp) == null){
-                            sensorData.put(timestamp, new HashMap<String, Float>());
-                        }
-                        Map timestampData = (Map)sensorData.get(timestamp);
-                        timestampData.put(idx, val);
-                        sensorData.put(timestamp, timestampData);
-                        data.put(name, sensorData);
-                        c.moveToNext();
-                    }
-                }
+                data = getSensorDataFromCursor(c);
                 c.close();
             }
         } catch(SQLiteException e){
@@ -261,7 +230,82 @@ public class SensorDataDbService extends ContextWrapper {
         }
 
         return data;
+    }
 
+    public Map getLatestData(){
+
+        Map data = new HashMap<String, Map>();
+
+        String[] selectColumns = new String[]{
+                SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP,
+                SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME,
+                SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
+                SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX
+        };
+
+        String whereClause = SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP + " > ?";
+
+        // TODO: use last successful timestamp of action_result
+        String[] whereArgs = new String[]{
+                "0"
+        };
+
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                        SensorDataContract.DataEntry.TABLE_NAME,
+                        selectColumns, whereClause, whereArgs, null, null, null, null);
+                data = getSensorDataFromCursor(c);
+                c.close();
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return data;
+    }
+
+    /**
+     * {
+     *   "sensorName": {
+     *     "timestamp": {
+     *       "0": "x",
+     *       "1": "y",
+     *       ...
+     *     },
+     *     ...
+     *   },
+     *   ...
+     * }
+     * @return {Map} sensor data
+     */
+    public Map getSensorDataFromCursor(final Cursor c){
+        Map data = new HashMap<String, Map>();
+
+        if(c.moveToFirst()){
+            while (c.isAfterLast() == false) {
+                String name = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME));
+                String timestamp = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP));
+                String idx = c.getString(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX));
+                float val = c.getFloat(c.getColumnIndex(SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE));
+
+                if(data.get(name) == null){
+                    data.put(name, new HashMap<Long, Map>());
+                }
+                Map sensorData = (Map)data.get(name);
+                if(sensorData.get(timestamp) == null){
+                    sensorData.put(timestamp, new HashMap<String, Float>());
+                }
+                Map timestampData = (Map)sensorData.get(timestamp);
+                timestampData.put(idx, val);
+                sensorData.put(timestamp, timestampData);
+                data.put(name, sensorData);
+                c.moveToNext();
+            }
+        }
+
+        return data;
     }
 
     public void saveExportAction(ActionUrl action){

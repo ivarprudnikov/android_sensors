@@ -35,7 +35,6 @@ import com.ivarprudnikov.sensors.storage.ActionUrl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
 
@@ -100,39 +99,58 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
 
     private void showOptionsDialog(final ActionUrl action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final String[] actionsArray = new String[]{ "Send data now", "Edit", "Delete" };
+        final String[] actionsArray = new String[]{ "Send all data", "Send latest data", "Edit", "Delete" };
         builder.setTitle("Options")
                 .setItems(actionsArray, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
-                                Map data = App.getDbService().getData();
-                                AsyncNetworkTask.OnResponseListener lstnr = new AsyncNetworkTask.OnResponseListener() {
-                                    @Override
-                                    public void onResponseFinished(int statusCode) {
-                                        Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
-                                    }
-                                };
-                                final AsyncNetworkTask mTask = new AsyncNetworkTask(getContext(), lstnr, action.getUrl(), data);
-                                mTask.execute();
-                                dialog.dismiss();
+                                sendAllData(action);
                                 break;
                             case 1:
-                                Bundle bundle = new Bundle();
-                                bundle.putParcelable("item", action);
-                                Intent intent = new Intent(getContext(), ExportDataFormActivity.class);
-                                intent.putExtras(bundle);
-                                getContext().startActivity(intent);
-                                dialog.dismiss();
+                                sendLatestData(action);
                                 break;
                             case 2:
+                                openEditActionActivity(action);
+                                break;
+                            case 3:
                                 showDeleteConfirmationDialog(action);
-                                dialog.dismiss();
                                 break;
                         }
+                        dialog.dismiss();
                     }
                 });
         builder.show();
+    }
+
+    private void sendAllData(ActionUrl action){
+        AsyncNetworkTask.OnResponseListener allFinishedListener = new AsyncNetworkTask.OnResponseListener() {
+            @Override
+            public void onResponseFinished(int statusCode) {
+                Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
+            }
+        };
+        final AsyncNetworkTask mTaskAll = new AsyncNetworkTask(getContext(), allFinishedListener, action.getUrl(), App.getDbService().getData());
+        mTaskAll.execute();
+    }
+
+    private void sendLatestData(ActionUrl action){
+        AsyncNetworkTask.OnResponseListener latestFinishedListener = new AsyncNetworkTask.OnResponseListener() {
+            @Override
+            public void onResponseFinished(int statusCode) {
+                Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
+            }
+        };
+        final AsyncNetworkTask mTaskLatest = new AsyncNetworkTask(getContext(), latestFinishedListener, action.getUrl(), App.getDbService().getLatestData());
+        mTaskLatest.execute();
+    }
+
+    private void openEditActionActivity(ActionUrl action){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("item", action);
+        Intent intent = new Intent(getContext(), ExportDataFormActivity.class);
+        intent.putExtras(bundle);
+        getContext().startActivity(intent);
     }
 
     private void showDeleteConfirmationDialog(final ActionUrl action) {
