@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.hardware.Sensor;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ivarprudnikov.sensors.App;
@@ -210,7 +211,7 @@ public class SensorDataDbService extends ContextWrapper {
 
     public Map getData(){
 
-        Map data = new HashMap<String, Map>();
+        Map data = new HashMap<>();
 
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -235,7 +236,7 @@ public class SensorDataDbService extends ContextWrapper {
 
     public Map getLatestData(){
 
-        Map data = new HashMap<String, Map>();
+        Map data = new HashMap<>();
 
         String[] selectColumns = new String[]{
                 SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP,
@@ -244,19 +245,19 @@ public class SensorDataDbService extends ContextWrapper {
                 SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX
         };
 
-        String whereClause = SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP + " > ?";
-
-        // TODO: use last successful timestamp of action_result
-        String[] whereArgs = new String[]{
-                "0"
-        };
+        String query = "select " +
+                TextUtils.join(",", selectColumns) +
+                " from " + SensorDataContract.DataEntry.TABLE_NAME +
+                " where " + SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP + " > coalesce((" +
+                " select max(" + SensorDataContract.ActionResult.COLUMN_NAME_DATA_TO_TIME + ")" +
+                " from " + SensorDataContract.ActionResult.TABLE_NAME +
+                " where " + SensorDataContract.ActionResult.COLUMN_NAME_IS_SUCCESS + " > 0" +
+                " ),0)";
 
         try {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
             if(db != null){
-                Cursor c = db.query(
-                        SensorDataContract.DataEntry.TABLE_NAME,
-                        selectColumns, whereClause, whereArgs, null, null, null, null);
+                Cursor c = db.rawQuery(query, new String[]{});
                 data = getSensorDataFromCursor(c);
                 c.close();
             }
@@ -269,15 +270,20 @@ public class SensorDataDbService extends ContextWrapper {
 
     /**
      * {
-     *   "sensorName": {
-     *     "timestamp": {
-     *       "0": "x",
-     *       "1": "y",
+     *   "sensor_names": ["sensorName", ...]
+     *   "from_time": 0,
+     *   "to_time": 10,
+     *   "data": {
+     *     "sensorName": {
+     *       "timestamp": {
+     *         "0": "x",
+     *         "1": "y",
+     *         ...
+     *       },
      *       ...
      *     },
      *     ...
-     *   },
-     *   ...
+     *   }
      * }
      * @return {Map} sensor data
      */
@@ -289,6 +295,7 @@ public class SensorDataDbService extends ContextWrapper {
         Map<String, Map> data = new HashMap<>();
         List<String> sensors = new ArrayList<>();
         List<Long> times = new ArrayList<>();
+        int totalEvents = 0;
 
         if(c.moveToFirst()){
             while (c.isAfterLast() == false) {
@@ -304,6 +311,7 @@ public class SensorDataDbService extends ContextWrapper {
                 Map sensorData = (Map)data.get(name);
                 if(sensorData.get(timestamp) == null){
                     sensorData.put(timestamp, new HashMap<String, Float>());
+                    totalEvents++;
                     try {
                         times.add(Long.valueOf(timestamp, 10));
                     } catch(NumberFormatException e){}
@@ -318,12 +326,13 @@ public class SensorDataDbService extends ContextWrapper {
 
         resp.put("data", data);
         resp.put("sensors_names", sensors);
-        if(times.size() > 0){
+        resp.put("total_events", totalEvents);
+
+        if(data.keySet().size() > 0){
             Collections.sort(times);
             resp.put("from_time", times.get(0));
             resp.put("to_time", times.get((times.size() - 1)));
         }
-
 
         return resp;
     }
@@ -344,6 +353,32 @@ public class SensorDataDbService extends ContextWrapper {
                     db.update(SensorDataContract.ActionUrl.TABLE_NAME, values, SensorDataContract.ActionUrl._ID+"=?", new String[]{ String.valueOf(action.getId()) });
                 } else {
                     db.insert(SensorDataContract.ActionUrl.TABLE_NAME, null, values);
+                }
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+    }
+
+    public void saveExportResult(ActionResult result){
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
+        values.put(SensorDataContract.ActionResult.COLUMN_NAME_TIMESTAMP, result.getTimestamp());
+        values.put(SensorDataContract.ActionResult.COLUMN_NAME_ACTION_ID, result.getAction_id());
+        values.put(SensorDataContract.ActionResult.COLUMN_NAME_IS_SUCCESS, result.is_success());
+        values.put(SensorDataContract.ActionResult.COLUMN_NAME_DATA_FROM_TIME, result.getData_from_time());
+        values.put(SensorDataContract.ActionResult.COLUMN_NAME_DATA_TO_TIME, result.getData_to_time());
+
+        try {
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            if(db != null){
+                if(result.getId() != null){
+                    db.update(SensorDataContract.ActionResult.TABLE_NAME, values, SensorDataContract.ActionResult._ID+"=?", new String[]{ String.valueOf(result.getId()) });
+                } else {
+                    db.insert(SensorDataContract.ActionResult.TABLE_NAME, null, values);
                 }
             }
         } catch(SQLiteException e){

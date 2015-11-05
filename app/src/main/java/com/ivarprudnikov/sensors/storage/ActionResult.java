@@ -25,12 +25,12 @@ public class ActionResult {
     long timestamp;
     Integer action_id;
     boolean is_success;
-    long data_from_time;
-    long data_to_time;
+    Long data_from_time;
+    Long data_to_time;
 
     public ActionResult() {}
 
-    public ActionResult(int action_id, boolean is_success, long from, long to) {
+    public ActionResult(int action_id, boolean is_success, Long from, Long to) {
         this.timestamp = (new Date()).getTime();
         this.action_id = action_id;
         this.is_success = is_success;
@@ -70,19 +70,19 @@ public class ActionResult {
         this.is_success = is_success;
     }
 
-    public long getData_from_time() {
+    public Long getData_from_time() {
         return data_from_time;
     }
 
-    public void setData_from_time(long data_from_time) {
+    public void setData_from_time(Long data_from_time) {
         this.data_from_time = data_from_time;
     }
 
-    public long getData_to_time() {
+    public Long getData_to_time() {
         return data_to_time;
     }
 
-    public void setData_to_time(long data_to_time) {
+    public void setData_to_time(Long data_to_time) {
         this.data_to_time = data_to_time;
     }
 }

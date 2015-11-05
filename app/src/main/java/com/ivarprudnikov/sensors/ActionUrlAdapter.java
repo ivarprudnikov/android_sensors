@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.activity.ExportDataFormActivity;
+import com.ivarprudnikov.sensors.storage.ActionResult;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 
 import java.util.Date;
@@ -124,23 +125,21 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
         builder.show();
     }
 
-    private void sendAllData(ActionUrl action){
-        final Map data = App.getDbService().getData();
-        AsyncNetworkTask.OnResponseListener allFinishedListener = new AsyncNetworkTask.OnResponseListener() {
-            @Override
-            public void onResponseFinished(int statusCode) {
-                Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
-            }
-        };
-        final AsyncNetworkTask mTaskAll = new AsyncNetworkTask(getContext(), allFinishedListener, action.getUrl(), data);
-        mTaskAll.execute();
+    private void sendAllData(final ActionUrl action){
+        sendActionData(action, App.getDbService().getData());
     }
 
-    private void sendLatestData(ActionUrl action){
-        final Map data = App.getDbService().getLatestData();
+    private void sendLatestData(final ActionUrl action){
+        sendActionData(action, App.getDbService().getLatestData());
+    }
+
+    private void sendActionData(final ActionUrl action, final Map data){
         AsyncNetworkTask.OnResponseListener latestFinishedListener = new AsyncNetworkTask.OnResponseListener() {
             @Override
             public void onResponseFinished(int statusCode) {
+                boolean isSuccess = statusCode < 300 && statusCode >= 200;
+                ActionResult ar = new ActionResult(action.getId(), isSuccess, (Long)data.get("from_time"), (Long)data.get("to_time"));
+                App.getDbService().saveExportResult(ar);
                 Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
             }
         };
