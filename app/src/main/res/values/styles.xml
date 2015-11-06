@@ -18,7 +18,6 @@
 
     <style name="Header">
         <item name="android:background">@color/theme_normal</item>
-        <item name="android:paddingTop">@dimen/abc_action_bar_default_height_material</item>
     </style>
 
     <style name="HeaderLight">

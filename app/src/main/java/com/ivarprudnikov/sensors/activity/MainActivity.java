@@ -29,8 +29,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private Toolbar mToolbar;
     private SharedPreferences mSharedPreferences;
     private String mLoadingCount = "...";
+    private ImageView statusImage;
+    Animation mRotationAnimation;
 
     private Handler fHandler = new Handler();
 
@@ -132,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
+        mRotationAnimation = AnimationUtils.loadAnimation(this, R.anim.clockwise_rotation);
+        statusImage = (ImageView)mHomeSensorListHeaderView.findViewById(R.id.imageView);
+
         // Construct Intent to start alarm which makes sure
         // that background service is running
         Intent i = new Intent(this, OnAlarmBroadcastReceiver.class);
@@ -180,6 +188,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     public void syncStatus(){
+
+        if((Preferences.isDataStorageEnabled() && !Preferences.areAnySensorListenersEnabled()) ||
+                (!Preferences.isDataStorageEnabled() && Preferences.areAnySensorListenersEnabled())){
+            statusImage.setImageResource(R.drawable.status_off);
+            statusImage.setAnimation(null);
+        } else if(Preferences.isDataStorageEnabled() && Preferences.areAnySensorListenersEnabled()){
+            statusImage.setImageResource(R.drawable.status_on);
+            if(statusImage.getAnimation() == null)
+                statusImage.startAnimation(mRotationAnimation);
+        } else {
+            statusImage.setImageResource(0);
+            statusImage.setAnimation(null);
+        }
+
         String eventsCount = mDataCountText.getText().toString();
         if(!Preferences.isDataStorageEnabled() && eventsCount.equals("0")){
             mStatusText.setText("Enable storage first");
