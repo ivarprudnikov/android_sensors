@@ -19,7 +19,7 @@
 
     <string name="data_limit_label">Stored data limit</string>
     <string name="data_limit_reached_label">What to do with data when limit is reached?</string>
-    <string name="delete_data_label">Delete all stored data?</string>
+    <string name="delete_data_label">Delete all stored sensor data?</string>
     <string name="delete_sensor_data_label">Delete selected sensor data?</string>
 
     <string-array name="available_durations_in_hours">
