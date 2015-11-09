@@ -38,7 +38,7 @@
         <item>Overwrite older data</item>
     </string-array>
     <string name="title_activity_export_data">Export</string>
-    <string name="title_activity_export_data_create">Add export action</string>
+    <string name="title_activity_export_data_create">Export action</string>
 
     <string name="action_settings">Settings</string>
 </resources>
