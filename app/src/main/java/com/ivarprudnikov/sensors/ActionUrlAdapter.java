@@ -175,6 +175,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         App.getDbService().deleteActionUrlRows(action);
+                        App.getDbService().deleteActionResultRows(action);
                         remove(action);
                         notifyDataSetChanged();
                     }

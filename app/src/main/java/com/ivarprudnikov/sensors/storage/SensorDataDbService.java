@@ -492,4 +492,25 @@ public class SensorDataDbService extends ContextWrapper {
 
         return deleted;
     }
+
+    public int deleteActionResultRows(ActionUrl url){
+
+        int deleted = 0;
+
+        try {
+            if(url != null){
+
+                String whereQuery = SensorDataContract.ActionResult.COLUMN_NAME_ACTION_ID + "=?";
+                String[] args = new String[]{String.valueOf(url.getId())};
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                if(db != null){
+                    deleted = db.delete(SensorDataContract.ActionResult.TABLE_NAME, whereQuery, args);
+                }
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+        }
+
+        return deleted;
+    }
 }
