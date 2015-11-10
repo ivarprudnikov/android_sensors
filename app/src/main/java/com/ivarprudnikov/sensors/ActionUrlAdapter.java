@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.activity.ExportDataFormActivity;
+import com.ivarprudnikov.sensors.activity.ExportResult;
 import com.ivarprudnikov.sensors.storage.ActionResult;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 
@@ -101,7 +102,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
 
     private void showOptionsDialog(final ActionUrl action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final String[] actionsArray = new String[]{ "Send all data", "Send latest data", "Edit", "Delete" };
+        final String[] actionsArray = new String[]{ "Send all data", "Send latest data", "Edit", "Delete", "Export results" };
         builder.setTitle("Options")
                 .setItems(actionsArray, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -117,6 +118,9 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
                                 break;
                             case 3:
                                 showDeleteConfirmationDialog(action);
+                                break;
+                            case 4:
+                                openExportResultsActivity(action);
                                 break;
                         }
                         dialog.dismiss();
@@ -151,6 +155,14 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
         Bundle bundle = new Bundle();
         bundle.putParcelable("item", action);
         Intent intent = new Intent(getContext(), ExportDataFormActivity.class);
+        intent.putExtras(bundle);
+        getContext().startActivity(intent);
+    }
+
+    private void openExportResultsActivity(ActionUrl action){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("item", action);
+        Intent intent = new Intent(getContext(), ExportResult.class);
         intent.putExtras(bundle);
         getContext().startActivity(intent);
     }

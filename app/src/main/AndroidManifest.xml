@@ -82,6 +82,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ExportDataActivity" />
         </activity>
+        <activity
+            android:name=".activity.ExportResult"
+            android:label="@string/title_activity_export_result"
+            android:parentActivityName=".activity.ExportDataActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ivarprudnikov.sensors.activity.ExportDataActivity" />
+        </activity>
     </application>
 
 </manifest>
