@@ -37,7 +37,6 @@ public class ActionResultAdapter extends ArrayAdapter<ActionResult> {
         TextView line2;
         TextView line3;
         TextView line4;
-        TextView line5;
     }
 
     public ActionResultAdapter(Context context, List<ActionResult> actions) {
@@ -60,7 +59,6 @@ public class ActionResultAdapter extends ArrayAdapter<ActionResult> {
             viewHolder.line2 = (TextView) convertView.findViewById(R.id.line2);
             viewHolder.line3 = (TextView) convertView.findViewById(R.id.line3);
             viewHolder.line4 = (TextView) convertView.findViewById(R.id.line4);
-            viewHolder.line5 = (TextView) convertView.findViewById(R.id.line5);
 
             convertView.setTag(viewHolder);
         } else {
@@ -74,17 +72,15 @@ public class ActionResultAdapter extends ArrayAdapter<ActionResult> {
         t.setTime(result.getTimestamp());
         viewHolder.line1.setText(t.toString());
 
-        viewHolder.line2.setText(String.valueOf(result.getAction_id()));
-
-        viewHolder.line3.setText(String.valueOf(result.is_success()));
+        viewHolder.line2.setText(String.valueOf(result.is_success()));
 
         Date from = new Date();
         from.setTime(result.getData_from_time());
-        viewHolder.line4.setText(from.toString());
+        viewHolder.line3.setText(from.toString());
 
         Date to = new Date();
         to.setTime(result.getData_to_time());
-        viewHolder.line5.setText(to.toString());
+        viewHolder.line4.setText(to.toString());
 
         // Return the completed view to render on screen
         return convertView;

@@ -102,7 +102,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
 
     private void showOptionsDialog(final ActionUrl action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final String[] actionsArray = new String[]{ "Send all data", "Send latest data", "Edit", "Delete", "Export results" };
+        final String[] actionsArray = new String[]{ "Send all data", "Send latest data", "Edit", "Delete", "History" };
         builder.setTitle("Options")
                 .setItems(actionsArray, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
