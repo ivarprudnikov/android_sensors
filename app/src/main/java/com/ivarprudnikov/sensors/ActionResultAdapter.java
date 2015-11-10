@@ -74,7 +74,7 @@ public class ActionResultAdapter extends ArrayAdapter<ActionResult> {
         t.setTime(result.getTimestamp());
         viewHolder.line1.setText(t.toString());
 
-        viewHolder.line2.setText(result.getAction_id());
+        viewHolder.line2.setText(String.valueOf(result.getAction_id()));
 
         viewHolder.line3.setText(String.valueOf(result.is_success()));
 

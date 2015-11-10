@@ -6,47 +6,132 @@
     android:gravity="center_vertical" >
 
     <TextView
+        android:id="@+id/line1label"
+        android:text="Time"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="3dip"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/line1"
         android:text="2015-12-23 23:21:53 UTC"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="20dip"
         android:layout_marginTop="10dip"
         android:layout_marginBottom="3dip"
+        android:layout_toRightOf="@+id/line1label"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line2label"
+        android:text="Action:"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="3dip"
+        android:layout_below="@id/line1"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/line2"
         android:text="ID"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="20dip"
         android:layout_marginBottom="3dip"
+        android:layout_toRightOf="@+id/line2label"
         android:layout_below="@id/line1"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line3label"
+        android:text="Is success?"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="3dip"
+        android:layout_below="@id/line2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/line3"
         android:text="Success"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="20dip"
         android:layout_marginBottom="3dip"
+        android:layout_toRightOf="@+id/line3label"
         android:layout_below="@id/line2"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line4label"
+        android:text="From:"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="3dip"
+        android:layout_below="@id/line3"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/line4"
         android:text="2015-12-23 23:21:53 UTC"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="20dip"
         android:layout_marginBottom="3dip"
+        android:layout_toRightOf="@+id/line4label"
         android:layout_below="@id/line3"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line5label"
+        android:text="To:"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="3dip"
+        android:layout_below="@id/line4"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/line5"
         android:text="2015-12-23 23:21:53 UTC"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="20dip"
         android:layout_marginBottom="10dip"
+        android:layout_toRightOf="@+id/line5label"
         android:layout_below="@id/line4"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 

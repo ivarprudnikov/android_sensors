@@ -392,6 +392,7 @@ public class SensorDataDbService extends ContextWrapper {
 
         String whereClause = null;
         String[] whereArgs = null;
+        String orderBy = SensorDataContract.ActionResult.COLUMN_NAME_TIMESTAMP + " DESC";
 
         if(action != null){
             whereClause = SensorDataContract.ActionResult.COLUMN_NAME_ACTION_ID + "=?";
@@ -410,7 +411,7 @@ public class SensorDataDbService extends ContextWrapper {
                                 SensorDataContract.ActionResult.COLUMN_NAME_IS_SUCCESS,
                                 SensorDataContract.ActionResult.COLUMN_NAME_DATA_FROM_TIME,
                                 SensorDataContract.ActionResult.COLUMN_NAME_DATA_TO_TIME
-                        }, whereClause, whereArgs, null, null, null, null);
+                        }, whereClause, whereArgs, null, null, orderBy, null);
                 if(c.moveToFirst()){
                     while (c.isAfterLast() == false) {
 
@@ -464,7 +465,7 @@ public class SensorDataDbService extends ContextWrapper {
                 c.close();
             }
         } catch(SQLiteException e){
-            Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
+            Log.e("SensorDataDbService", "mDbHelper.getReadableDatabase() exception", e);
         }
 
         return data;
