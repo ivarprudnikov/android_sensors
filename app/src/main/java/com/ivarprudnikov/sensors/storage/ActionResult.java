@@ -30,6 +30,15 @@ public class ActionResult {
 
     public ActionResult() {}
 
+    public ActionResult(int id, Long timestamp, int action_id, boolean is_success, Long from, Long to) {
+        this.id = id;
+        this.timestamp = timestamp;
+        this.action_id = action_id;
+        this.is_success = is_success;
+        this.data_from_time = from;
+        this.data_to_time = to;
+    }
+
     public ActionResult(int action_id, boolean is_success, Long from, Long to) {
         this.timestamp = (new Date()).getTime();
         this.action_id = action_id;

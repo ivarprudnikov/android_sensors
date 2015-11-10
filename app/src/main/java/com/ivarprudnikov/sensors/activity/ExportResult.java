@@ -25,11 +25,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.ActionResultAdapter;
+import com.ivarprudnikov.sensors.App;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 import com.ivarprudnikov.sensors.storage.ActionResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExportResult extends AppCompatActivity {
 
@@ -70,5 +72,26 @@ public class ExportResult extends AppCompatActivity {
 
         mListAdapter = new ActionResultAdapter(this, new ArrayList<ActionResult>());
         mListView.setAdapter(mListAdapter);
+        syncResults();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        syncResults();
+    }
+
+    public void syncResults(){
+        List<ActionResult> mList = App.getDbService().getActionResultList(action);
+        if(mList.size() > 0){
+            mEmptyListHelperView.setVisibility(View.GONE);
+        } else {
+            mEmptyListHelperView.setVisibility(View.VISIBLE);
+        }
+        mListAdapter.clear();
+        for(ActionResult ar : mList){
+            mListAdapter.add(ar);
+        }
+        mListAdapter.notifyDataSetChanged();
     }
 }

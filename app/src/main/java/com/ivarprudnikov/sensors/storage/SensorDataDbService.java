@@ -387,6 +387,53 @@ public class SensorDataDbService extends ContextWrapper {
 
     }
 
+    public List<ActionResult> getActionResultList(ActionUrl action){
+        List<ActionResult> data = new ArrayList<>();
+
+        String whereClause = null;
+        String[] whereArgs = null;
+
+        if(action != null){
+            whereClause = SensorDataContract.ActionResult.COLUMN_NAME_ACTION_ID + "=?";
+            whereArgs = new String[]{ String.valueOf(action.getId()) };
+        }
+
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                        SensorDataContract.ActionResult.TABLE_NAME,
+                        new String[]{
+                                SensorDataContract.ActionResult._ID,
+                                SensorDataContract.ActionResult.COLUMN_NAME_TIMESTAMP,
+                                SensorDataContract.ActionResult.COLUMN_NAME_ACTION_ID,
+                                SensorDataContract.ActionResult.COLUMN_NAME_IS_SUCCESS,
+                                SensorDataContract.ActionResult.COLUMN_NAME_DATA_FROM_TIME,
+                                SensorDataContract.ActionResult.COLUMN_NAME_DATA_TO_TIME
+                        }, whereClause, whereArgs, null, null, null, null);
+                if(c.moveToFirst()){
+                    while (c.isAfterLast() == false) {
+
+                        Integer id = c.getInt(c.getColumnIndex(SensorDataContract.ActionResult._ID));
+                        long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionResult.COLUMN_NAME_TIMESTAMP));
+                        Integer action_id = c.getInt(c.getColumnIndex(SensorDataContract.ActionResult.COLUMN_NAME_ACTION_ID));
+                        boolean is_success = c.getInt(c.getColumnIndex(SensorDataContract.ActionResult.COLUMN_NAME_IS_SUCCESS)) > 0;
+                        long from = c.getLong(c.getColumnIndex(SensorDataContract.ActionResult.COLUMN_NAME_DATA_FROM_TIME));
+                        long to = c.getLong(c.getColumnIndex(SensorDataContract.ActionResult.COLUMN_NAME_DATA_TO_TIME));
+
+                        data.add(new ActionResult(id, timestamp, action_id, is_success, from, to));
+                        c.moveToNext();
+                    }
+                }
+                c.close();
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getReadableDatabase() exception", e);
+        }
+
+        return data;
+    }
+
     public List<ActionUrl> getActionUrlList(){
 
         List<ActionUrl> data = new ArrayList<ActionUrl>();
