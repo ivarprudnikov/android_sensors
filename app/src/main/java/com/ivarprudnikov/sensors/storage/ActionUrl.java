@@ -20,29 +20,29 @@ package com.ivarprudnikov.sensors.storage;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 public class ActionUrl implements Parcelable {
 
     Integer id;
     String url;
     long frequency;
     long timestamp;
+    long last_updated;
 
     public ActionUrl() {}
 
     public ActionUrl(String url, long frequency) {
         this.url = url;
         this.frequency = frequency;
-        Date now = new Date();
-        this.timestamp = now.getTime();
+        this.timestamp = System.currentTimeMillis();
+        this.last_updated = this.timestamp;
     }
 
-    public ActionUrl(int id, String url, long frequency, long timestamp) {
+    public ActionUrl(int id, String url, long frequency, long timestamp, long lastUpdated) {
         this.id = id;
         this.url = url;
         this.frequency = frequency;
         this.timestamp = timestamp;
+        this.last_updated = lastUpdated;
     }
 
     public Integer getId() {
@@ -81,6 +81,14 @@ public class ActionUrl implements Parcelable {
         return this.frequency > 0;
     }
 
+    public long getLast_updated() {
+        return last_updated;
+    }
+
+    public void setLast_updated(long last_updated) {
+        this.last_updated = last_updated;
+    }
+
     // Parcelable
     //////////////////
 
@@ -104,6 +112,7 @@ public class ActionUrl implements Parcelable {
         dest.writeString(url);
         dest.writeLong(frequency);
         dest.writeLong(timestamp);
+        dest.writeLong(last_updated);
     }
 
     public void readFromParcel(Parcel in) {
@@ -111,6 +120,7 @@ public class ActionUrl implements Parcelable {
         this.url = in.readString();
         this.frequency = in.readLong();
         this.timestamp = in.readLong();
+        this.last_updated = in.readLong();
     }
 
     @Override

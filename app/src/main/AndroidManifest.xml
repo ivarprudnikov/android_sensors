@@ -90,6 +90,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ivarprudnikov.sensors.activity.ExportDataActivity" />
         </activity>
+
+        <receiver
+            android:name=".OnExportAlarmBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
     </application>
 
 </manifest>

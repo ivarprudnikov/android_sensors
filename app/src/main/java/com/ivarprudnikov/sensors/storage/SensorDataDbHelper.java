@@ -31,7 +31,7 @@ import com.ivarprudnikov.sensors.storage.SensorDataContract.ActionResult;
 public class SensorDataDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 14;
     public static final String DATABASE_NAME = "SensorData.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -51,6 +51,7 @@ public class SensorDataDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + ActionUrl.TABLE_NAME + " (" +
                     ActionUrl._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     ActionUrl.COLUMN_NAME_TIMESTAMP + INTEGER_TYPE + COMMA_SEP +
+                    ActionUrl.COLUMN_NAME_LAST_UPDATED + INTEGER_TYPE + COMMA_SEP +
                     ActionUrl.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
                     ActionUrl.COLUMN_NAME_FREQUENCY + INTEGER_TYPE +
                     " )";

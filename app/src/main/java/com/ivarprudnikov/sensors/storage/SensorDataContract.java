@@ -40,6 +40,7 @@ public final class SensorDataContract {
     public static abstract class ActionUrl implements BaseColumns {
         public static final String TABLE_NAME = "action_url";
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp_milli";
+        public static final String COLUMN_NAME_LAST_UPDATED = "last_updated_milli";
         public static final String COLUMN_NAME_URL = "url";
         public static final String COLUMN_NAME_FREQUENCY = "frequency_milli";
     }

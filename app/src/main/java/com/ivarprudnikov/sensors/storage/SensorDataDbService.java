@@ -345,6 +345,7 @@ public class SensorDataDbService extends ContextWrapper {
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_URL, action.getUrl());
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY, action.getFrequency());
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP, action.getTimestamp());
+        values.put(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED, action.getTimestamp());
 
         try {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -448,7 +449,8 @@ public class SensorDataDbService extends ContextWrapper {
                                 SensorDataContract.ActionUrl._ID,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_URL,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY,
-                                SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP
+                                SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED
                         }, null, null, null, null, null, null);
                 if(c.moveToFirst()){
                     while (c.isAfterLast() == false) {
@@ -457,8 +459,9 @@ public class SensorDataDbService extends ContextWrapper {
                         String url = c.getString(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_URL));
                         long freq = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY));
                         long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
+                        long lastUpdated = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED));
 
-                        data.add(new ActionUrl(id, url, freq, timestamp));
+                        data.add(new ActionUrl(id, url, freq, timestamp, lastUpdated));
                         c.moveToNext();
                     }
                 }

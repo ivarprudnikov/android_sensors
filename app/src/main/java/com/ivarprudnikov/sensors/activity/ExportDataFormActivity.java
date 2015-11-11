@@ -94,6 +94,7 @@ public class ExportDataFormActivity extends AppCompatActivity {
         });
         if(action != null){
             action.setUrl(mUrl.getText().toString());
+            action.setLast_updated(System.currentTimeMillis());
         } else {
             action = new ActionUrl(mUrl.getText().toString(), 0);
         }
