@@ -45,6 +45,27 @@
                 android:layout_height="wrap_content"
                 style="@style/InputHelp"/>
 
+            <TextView
+                android:text="Frequency"
+                android:id="@+id/exportFrequency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/InputLabel"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editFrequency"
+                android:inputType="number"
+                style="@style/InputField" />
+
+            <TextView
+                android:text="Specify interval in milliseconds for automatic export. 0 means automatic export is disabled."
+                android:id="@+id/exportFrequencyHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/InputHelp"/>
+
 
         </LinearLayout>
 

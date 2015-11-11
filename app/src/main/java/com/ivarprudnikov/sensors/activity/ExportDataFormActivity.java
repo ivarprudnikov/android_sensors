@@ -20,6 +20,7 @@ package com.ivarprudnikov.sensors.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ public class ExportDataFormActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private EditText mUrl;
+    private EditText mFrequency;
     private ActionUrl action;
 
     @Override
@@ -53,6 +55,7 @@ public class ExportDataFormActivity extends AppCompatActivity {
         });
 
         mUrl = (EditText)findViewById(R.id.editUrl);
+        mFrequency = (EditText)findViewById(R.id.editFrequency);
 
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null && bundle.size() > 0){
@@ -60,6 +63,7 @@ public class ExportDataFormActivity extends AppCompatActivity {
         }
         if(action != null){
             mUrl.setText(action.getUrl());
+            mFrequency.setText(String.valueOf(action.getFrequency()));
         }
     }
 
@@ -92,11 +96,20 @@ public class ExportDataFormActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        long frequency = 0;
+        try {
+            frequency = Long.valueOf(mFrequency.getText().toString());
+        } catch (Exception e){
+            Log.d("frequency exception", e.getMessage());
+        }
+
         if(action != null){
             action.setUrl(mUrl.getText().toString());
+            action.setFrequency(frequency);
             action.setLast_updated(System.currentTimeMillis());
         } else {
-            action = new ActionUrl(mUrl.getText().toString(), 0);
+            action = new ActionUrl(mUrl.getText().toString(), frequency);
         }
         mTask.execute(action);
     }
