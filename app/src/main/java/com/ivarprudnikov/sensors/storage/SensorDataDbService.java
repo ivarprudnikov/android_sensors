@@ -20,6 +20,7 @@ package com.ivarprudnikov.sensors.storage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -28,6 +29,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.OnExportAlarmBroadcastReceiver;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 
@@ -218,12 +220,12 @@ public class SensorDataDbService extends ContextWrapper {
             if(db != null){
                 Cursor c = db.query(
                         SensorDataContract.DataEntry.TABLE_NAME,
-                    new String[]{
-                            SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP,
-                            SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME,
-                            SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
-                            SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX,
-                    }, null, null, null, null, null, null);
+                        new String[]{
+                                SensorDataContract.DataEntry.COLUMN_NAME_TIMESTAMP,
+                                SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_NAME,
+                                SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE,
+                                SensorDataContract.DataEntry.COLUMN_NAME_SENSOR_DATA_VALUE_INDEX,
+                        }, null, null, null, null, null, null);
                 data = getSensorDataFromCursor(c);
                 c.close();
             }
@@ -347,14 +349,22 @@ public class SensorDataDbService extends ContextWrapper {
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP, action.getTimestamp());
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED, action.getTimestamp());
 
+        Integer actionId = action.getId();
+
         try {
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             if(db != null){
                 if(action.getId() != null){
                     db.update(SensorDataContract.ActionUrl.TABLE_NAME, values, SensorDataContract.ActionUrl._ID+"=?", new String[]{ String.valueOf(action.getId()) });
                 } else {
-                    db.insert(SensorDataContract.ActionUrl.TABLE_NAME, null, values);
+                    actionId = (int)db.insert(SensorDataContract.ActionUrl.TABLE_NAME, null, values);
                 }
+
+                // Make sure Alarm is triggered
+                Intent i = new Intent(App.getApp(), OnExportAlarmBroadcastReceiver.class);
+                i.setAction(Constants.INTENT_ACTION_TRIGGER_EXPORT);
+                i.putExtra(Constants.INTENT_KEY_ACTION_URL_ID, actionId);
+                sendBroadcast(i);
             }
         } catch(SQLiteException e){
             Log.e("SensorDataDbService", "mDbHelper.getWritableDatabase() exception", e);
@@ -464,6 +474,47 @@ public class SensorDataDbService extends ContextWrapper {
                         data.add(new ActionUrl(id, url, freq, timestamp, lastUpdated));
                         c.moveToNext();
                     }
+                }
+                c.close();
+            }
+        } catch(SQLiteException e){
+            Log.e("SensorDataDbService", "mDbHelper.getReadableDatabase() exception", e);
+        }
+
+        return data;
+
+    }
+
+    public ActionUrl getActionUrlById(long actionUrlId){
+
+        ActionUrl data = null;
+
+        try {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            if(db != null){
+                Cursor c = db.query(
+                        SensorDataContract.ActionUrl.TABLE_NAME,
+                        new String[]{
+                                SensorDataContract.ActionUrl._ID,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_URL,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED
+                        },
+                        SensorDataContract.ActionUrl._ID + "=?",
+                        new String[]{
+                                String.valueOf(actionUrlId)
+                        }, null, null, null, null);
+                if(c.moveToFirst()){
+
+                    Integer id = c.getInt(c.getColumnIndex(SensorDataContract.ActionUrl._ID));
+                    String url = c.getString(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_URL));
+                    long freq = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY));
+                    long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
+                    long lastUpdated = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED));
+
+                    data = new ActionUrl(id, url, freq, timestamp, lastUpdated);
+                    c.moveToNext();
                 }
                 c.close();
             }

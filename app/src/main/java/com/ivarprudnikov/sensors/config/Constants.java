@@ -20,6 +20,11 @@ package com.ivarprudnikov.sensors.config;
 public class Constants {
     public final static String INTENT_KEY_SENSOR_NAME = "com.ivarprudnikov.sensors.SENSOR_NAME";
     public final static String INTENT_KEY_ACTION_URL_ID = "com.ivarprudnikov.sensors.ACTION_URL_ID";
+    public final static String INTENT_KEY_ACTION_URL_REGISTRATION_TIME = "com.ivarprudnikov.sensors.ACTION_URL_REGISTRATION_TIME";
+
+    public final static String INTENT_ACTION_TRIGGER_FROM_BOOT = "com.ivarprudnikov.sensors.ACTION_TRIGGER_FROM_BOOT";
+    public final static String INTENT_ACTION_TRIGGER_EXPORT = "com.ivarprudnikov.sensors.ACTION_TRIGGER_EXPORT";
+
     public static final String TEXT_NO_SENSOR_FOUND = "Could not identify the sensor";
     public static final String TEXT_SENSOR_TYPE_UNRESOLVABLE = "Unresolvable";
     public static final int CHART_MAX_HORIZONTAL_POINTS = 200;

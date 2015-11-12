@@ -24,6 +24,8 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
+import com.ivarprudnikov.sensors.config.Constants;
+
 /**
  * Start alarm that will trigger {OnAlarmBroadcastReceiver} which makes
  * sure that background service is alive
@@ -36,12 +38,22 @@ public class OnBootBroadcastReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent startServiceIntent = new Intent(context, OnAlarmBroadcastReceiver.class);
-        startServiceIntent.setAction("com.ivarprudnikov.sensors.ACTION_TRIGGER_FROM_BOOT");
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, startServiceIntent, 0);
 
+
+        // Starts service responsible for sensor data storage
+        Intent startSensorDataServiceIntent = new Intent(context, OnAlarmBroadcastReceiver.class);
+        startSensorDataServiceIntent.setAction(Constants.INTENT_ACTION_TRIGGER_FROM_BOOT);
+        PendingIntent pi1 = PendingIntent.getBroadcast(context, 0, startSensorDataServiceIntent, 0);
         mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + START_AT_OFFSET,
-                pi);
+                pi1);
+
+        // Registers alarms required for data export
+        Intent startDataExportIntent = new Intent(context, OnExportAlarmBroadcastReceiver.class);
+        startDataExportIntent.setAction(Constants.INTENT_ACTION_TRIGGER_FROM_BOOT);
+        PendingIntent pi2 = PendingIntent.getBroadcast(context, 0, startSensorDataServiceIntent, 0);
+        mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + START_AT_OFFSET,
+                pi2);
     }
 }
