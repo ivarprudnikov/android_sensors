@@ -24,6 +24,7 @@ public class Constants {
 
     public final static String INTENT_ACTION_TRIGGER_FROM_BOOT = "com.ivarprudnikov.sensors.ACTION_TRIGGER_FROM_BOOT";
     public final static String INTENT_ACTION_TRIGGER_EXPORT = "com.ivarprudnikov.sensors.ACTION_TRIGGER_EXPORT";
+    public final static String INTENT_ACTION_TRIGGER_REREGISTER_EXPORT = "com.ivarprudnikov.sensors.ACTION_TRIGGER_REREGISTER_EXPORT";
 
     public static final String TEXT_NO_SENSOR_FOUND = "Could not identify the sensor";
     public static final String TEXT_SENSOR_TYPE_UNRESOLVABLE = "Unresolvable";

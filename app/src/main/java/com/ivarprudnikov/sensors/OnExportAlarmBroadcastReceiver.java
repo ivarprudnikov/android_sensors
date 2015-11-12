@@ -14,14 +14,14 @@ import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.ActionResult;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 
+import java.util.List;
 import java.util.Map;
 
 public class OnExportAlarmBroadcastReceiver extends BroadcastReceiver {
 
     private static final long START_OFFSET = 997;
 
-    public OnExportAlarmBroadcastReceiver() {
-    }
+    public OnExportAlarmBroadcastReceiver() {}
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -35,9 +35,21 @@ public class OnExportAlarmBroadcastReceiver extends BroadcastReceiver {
         } else if(action != null && action.equals(Constants.INTENT_ACTION_TRIGGER_FROM_BOOT)){
             // Release the wake lock provided by the WakefulBroadcastReceiver.
             OnBootBroadcastReceiver.completeWakefulIntent(intent);
-            // TODO: re-register alarms for each enabled action url
+            reregister();
+        } else if(action != null && action.equals(Constants.INTENT_ACTION_TRIGGER_REREGISTER_EXPORT)){
+            reregister();
         }
+    }
 
+    private void reregister(){
+        List<ActionUrl> actions = App.getDbService().getActionUrlList();
+        if(actions.size() > 0){
+            for( ActionUrl a : actions ){
+                if(a.getFrequency() > 0){
+                    new ExportTask().execute((long)a.getId());
+                }
+            }
+        }
     }
 
     private class ExportTask extends AsyncTask<Long, Void, Void> {
