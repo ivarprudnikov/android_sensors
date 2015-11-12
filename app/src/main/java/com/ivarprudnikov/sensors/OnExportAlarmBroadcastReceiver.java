@@ -97,7 +97,7 @@ public class OnExportAlarmBroadcastReceiver extends BroadcastReceiver {
 
                     Log.d("ExportTask", "prefs enabled");
 
-                    // TODO: check if async task still in progress
+                    // TODO: check if async task still in progress, otherwise will result in posting duplicated data
 
                     // Load latest data
                     //////////////////////
