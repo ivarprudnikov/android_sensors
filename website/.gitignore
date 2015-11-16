@@ -1,0 +1,16 @@
+bower_components/
+node_modules/
+.sass-cache/
+.idea/
+.tmp/
+dist/
+app/**/generated*.js
+app/config/config.js
+app/images/svg_gen
+app/images/svg_min
+.DS_Store
+*.out
+*.iml
+*.ipr
+*.iws
+*.log

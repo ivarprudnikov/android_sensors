@@ -1,0 +1,51 @@
+.navbar-main {
+
+  background-color: $brand-primary;
+  color: #ffffff;
+  margin-bottom: 0;
+
+  .navbar-toggle {
+    border-color: transparent;
+
+    .icon-bar {
+      background-color: #ffffff;
+    }
+  }
+
+  .navbar {
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .nav {
+
+    li {
+
+      & > a {
+        color: #ffffff;
+
+        &:hover,
+        &:focus {
+          color: inherit;
+          background-color: inherit;
+          border-color: inherit;
+        }
+      }
+
+      &.active > a,
+      &:hover > a,
+      &:focus > a {
+        background-color: darken($brand-primary,10%);
+        border-color: transparent;
+      }
+
+    }
+  }
+
+  .logo {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+}
