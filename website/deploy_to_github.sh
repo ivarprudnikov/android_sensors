@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -o errexit #abort if any command fails
 
+# cloned from https://github.com/X1011/git-directory-deploy
+# CONFIG:
+# GIT_DEPLOY_DIR: root of the tree of files to deploy
+# GIT_DEPLOY_BRANCH: branch to commit files to and push to origin
+# GIT_DEPLOY_USERNAME, GIT_DEPLOY_EMAIL: identity to use for git commits if none is set already. Useful for CI servers.
+# GIT_DEPLOY_REPO: repository to deploy to. Must be readable and writable. The default of "origin" will
+# not work on Travis CI, since it uses the read-only git protocol. In that case, it is recommended to store a GitHub
+# token in a secure environment variable and use it in an HTTPS URL
+# like this: repo=https://$GITHUB_TOKEN@github.com/user/repo.git
+
 main() {
 	deploy_directory=${GIT_DEPLOY_DIR:-dist}
 	deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
