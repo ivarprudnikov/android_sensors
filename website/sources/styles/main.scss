@@ -5,3 +5,41 @@
 body {
   overflow-y: scroll;
 }
+
+.container-intro {
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  h1 {
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0px 0 16px;
+  }
+
+  footer a img {
+    max-width: 180px;
+  }
+}
+
+
+@media screen and (min-width: $screen-sm-min) {
+
+  .container-intro {
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    h1 {
+      font-size: 36px;
+      margin: 0px 0 24px;
+    }
+
+    p {
+      font-size: 17px;
+    }
+
+    footer a img {
+      max-width: 220px;
+    }
+  }
+}
+
