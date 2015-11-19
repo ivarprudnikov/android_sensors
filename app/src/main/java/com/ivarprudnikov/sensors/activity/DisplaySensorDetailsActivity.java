@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.App;
-import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.AsyncSensorEventsCounter;
+import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 
@@ -158,15 +159,20 @@ public class DisplaySensorDetailsActivity extends AppCompatActivity implements S
         ((TextView)findViewById(R.id.sensorDetailsPowerValue)).setText(Float.toString(mSelectedSensor.getPower()));
         ((TextView)findViewById(R.id.sensorDetailsMinDelayValue)).setText(Integer.toString(mSelectedSensor.getMinDelay()));
 
-        // TODO: compatibility issues with lower than API ver 20
-        try {
-            ((TextView)findViewById(R.id.sensorDetailsReportingModeValue)).setText( reportingModes.get(mSelectedSensor.getReportingMode()));
-            ((TextView)findViewById(R.id.sensorDetailsTypeStringValue)).setText(mSelectedSensor.getStringType());
-            ((TextView)findViewById(R.id.sensorDetailsMaxDelayValue)).setText(Integer.toString(mSelectedSensor.getMaxDelay()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             ((TextView)findViewById(R.id.sensorDetailsFifoMaxEventValue)).setText(Integer.toString(mSelectedSensor.getFifoMaxEventCount()));
             ((TextView)findViewById(R.id.sensorDetailsFifoReservedEventValue)).setText(Integer.toString(mSelectedSensor.getFifoReservedEventCount()));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            ((TextView)findViewById(R.id.sensorDetailsTypeStringValue)).setText(mSelectedSensor.getStringType());
+        }
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            ((TextView)findViewById(R.id.sensorDetailsReportingModeValue)).setText( reportingModes.get(mSelectedSensor.getReportingMode()));
+            ((TextView)findViewById(R.id.sensorDetailsMaxDelayValue)).setText(Integer.toString(mSelectedSensor.getMaxDelay()));
             ((TextView)findViewById(R.id.sensorDetailsIsWakeUpValue)).setText(Boolean.toString(mSelectedSensor.isWakeUpSensor()));
-        } catch(Exception e){}
+        }
 
         // hidden methods
         //mSelectedSensor.getRequiredPermission();

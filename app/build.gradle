@@ -25,8 +25,13 @@ repositories {
 }
 
 dependencies {
+    // lib
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    // compatibility lib
     compile 'com.android.support:appcompat-v7:22.2.0'
+    // charts
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.1'
+    // http client
     compile 'com.google.http-client:google-http-client-android:1.20.0'
+    compile 'com.google.http-client:google-http-client-gson:1.20.0' exclude module: 'httpclient'
 }

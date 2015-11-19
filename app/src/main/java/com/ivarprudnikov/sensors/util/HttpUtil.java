@@ -17,6 +17,8 @@
 
 package com.ivarprudnikov.sensors.util;
 
+import android.os.Build;
+
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
@@ -29,6 +31,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
+import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,7 +39,16 @@ import java.util.Map;
 public class HttpUtil {
 
     static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    static final JsonFactory JSON_FACTORY = AndroidJsonFactory.getDefaultInstance();
+    static final JsonFactory JSON_FACTORY = getJsonfactoryInstance();
+
+    public static JsonFactory getJsonfactoryInstance(){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // only for honeycomb and newer versions
+            return AndroidJsonFactory.getDefaultInstance();
+        } else {
+            return GsonFactory.getDefaultInstance();
+        }
+    }
 
     public static HttpResponse post(String urlString, Map data, final Map<String, String> headers) throws IOException {
 
