@@ -17,6 +17,7 @@
 
 package com.ivarprudnikov.sensors.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.ivarprudnikov.sensors.AsyncActionUrlStorage;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
@@ -38,6 +40,8 @@ public class ExportDataFormActivity extends AppCompatActivity {
     private EditText mUrl;
     private EditText mFrequency;
     private ActionUrl action;
+
+    private static final int REQUEST_CHOOSER = 8213;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,11 @@ public class ExportDataFormActivity extends AppCompatActivity {
             mUrl.setText(action.getUrl());
             mFrequency.setText(String.valueOf(action.getFrequency()));
         }
+
+        // Create the ACTION_GET_CONTENT Intent
+        Intent getContentIntent = FileUtils.createGetContentIntent();
+        Intent intent = Intent.createChooser(getContentIntent, "Select a file");
+        startActivityForResult(intent, REQUEST_CHOOSER);
     }
 
     @Override

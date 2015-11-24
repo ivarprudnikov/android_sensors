@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <bool name="file_picker_use_activity">false</bool>
+    <bool name="file_picker_use_provider">true</bool>
+
+</resources>
