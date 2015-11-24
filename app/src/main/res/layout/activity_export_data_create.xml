@@ -67,6 +67,50 @@
                 style="@style/InputHelp"/>
 
 
+            <!-- CLIENT CERTIFICATE -->
+
+            <TextView
+                android:text="Client certificate"
+                android:id="@+id/certificate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/InputLabel"/>
+
+            <Button
+                android:visibility="gone"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add certificate"
+                android:id="@+id/certificateAdd" />
+
+            <EditText
+                android:visibility="gone"
+                android:text="CERTIFICATE ADDED"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editCertificate"
+                android:inputType="text"
+                android:enabled="false"
+                style="@style/InputField" />
+
+            <Button
+                android:visibility="gone"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove certificate"
+                android:id="@+id/certificateRemove"
+                android:layout_gravity="right" />
+
+            <TextView
+                android:text="Add client certificate if it is necessary for request authentication"
+                android:id="@+id/certificateHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/InputHelp"/>
+
+
         </LinearLayout>
 
     </ScrollView>

@@ -471,7 +471,7 @@ public class SensorDataDbService extends ContextWrapper {
                         long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
                         long lastUpdated = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED));
 
-                        data.add(new ActionUrl(id, url, freq, timestamp, lastUpdated));
+                        data.add(new ActionUrl(id, url, freq, timestamp, lastUpdated, null));
                         c.moveToNext();
                     }
                 }
@@ -513,7 +513,7 @@ public class SensorDataDbService extends ContextWrapper {
                     long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
                     long lastUpdated = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED));
 
-                    data = new ActionUrl(id, url, freq, timestamp, lastUpdated);
+                    data = new ActionUrl(id, url, freq, timestamp, lastUpdated, null);
                     c.moveToNext();
                 }
                 c.close();

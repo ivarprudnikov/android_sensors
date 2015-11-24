@@ -27,22 +27,25 @@ public class ActionUrl implements Parcelable {
     long frequency;
     long timestamp;
     long last_updated;
+    byte[] client_certificate;
 
     public ActionUrl() {}
 
-    public ActionUrl(String url, long frequency) {
+    public ActionUrl(String url, long frequency, byte[] client_certificate) {
         this.url = url;
         this.frequency = frequency;
         this.timestamp = System.currentTimeMillis();
         this.last_updated = this.timestamp;
+        this.client_certificate = client_certificate;
     }
 
-    public ActionUrl(int id, String url, long frequency, long timestamp, long lastUpdated) {
+    public ActionUrl(int id, String url, long frequency, long timestamp, long lastUpdated, byte[] client_certificate) {
         this.id = id;
         this.url = url;
         this.frequency = frequency;
         this.timestamp = timestamp;
         this.last_updated = lastUpdated;
+        this.client_certificate = client_certificate;
     }
 
     public Integer getId() {
@@ -89,6 +92,14 @@ public class ActionUrl implements Parcelable {
         this.last_updated = last_updated;
     }
 
+    public byte[] getClient_certificate() {
+        return client_certificate;
+    }
+
+    public void setClient_certificate(byte[] client_certificate) {
+        this.client_certificate = client_certificate;
+    }
+
     // Parcelable
     //////////////////
 
@@ -98,7 +109,7 @@ public class ActionUrl implements Parcelable {
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public ActionUrl createFromParcel(Parcel in ) {
+        public ActionUrl createFromParcel(Parcel in) {
             return new ActionUrl( in );
         }
         public ActionUrl[] newArray(int size) {
@@ -113,6 +124,13 @@ public class ActionUrl implements Parcelable {
         dest.writeLong(frequency);
         dest.writeLong(timestamp);
         dest.writeLong(last_updated);
+        if(client_certificate != null){
+            dest.writeInt(client_certificate.length);
+            dest.writeByteArray(client_certificate);
+        } else {
+            dest.writeInt(0);
+            dest.writeByteArray(new byte[0]);
+        }
     }
 
     public void readFromParcel(Parcel in) {
@@ -121,6 +139,8 @@ public class ActionUrl implements Parcelable {
         this.frequency = in.readLong();
         this.timestamp = in.readLong();
         this.last_updated = in.readLong();
+        this.client_certificate = new byte[in.readInt()];
+        in.readByteArray(this.client_certificate);
     }
 
     @Override
