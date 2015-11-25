@@ -60,7 +60,6 @@ public class AsyncActionUrlNetworkTask extends AsyncTask<Void, Void, String> {
             try {
                 response.disconnect();
             } catch (IOException e){
-                statusCode = -1;
             }
 
         }
