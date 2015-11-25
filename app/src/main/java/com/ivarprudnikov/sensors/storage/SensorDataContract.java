@@ -43,6 +43,7 @@ public final class SensorDataContract {
         public static final String COLUMN_NAME_LAST_UPDATED = "last_updated_milli";
         public static final String COLUMN_NAME_URL = "url";
         public static final String COLUMN_NAME_FREQUENCY = "frequency_milli";
+        public static final String COLUMN_NAME_CLIENT_CERTIFICATE = "client_certificate";
     }
 
     public static abstract class ActionResult implements BaseColumns {

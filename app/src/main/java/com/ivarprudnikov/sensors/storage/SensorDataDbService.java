@@ -348,6 +348,7 @@ public class SensorDataDbService extends ContextWrapper {
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY, action.getFrequency());
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP, action.getTimestamp());
         values.put(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED, action.getTimestamp());
+        values.put(SensorDataContract.ActionUrl.COLUMN_NAME_CLIENT_CERTIFICATE, action.getClient_certificate());
 
         Integer actionId = action.getId();
 
@@ -361,6 +362,8 @@ public class SensorDataDbService extends ContextWrapper {
                 }
 
                 // Make sure Alarm is triggered
+                // as this action might set frequency
+                // to be repeatedly executed
                 Intent i = new Intent(App.getApp(), OnExportAlarmBroadcastReceiver.class);
                 i.setAction(Constants.INTENT_ACTION_TRIGGER_EXPORT);
                 i.putExtra(Constants.INTENT_KEY_ACTION_URL_ID, actionId);
@@ -460,7 +463,8 @@ public class SensorDataDbService extends ContextWrapper {
                                 SensorDataContract.ActionUrl.COLUMN_NAME_URL,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP,
-                                SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED
+                                SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_CLIENT_CERTIFICATE
                         }, null, null, null, null, null, null);
                 if(c.moveToFirst()){
                     while (c.isAfterLast() == false) {
@@ -470,8 +474,8 @@ public class SensorDataDbService extends ContextWrapper {
                         long freq = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY));
                         long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
                         long lastUpdated = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED));
-
-                        data.add(new ActionUrl(id, url, freq, timestamp, lastUpdated, null));
+                        byte[] cert = c.getBlob(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_CLIENT_CERTIFICATE));
+                        data.add(new ActionUrl(id, url, freq, timestamp, lastUpdated, cert));
                         c.moveToNext();
                     }
                 }
@@ -499,7 +503,8 @@ public class SensorDataDbService extends ContextWrapper {
                                 SensorDataContract.ActionUrl.COLUMN_NAME_URL,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY,
                                 SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP,
-                                SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED
+                                SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED,
+                                SensorDataContract.ActionUrl.COLUMN_NAME_CLIENT_CERTIFICATE
                         },
                         SensorDataContract.ActionUrl._ID + "=?",
                         new String[]{
@@ -512,8 +517,9 @@ public class SensorDataDbService extends ContextWrapper {
                     long freq = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_FREQUENCY));
                     long timestamp = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_TIMESTAMP));
                     long lastUpdated = c.getLong(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_LAST_UPDATED));
+                    byte[] cert = c.getBlob(c.getColumnIndex(SensorDataContract.ActionUrl.COLUMN_NAME_CLIENT_CERTIFICATE));
 
-                    data = new ActionUrl(id, url, freq, timestamp, lastUpdated, null);
+                    data = new ActionUrl(id, url, freq, timestamp, lastUpdated, cert);
                     c.moveToNext();
                 }
                 c.close();
