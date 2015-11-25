@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.App;
-import com.ivarprudnikov.sensors.async.AsyncNetworkTask;
+import com.ivarprudnikov.sensors.async.AsyncActionUrlNetworkTask;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.activity.ExportDataFormActivity;
 import com.ivarprudnikov.sensors.activity.ExportResult;
@@ -148,7 +148,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
     }
 
     private void sendActionData(final ActionUrl action, final Map data){
-        AsyncNetworkTask.OnResponseListener latestFinishedListener = new AsyncNetworkTask.OnResponseListener() {
+        AsyncActionUrlNetworkTask.OnResponseListener latestFinishedListener = new AsyncActionUrlNetworkTask.OnResponseListener() {
             @Override
             public void onResponseFinished(int statusCode) {
                 boolean isSuccess = statusCode < 300 && statusCode >= 200;
@@ -157,7 +157,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
                 Toast.makeText(getContext(), "Got response status: " + String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
             }
         };
-        final AsyncNetworkTask mTaskLatest = new AsyncNetworkTask(getContext(), latestFinishedListener, action.getUrl(), data);
+        final AsyncActionUrlNetworkTask mTaskLatest = new AsyncActionUrlNetworkTask(getContext(), latestFinishedListener, action, data);
         mTaskLatest.execute();
     }
 

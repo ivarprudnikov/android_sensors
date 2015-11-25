@@ -21,27 +21,28 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.api.client.http.HttpResponse;
+import com.ivarprudnikov.sensors.storage.ActionUrl;
 import com.ivarprudnikov.sensors.util.HttpUtil;
 
 import java.io.IOException;
 import java.util.Map;
 
-public class AsyncNetworkTask extends AsyncTask<Void, Void, String> {
+public class AsyncActionUrlNetworkTask extends AsyncTask<Void, Void, String> {
 
     OnResponseListener listener;
     Context mContext;
     int statusCode;
-    String url;
+    ActionUrl actionUrl;
     Map data;
 
     public interface OnResponseListener {
         public void onResponseFinished(int code);
     }
 
-    public AsyncNetworkTask(Context ctx, OnResponseListener listener, String url, Map data) {
+    public AsyncActionUrlNetworkTask(Context ctx, OnResponseListener listener, ActionUrl actionUrl, Map data) {
         this.mContext = ctx;
         this.listener = listener;
-        this.url = url;
+        this.actionUrl = actionUrl;
         this.data = data;
     }
 
@@ -49,7 +50,7 @@ public class AsyncNetworkTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         HttpResponse response = null;
         try {
-            response = HttpUtil.post(url, data, null);
+            response = HttpUtil.post(actionUrl.getUrl(), data, null);
         } catch (IOException e){
             statusCode = -1;
         }
