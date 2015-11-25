@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.ivarprudnikov.sensors.async.AsyncNetworkTask;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 import com.ivarprudnikov.sensors.storage.ActionResult;
@@ -106,6 +107,8 @@ public class OnExportAlarmBroadcastReceiver extends BroadcastReceiver {
 
                     // Post data and store result
                     //////////////////////
+
+                    // TODO: change into service
 
                     AsyncNetworkTask.OnResponseListener latestFinishedListener = new AsyncNetworkTask.OnResponseListener() {
                         @Override

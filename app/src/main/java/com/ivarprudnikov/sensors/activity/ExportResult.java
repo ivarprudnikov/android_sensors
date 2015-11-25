@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ivarprudnikov.sensors.ActionResultAdapter;
+import com.ivarprudnikov.sensors.adapter.ActionResultAdapter;
 import com.ivarprudnikov.sensors.App;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.storage.ActionUrl;

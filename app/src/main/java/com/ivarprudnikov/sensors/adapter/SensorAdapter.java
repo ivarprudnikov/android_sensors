@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,8 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.activity.DisplaySensorDetailsActivity;
 import com.ivarprudnikov.sensors.config.Constants;
 

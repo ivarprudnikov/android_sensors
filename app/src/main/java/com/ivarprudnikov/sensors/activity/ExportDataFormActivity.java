@@ -31,7 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ipaulpro.afilechooser.utils.FileUtils;
-import com.ivarprudnikov.sensors.AsyncActionUrlStorage;
+import com.ivarprudnikov.sensors.async.AsyncActionUrlStorage;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
 

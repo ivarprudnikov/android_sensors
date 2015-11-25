@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +30,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ivarprudnikov.sensors.App;
+import com.ivarprudnikov.sensors.async.AsyncNetworkTask;
+import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.activity.ExportDataFormActivity;
 import com.ivarprudnikov.sensors.activity.ExportResult;
 import com.ivarprudnikov.sensors.storage.ActionResult;
@@ -46,6 +49,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
         TextView line1;
         TextView line2;
         TextView line3;
+        TextView line4;
         ImageButton menuTrigger;
     }
 
@@ -68,6 +72,7 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
             viewHolder.line1 = (TextView) convertView.findViewById(R.id.line1);
             viewHolder.line2 = (TextView) convertView.findViewById(R.id.line2);
             viewHolder.line3 = (TextView) convertView.findViewById(R.id.line3);
+            viewHolder.line4 = (TextView) convertView.findViewById(R.id.line4);
             viewHolder.menuTrigger = (ImageButton) convertView.findViewById(R.id.menuTrigger);
 
             convertView.setTag(viewHolder);
@@ -88,13 +93,18 @@ public class ActionUrlAdapter extends ArrayAdapter<ActionUrl> {
         viewHolder.line1.setText(action.getUrl());
 
         if(action.getFrequency() > 0)
-            viewHolder.line2.setText(String.valueOf(action.getFrequency()));
+            viewHolder.line2.setText("Sends every " + String.valueOf(action.getFrequency()) + " millisecond(s)");
         else
             viewHolder.line2.setText("Disabled");
 
         Date t = new Date();
         t.setTime(action.getTimestamp());
         viewHolder.line3.setText(t.toString());
+
+        if(action.getClient_certificate() != null && action.getClient_certificate().length > 0)
+            viewHolder.line4.setText("Certificate stored");
+        else
+            viewHolder.line4.setText("Disabled");
 
         // Return the completed view to render on screen
         return convertView;

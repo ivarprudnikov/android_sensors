@@ -37,7 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivarprudnikov.sensors.App;
-import com.ivarprudnikov.sensors.AsyncSensorEventsCounter;
+import com.ivarprudnikov.sensors.async.AsyncSensorEventsCounter;
 import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;

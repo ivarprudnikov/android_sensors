@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.ivarprudnikov.sensors.R;
 import com.ivarprudnikov.sensors.storage.ActionResult;
 
 import java.util.Date;

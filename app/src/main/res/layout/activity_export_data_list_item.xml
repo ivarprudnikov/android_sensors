@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="5dip"
-        android:layout_marginBottom="10dip"
+        android:layout_marginBottom="3dip"
         android:layout_below="@id/line2"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold" />
@@ -75,9 +75,34 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="50dip"
-        android:layout_marginBottom="10dip"
+        android:layout_marginBottom="3dip"
         android:layout_below="@id/line2"
         android:layout_toRightOf="@+id/line3label"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/line4label"
+        android:text="Certificate:"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="10dip"
+        android:layout_below="@id/line3"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/line4"
+        android:text="Stored"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dip"
+        android:layout_marginBottom="10dip"
+        android:layout_below="@id/line3"
+        android:layout_toRightOf="@+id/line4label"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <ImageButton
@@ -88,6 +113,7 @@
         android:layout_marginRight="10dip"
         android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

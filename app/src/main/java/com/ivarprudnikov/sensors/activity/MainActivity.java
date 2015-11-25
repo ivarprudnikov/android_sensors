@@ -38,10 +38,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ivarprudnikov.sensors.App;
-import com.ivarprudnikov.sensors.AsyncSensorEventsCounter;
+import com.ivarprudnikov.sensors.async.AsyncSensorEventsCounter;
 import com.ivarprudnikov.sensors.OnAlarmBroadcastReceiver;
 import com.ivarprudnikov.sensors.R;
-import com.ivarprudnikov.sensors.SensorAdapter;
+import com.ivarprudnikov.sensors.adapter.SensorAdapter;
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.config.Preferences;
 

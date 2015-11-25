@@ -15,7 +15,7 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.async;
 
 import android.content.Context;
 import android.os.AsyncTask;

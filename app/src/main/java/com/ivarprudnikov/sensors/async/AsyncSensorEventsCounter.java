@@ -15,28 +15,39 @@
  * along with com.ivarprudnikov.sensors.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ivarprudnikov.sensors;
+package com.ivarprudnikov.sensors.async;
 
+import android.content.Context;
+import android.hardware.Sensor;
 import android.os.AsyncTask;
 
-import com.ivarprudnikov.sensors.storage.ActionUrl;
+import com.ivarprudnikov.sensors.App;
 
-public class AsyncActionUrlStorage extends AsyncTask<ActionUrl, Void, String> {
+import java.text.DecimalFormatSymbols;
+
+public class AsyncSensorEventsCounter extends AsyncTask<Void, Void, String> {
 
     OnQueryResponseListener listener;
+    Context mContext;
+    Sensor sensor;
 
     public interface OnQueryResponseListener {
-        public void onQueryResponseFinished(String operationResponse);
+        public void OnQueryResponseFinished(String operationResponse);
     }
 
-    public AsyncActionUrlStorage(OnQueryResponseListener listener) {
+    public AsyncSensorEventsCounter(Context ctx, OnQueryResponseListener listener, Sensor sensor) {
+        this.mContext = ctx;
         this.listener = listener;
+        this.sensor = sensor;
     }
 
     @Override
-    protected String doInBackground(ActionUrl... params) {
-        App.getDbService().saveExportAction(params[0]);
-        return "Saved";
+    protected String doInBackground(Void... params) {
+        int data = App.getDbService().countSensorEvents(sensor);
+        if(data < 0){
+            return DecimalFormatSymbols.getInstance().getInfinity();
+        }
+        return Integer.valueOf(data).toString();
     }
 
     @Override
@@ -47,7 +58,7 @@ public class AsyncActionUrlStorage extends AsyncTask<ActionUrl, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if( listener != null ) {
-            listener.onQueryResponseFinished(result);
+            listener.OnQueryResponseFinished(result);
         }
     }
 }
