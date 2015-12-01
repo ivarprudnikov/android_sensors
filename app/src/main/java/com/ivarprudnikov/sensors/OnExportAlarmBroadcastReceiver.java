@@ -20,6 +20,7 @@ package com.ivarprudnikov.sensors;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.ivarprudnikov.sensors.config.Constants;
 import com.ivarprudnikov.sensors.storage.ActionUrl;
@@ -35,6 +36,7 @@ public class OnExportAlarmBroadcastReceiver extends BroadcastReceiver {
 
         String action = intent.getAction();
         if(action != null && action.equals(Constants.INTENT_ACTION_TRIGGER_EXPORT)){
+            Log.d("OnExportAlarmBrdRec","start SensorDataSenderService");
             Intent i = (Intent)intent.clone();
             i.setClass(context, SensorDataSenderService.class);
             context.startService(i);

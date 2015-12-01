@@ -61,6 +61,8 @@ public class SensorDataSenderService extends Service {
         @Override
         public void handleMessage(Message message) {
 
+            Log.d("SensorDataSenderSrvc","handleMessage");
+
             Bundle b = message.getData();
 
             long actionUrlId = b.getInt(Constants.INTENT_KEY_ACTION_URL_ID, -1);
@@ -180,7 +182,11 @@ public class SensorDataSenderService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle intentData = intent.getExtras();
+        Log.d("SensorDataSenderSrvc","onStartCommand");
+        Bundle intentData = null;
+        if(intent != null){
+            intentData = intent.getExtras();
+        }
         if(intentData != null){
             Message msg = new Message();
             msg.setData(intentData);
