@@ -27,14 +27,23 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.DefaultConnectionFactory;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.util.Map;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 public class HttpUtil {
 
@@ -54,6 +63,37 @@ public class HttpUtil {
 
         HttpRequestFactory requestFactory =
                 HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
+                    @Override
+                    public void initialize(HttpRequest request) {
+                        request.setParser(new JsonObjectParser(JSON_FACTORY));
+                        combineHeaders(request.getHeaders(), headers);
+                    }
+                });
+        GenericUrl url = new GenericUrl(urlString);
+        JsonHttpContent content = new JsonHttpContent(JSON_FACTORY, data);
+        HttpRequest request = requestFactory.buildPostRequest(url, content);
+
+        return request.execute();
+    }
+
+    public static HttpResponse postWithCert(String urlString, Map data, final Map<String, String> headers, byte[] certificate) throws IOException {
+
+        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        InputStream is = new ByteArrayInputStream(certificate);
+        keyStore.load(is, null);
+
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance("X509");
+        kmf.init(keyStore, null);
+        KeyManager[] keyManagers = kmf.getKeyManagers();
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(keyManagers, null, null);
+        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+        NetHttpTransport.Builder transportBuilder = new NetHttpTransport.Builder();
+        NetHttpTransport transport = transportBuilder.setSslSocketFactory(sslSocketFactory).build();
+
+        HttpRequestFactory requestFactory =
+                transport.createRequestFactory(new HttpRequestInitializer() {
                     @Override
                     public void initialize(HttpRequest request) {
                         request.setParser(new JsonObjectParser(JSON_FACTORY));
